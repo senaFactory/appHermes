@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/Homepage.dart';
+import 'package:maqueta/pages/equiposPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
       routes: {
-        "/": (context) => Homepage()
+        "/": (context) => Homepage(),
+        "/equiposPage": (context) => Equipospage()
       },
     );
   }

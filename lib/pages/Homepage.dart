@@ -40,6 +40,7 @@ class Homepage extends StatelessWidget {
         onTap: (index){},
         height: 70,
         color: Color(0xFF00314D),
+        buttonBackgroundColor: Color(0xFF007D78),
         items:[
           Icon(
             Icons.computer,
