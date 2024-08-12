@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
 import 'package:maqueta/widgets/NavigationBar.dart';
 
-class Myaccountpage extends StatefulWidget {
-  const Myaccountpage({super.key});
+class Carnetpage extends StatefulWidget {
+  const Carnetpage({super.key});
 
   @override
-  State<Myaccountpage> createState() => _MyaccountpageState();
+  State<Carnetpage> createState() => _CarnetpageState();
 }
 
-class _MyaccountpageState extends State<Myaccountpage> {
+class _CarnetpageState extends State<Carnetpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
-          HomeAppBar(),
-     
-        ],
-      ),
+  
+      
       bottomNavigationBar: CustomNavigationBar(),
+    
     );
   }
 }

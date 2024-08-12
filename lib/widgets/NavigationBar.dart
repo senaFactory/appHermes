@@ -8,13 +8,7 @@ class CustomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
       backgroundColor: Colors.transparent,
-      onTap: (index) {
-        // if (index == 0) {
-        //   Navigator.pushNamed(context, "/");
-        // } else if (index == 1) {
-        //   Navigator.pushNamed(context, "/equiposPage");
-        // }
-      },
+     
       height: 70,
       color: Color(0xFF00314D),
       buttonBackgroundColor: Color(0xFF007D78),
