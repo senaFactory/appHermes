@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+//* HomeAppBar Se encarga de mostrar la barra superior con el logo y texto.
+
 class HomeAppBar extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +18,7 @@ class HomeAppBar extends StatelessWidget {
         children: [
           Image.asset(
             "images/logo.png",
-            color: Color.fromARGB(255, 237, 237, 240),
+            color: Color(0xFF84A5A4),
             height: 50,
           ),
           SizedBox(width:5), // Agrega espacio entre el logo y el texto
@@ -45,3 +49,5 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 }
+
+ 
