@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
-import 'package:maqueta/widgets/NavigationBar.dart';
 
 class Carnetpage extends StatefulWidget {
   const Carnetpage({super.key});

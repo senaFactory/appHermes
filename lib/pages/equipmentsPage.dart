@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
-import 'package:maqueta/widgets/NavigationBar.dart';
+
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -17,8 +17,25 @@ class _EquipmentspageState extends State<Equipmentspage> {
       body: ListView(
         children: [
           HomeAppBar(),
-          Text(
-            "Pagina de equipos"
+          Container(
+            child: const Column(
+              children: [
+                SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Mis Equipos",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF00314D),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

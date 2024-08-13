@@ -30,14 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
       
-    Equipmentspage(), // Página 1
-    Carnetpage(),     // Página 2
-    Myaccountpage(),  // Página 3
+    Equipmentspage(), // Página 0
+    Carnetpage(),     // Página 1
+    Myaccountpage(),  // Página 2
   ];
 
   //* Método que se llama cuando se selecciona una pestaña en la barra de navegación
-  
-  void _onTabTapped(int index) {
+
+  void _onTabTapped(int index) { //hace que la interfaz se reconstruya y muestre la página correspondiente.
     setState(() {
       _currentIndex = index; //* Actualiza el índice de la página actual
     });
