@@ -13,13 +13,15 @@ class _MyaccountpageState extends State<Myaccountpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: ListView(
         children: [
           HomeAppBar(),
-     
+          Text(
+            "Pagina de Cuenta"
+          ),
         ],
       ),
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 }

@@ -12,7 +12,6 @@ class homePage extends StatelessWidget {
           
         ],
       ),
-      bottomNavigationBar: CustomNavigationBar(),
     );
   }
 }

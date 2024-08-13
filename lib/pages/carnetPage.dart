@@ -13,9 +13,17 @@ class _CarnetpageState extends State<Carnetpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      body: ListView(
+        children: [
+          HomeAppBar(),
+          Text(
+            "Pagina carnet"
+          )
+        ],
+      ),
   
       
-      bottomNavigationBar: CustomNavigationBar(),
     
     );
   }

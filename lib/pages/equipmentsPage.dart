@@ -18,12 +18,10 @@ class _EquipmentspageState extends State<Equipmentspage> {
         children: [
           HomeAppBar(),
           Text(
-            "Pagina del equipos"
+            "Pagina de equipos"
           ),
         ],
       ),
-      bottomNavigationBar: CustomNavigationBar(),
-      
     );
   }
 }
