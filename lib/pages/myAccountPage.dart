@@ -14,31 +14,96 @@ class _MyaccountpageState extends State<Myaccountpage> {
     return Scaffold(
       body: ListView(
         children: [
-          HomeAppBar(), // Barra de navegación personalizada (si la tienes)
-          Container( // Agrega un poco de espacio alrededor del contenido
+          HomeAppBar(),
+          Container(
             child: Column(
               children: [
-                SizedBox(height: 40), // Espacio en la parte superior
+                SizedBox(height: 40),
                 Text(
-                  "Mi Cuenta", // Texto para la sección "Mi Cuenta"
+                  "Mi Cuenta",
                   style: TextStyle(
-                    fontSize: 18, // Tamaño de la fuente
-                    fontWeight: FontWeight.w600, // Peso de la fuente
-                    color: Color(0xFF00314D), // Color del texto
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF00314D),
                   ),
                 ),
-                SizedBox(height: 15), // Espacio entre el texto y el perfil
+                SizedBox(height: 15),
                 CircleAvatar(
-                  radius: 90, // Radio del círculo (tamaño de la foto de perfil)
-                  backgroundImage: AssetImage('images/persona_sena2.jpg'), // Imagen del perfil
+                  radius:
+                      110, // Radio del círculo (tamaño de la foto de perfil)
+                  backgroundImage: AssetImage(
+                      'images/aprendiz_sena1.jpeg'), // Imagen del perfil
                 ),
-                SizedBox(height: 15), // Espacio entre la imagen y el nombre
+                SizedBox(height: 15),
                 Text(
-                  "Juan Pedro Navaja Laverde", // Aquí pones el nombre del usuario
+                  "Juan Pedro Navaja Laverde",
                   style: TextStyle(
-                    fontSize: 15, // Tamaño de la fuente
-                    fontWeight: FontWeight.bold, // Peso de la fuente
-                    color: Color(0xFF00314D), // Color del texto
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF00314D),
+                  ),
+                ),
+                SizedBox(height: 55),
+                Padding(
+                  padding: EdgeInsets.only(left: 30.0), // Espacio desde el borde izquierdo del teléfono
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person, // Icono información personal
+                        color: Color(0xFF00314D),
+                      ),
+                      SizedBox(width: 10), // Espacio entre el ícono y el texto
+                      Text(
+                        "Información personal",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF00314D),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 25),
+                Padding(
+                  padding: EdgeInsets.only(left: 30.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.dark_mode,
+                        color: Color(0xFF00314D),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Modo oscuro",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF00314D),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15),
+                Padding(
+                  padding: EdgeInsets.only(left: 30.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        color: Color(0xFF00314D),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        "Cerrar sesión",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF00314D),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
