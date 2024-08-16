@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnetPage.dart';
 import 'package:maqueta/pages/equipmentsPage.dart';
 import 'package:maqueta/pages/myAccountPage.dart';
-import 'package:maqueta/pages/pagesSecondarys/personInfoPage.dart';
 import 'package:maqueta/widgets/NavigationBar.dart';
 
 void main() => runApp(MyApp());
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         '/equipments': (context) => Equipmentspage(), 
         '/carnet': (context) => Carnetpage(), 
         '/myaccount': (context) => Myaccountpage(),
-        '/personalinfo': (context) => Personinfopage(), 
+      
       },
     );
   }
@@ -38,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Equipmentspage(), // Página 0
     Carnetpage(), // Página 1
     Myaccountpage(), // Página 2
-    Personinfopage(),
+   
   ];
 
   //* Método que se llama cuando se selecciona una pestaña en la barra de navegación
