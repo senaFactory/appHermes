@@ -10,7 +10,7 @@ class HomeAppBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Color(0xFF00314D),
-        borderRadius: BorderRadius.circular(7.8), // Cambia el valor para ajustar el redondeo
+        borderRadius: BorderRadius.circular(5), // Cambia el valor para ajustar el redondeo
       ),
       padding: EdgeInsets.all(25),
       child: Row(
