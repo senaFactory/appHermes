@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 //* HomeAppBar Se encarga de mostrar la barra superior con el logo y texto.
 
 class HomeAppBar extends StatelessWidget {
-
+  const HomeAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xFF00314D),
-        borderRadius: BorderRadius.circular(5), // Cambia el valor para ajustar el redondeo
+        color: const Color(0xFF00314D),
+        borderRadius: BorderRadius.circular(5), // Ajusta el redondeo si es necesario
       ),
-      padding: EdgeInsets.all(25),
+      padding: const EdgeInsets.all(25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(
             "images/logo.png",
-            color: Color(0xFF84A5A4),
+            color: const Color(0xFF84A5A4),
             height: 50,
           ),
-          SizedBox(width:5), // Agrega espacio entre el logo y el texto
+          const SizedBox(width: 5), // Espacio entre el logo y el texto
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -32,7 +32,7 @@ class HomeAppBar extends StatelessWidget {
                   fontWeight: FontWeight.w300, // Grosor del texto
                   color: Color(0xFFF5F4F4),
                   letterSpacing: 2.0, // Espacio de las letras
-                  height: 1.0, // Ajusta la altura de línea para reducir el espacio vertical
+                  height: 1.0, // Ajusta la altura de línea
                 ),
               ),
               Text(
@@ -49,5 +49,3 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 }
-
- 
