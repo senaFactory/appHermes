@@ -30,8 +30,8 @@ class _MyaccountpageState extends State<Myaccountpage> {
                 ),
                 SizedBox(height: 15),
                 CircleAvatar(
-                  radius: 110, // Radio del círculo (tamaño de la foto de perfil)
-                  backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'), // Imagen del perfil
+                  radius: 110,
+                  backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -43,75 +43,50 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   ),
                 ),
                 SizedBox(height: 55),
-                GestureDetector(
+                ListTile(
+                  leading: Icon(Icons.person, color: Color(0xFF00314D)),
+                  title: Text(
+                    "Información personal",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF00314D)),
+                  ),
+                   contentPadding: EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Personinfopage()),
                     );
                   },
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 30.0), // Espacio desde el borde izquierdo del teléfono
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.person, // Icono información personal
-                          color: Color(0xFF00314D),
-                        ),
-                        SizedBox(width: 10), // Espacio entre el ícono y el texto
-                        Text(
-                          "Información personal",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF00314D),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
-                SizedBox(height: 25),
-                Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.dark_mode,
-                        color: Color(0xFF00314D),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Modo oscuro",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF00314D),
-                        ),
-                      ),
-                    ],
+                ListTile(
+                  leading: Icon(Icons.dark_mode, color: Color(0xFF00314D)),
+                  title: Text(
+                    "Modo oscuro",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF00314D)),
                   ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  onTap: () {
+                    //* Implementar funcionalidad para cambiar el modo oscuro
+                  },
                 ),
-                SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        color: Color(0xFF00314D),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        "Cerrar sesión",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF00314D),
-                        ),
-                      ),
-                    ],
+                ListTile(
+                  leading: Icon(Icons.logout, color: Color(0xFF00314D)),
+                  title: Text(
+                    "Cerrar sesión",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF00314D)),
                   ),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  onTap: () {
+                    //* Implementar funcionalidad para cerrar sesión
+                  },
                 ),
               ],
             ),
