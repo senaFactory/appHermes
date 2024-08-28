@@ -33,7 +33,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   radius: 110,
                   backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 20),
                 Text(
                   "Juan Pedro Navaja Laverde",
                   style: TextStyle(
