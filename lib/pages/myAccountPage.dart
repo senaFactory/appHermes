@@ -15,12 +15,12 @@ class _MyaccountpageState extends State<Myaccountpage> {
     return Scaffold(
       body: ListView(
         children: [
-          HomeAppBar(),
+          const HomeAppBar(),
           Container(
             child: Column(
               children: [
-                SizedBox(height: 40),
-                Text(
+                const SizedBox(height: 40),
+                const Text(
                   "Mi Cuenta",
                   style: TextStyle(
                     fontSize: 18,
@@ -28,13 +28,13 @@ class _MyaccountpageState extends State<Myaccountpage> {
                     color: Color(0xFF00314D),
                   ),
                 ),
-                SizedBox(height: 15),
-                CircleAvatar(
+                const SizedBox(height: 15),
+                const CircleAvatar(
                   radius: 110,
                   backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
                 ),
-                SizedBox(height: 20),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   "Juan Pedro Navaja Laverde",
                   style: TextStyle(
                     fontSize: 15,
@@ -42,39 +42,39 @@ class _MyaccountpageState extends State<Myaccountpage> {
                     color: Color(0xFF00314D),
                   ),
                 ),
-                SizedBox(height: 55),
+                const SizedBox(height: 55),
                 ListTile(
-                  leading: Icon(Icons.person, color: Color(0xFF00314D)),
-                  title: Text(
+                  leading: const Icon(Icons.person, color: Color(0xFF00314D)),
+                  title: const Text(
                     "Información personal",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Personinfopage()),
+                      MaterialPageRoute(builder: (context) => const PersonInfoPage()),
                     );
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.dark_mode, color: Color(0xFF00314D)),
-                  title: Text(
+                  leading: const Icon(Icons.dark_mode, color: Color(0xFF00314D)),
+                  title: const Text(
                     "Modo oscuro",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
                     // Implementar funcionalidad para cambiar el modo oscuro
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.logout, color: Color(0xFF00314D)),
-                  title: Text(
+                  leading: const Icon(Icons.logout, color: Color(0xFF00314D)),
+                  title: const Text(
                     "Cerrar sesión",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
                     // Implementar funcionalidad para cerrar sesión
                   },
