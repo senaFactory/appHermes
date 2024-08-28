@@ -47,12 +47,9 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   leading: Icon(Icons.person, color: Color(0xFF00314D)),
                   title: Text(
                     "Información personal",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF00314D)),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
-                   contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
                     Navigator.push(
                       context,
@@ -64,28 +61,22 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   leading: Icon(Icons.dark_mode, color: Color(0xFF00314D)),
                   title: Text(
                     "Modo oscuro",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF00314D)),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
                   contentPadding: EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
-                    //* Implementar funcionalidad para cambiar el modo oscuro
+                    // Implementar funcionalidad para cambiar el modo oscuro
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.logout, color: Color(0xFF00314D)),
                   title: Text(
                     "Cerrar sesión",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF00314D)),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
                   contentPadding: EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
-                    //* Implementar funcionalidad para cerrar sesión
+                    // Implementar funcionalidad para cerrar sesión
                   },
                 ),
               ],
