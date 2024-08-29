@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/infoColumn.dart';
 
-
 class Carnetpage extends StatefulWidget {
   const Carnetpage({super.key});
 
@@ -22,22 +21,31 @@ class _CarnetpageState extends State<Carnetpage> {
           Center(
             child: Column(
               children: [
-                SizedBox(height: 50), // Espacio superior
-                Text(
-                  'Hola, Juan Pedro!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF00314D),
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Aprendiz',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                    color: Color(0xFF00314D),
+                SizedBox(height: 30), // Espacio superior
+                // Contenedor para alinear el texto a la izquierda
+                Container(
+                  width: screenSize.width * 0.8, // Ancho para darle margen lateral
+                  alignment: Alignment.centerLeft, // Alinea el texto a la izquierda
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // Alineación dentro del Column
+                    children: const [
+                      Text(
+                        'Hola, Juan Pedro!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF00314D),
+                        ),
+                      ),
+                      Text(
+                        'Aprendiz',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w300,
+                          color: Color(0xFF00314D),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 20), // Espacio antes de la imagen
@@ -142,4 +150,3 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 }
-
