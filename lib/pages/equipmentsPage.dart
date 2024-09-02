@@ -53,7 +53,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
                         children: [
                           Row(
                             children: [
-                              Icon(Icons.laptop, size: 30, color: Colors.black54),
+                              Icon(Icons.laptop,
+                                  size: 30, color: Colors.black54),
                               SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,10 +81,6 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           DropdownButton<String>(
                             items: [
                               DropdownMenuItem<String>(
-                                value: "Acción",
-                                child: Text("Acción"),
-                              ),
-                              DropdownMenuItem<String>(
                                 value: "Editar",
                                 child: Text("Editar"),
                               ),
@@ -104,14 +101,17 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           SizedBox(width: 5),
                           Text(
                             "Ideapad1",
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                           SizedBox(width: 15),
-                          Icon(Icons.color_lens, size: 20, color: Colors.black54),
+                          Icon(Icons.color_lens,
+                              size: 20, color: Colors.black54),
                           SizedBox(width: 5),
                           Text(
                             "Azul oscuro",
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                         ],
                       ),
@@ -122,28 +122,43 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           SizedBox(width: 5),
                           Text(
                             "ABC1234456789",
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
-                // Botón "Agregar equipo"
-                ElevatedButton(
-                  onPressed: () {
-                    // Acción al presionar el botón
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF00314D),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                SizedBox(height: 35),
+                Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.end, // Alinea a la derecha
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 20.0), // Espacio a la derecha
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Acción al presionar el botón
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF00314D),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          "Agregar equipo",
+                          style: TextStyle(
+                            color: Colors.white, 
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text("Agregar equipo"),
-                
+                  ],
                 ),
               ],
             ),
