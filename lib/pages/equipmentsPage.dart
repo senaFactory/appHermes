@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maqueta/pages/pagesSecondarys/formAddEquipts.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
 class Equipmentspage extends StatefulWidget {
@@ -140,7 +141,10 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           right: 20.0), // Espacio a la derecha
                       child: ElevatedButton(
                         onPressed: () {
-                          // Acción al presionar el botón
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Formaddequipts()),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF00314D),
