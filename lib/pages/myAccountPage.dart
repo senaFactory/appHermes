@@ -46,7 +46,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                 ListTile(
                   leading: const Icon(Icons.person, color: Color(0xFF00314D)),
                   title: const Text(
-                    "Información personal",
+                    "Mi Perfil",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF00314D)),
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 30),

@@ -143,7 +143,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Formaddequipts()),
+                            MaterialPageRoute(builder: (context) => Formaddeequipts()),
                           );
                         },
                         style: ElevatedButton.styleFrom(

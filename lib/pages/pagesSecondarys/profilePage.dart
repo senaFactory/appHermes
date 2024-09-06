@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
-class PersonInfoPage extends StatelessWidget {
-  const PersonInfoPage({super.key});
+class PerfilPage extends StatelessWidget {
+  const PerfilPage({super.key});
 
   // Método que construye cada columna de información personal
   // 'Expanded' se utiliza para asegurar que cada columna use todo el espacio disponible de manera equitativa
@@ -37,7 +37,7 @@ class PersonInfoPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "Información personal",
+                      "Mi Perfil",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
