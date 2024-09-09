@@ -60,7 +60,6 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    const SizedBox(height: 10),
                     const Text(
                       'Por favor completa la siguiente información.',
                       style: TextStyle(
@@ -79,26 +78,15 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    DropdownButtonFormField<String>(
+                    _buildCustomDropdown(
+                      hint: 'Selecciona el tipo de equipo',
                       value: _selectedType,
-                      hint: const Text('Selecciona el tipo de equipo'),
-                      items: _equipmentTypes.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                      items: _equipmentTypes,
                       onChanged: (newValue) {
                         setState(() {
                           _selectedType = newValue;
                         });
                       },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      ),
                     ),
                     const SizedBox(height: 20),
                     
@@ -111,26 +99,15 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    DropdownButtonFormField<String>(
+                    _buildCustomDropdown(
+                      hint: 'Selecciona la marca del equipo',
                       value: _selectedBrand,
-                      hint: const Text('Selecciona la marca del equipo'),
-                      items: _brands.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                      items: _brands,
                       onChanged: (newValue) {
                         setState(() {
                           _selectedBrand = newValue;
                         });
                       },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      ),
                     ),
                     const SizedBox(height: 20),
                     
@@ -146,27 +123,30 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                     _buildTextField('Color', 'Ingresa el color del equipo', _colorController),
                     const SizedBox(height: 30),
                     
-                    // Botón de registro
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Lógica para registrar el equipo
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00314D),
-                          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                    // Botón de registro alineado a la derecha
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,  // Alinea el botón a la derecha
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Lógica para registrar el equipo
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00314D),
+                            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: const Text(
+                            'Registrar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
-                        child: const Text(
-                          'Registrar',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -175,6 +155,43 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
           ),
         ],
       ),
+    );
+  }
+
+  // Widget para construir el Dropdown personalizado
+  Widget _buildCustomDropdown({
+    required String hint,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      hint: Text(hint),
+      items: items.map((String item) {
+        return DropdownMenuItem<String>(
+          value: item,
+          child: Text(item),
+        );
+      }).toList(),
+      onChanged: onChanged,
+      // Estilo del Dropdown
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      ),
+      icon: Icon(
+        Icons.keyboard_arrow_down,  // Cambia el icono de la flecha hacia abajo
+        color: Colors.grey.shade600,
+      ),
+      style: const TextStyle(
+        color: Colors.black,  // Estilo del texto seleccionado
+        fontSize: 16,
+      ),
+      dropdownColor: Colors.white,  // Color de fondo del desplegable
+      isExpanded: true,  // Para que ocupe todo el ancho disponible
     );
   }
 

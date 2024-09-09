@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/pagesSecondarys/personInfoPage.dart';
+import 'package:maqueta/pages/pagesSecondarys/profilePage.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
 class Myaccountpage extends StatefulWidget {
@@ -53,7 +53,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PersonInfoPage()),
+                      MaterialPageRoute(builder: (context) => const PerfilPage()),
                     );
                   },
                 ),
