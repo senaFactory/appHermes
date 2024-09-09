@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
-
+import 'package:maqueta/widgets/customDropdown.dart'; 
 class Formaddeequipts extends StatefulWidget {
   const Formaddeequipts({super.key});
 
   @override
-  State<Formaddeequipts> createState() => _RegistroEquipoPageState();
+  State<Formaddeequipts> createState() => _RegisterEquipmentPageState();
 }
 
-class _RegistroEquipoPageState extends State<Formaddeequipts> {
+class _RegisterEquipmentPageState extends State<Formaddeequipts> {
   // Lista de opciones para el tipo de equipo
   final List<String> _equipmentTypes = ['Tablet', 'Desktop', 'Portatil'];
   String? _selectedType;
@@ -69,7 +69,7 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                     ),
                     const SizedBox(height: 20),
                     
-                    // Dropdown para seleccionar el tipo de equipo
+                    // Usar el CustomDropdownWidget para seleccionar el tipo de equipo
                     const Text(
                       'Tipo de Equipo',
                       style: TextStyle(
@@ -78,7 +78,7 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    _buildCustomDropdown(
+                    CustomDropdown(
                       hint: 'Selecciona el tipo de equipo',
                       value: _selectedType,
                       items: _equipmentTypes,
@@ -90,7 +90,7 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                     ),
                     const SizedBox(height: 20),
                     
-                    // Dropdown para seleccionar la marca
+                    // Usar el CustomDropdownWidget para seleccionar la marca
                     const Text(
                       'Marca',
                       style: TextStyle(
@@ -99,7 +99,7 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    _buildCustomDropdown(
+                    CustomDropdown(
                       hint: 'Selecciona la marca del equipo',
                       value: _selectedBrand,
                       items: _brands,
@@ -155,43 +155,6 @@ class _RegistroEquipoPageState extends State<Formaddeequipts> {
           ),
         ],
       ),
-    );
-  }
-
-  // Widget para construir el Dropdown personalizado
-  Widget _buildCustomDropdown({
-    required String hint,
-    required String? value,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return DropdownButtonFormField<String>(
-      value: value,
-      hint: Text(hint),
-      items: items.map((String item) {
-        return DropdownMenuItem<String>(
-          value: item,
-          child: Text(item),
-        );
-      }).toList(),
-      onChanged: onChanged,
-      // Estilo del Dropdown
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      ),
-      icon: Icon(
-        Icons.keyboard_arrow_down,  // Cambia el icono de la flecha hacia abajo
-        color: Colors.grey.shade600,
-      ),
-      style: const TextStyle(
-        color: Colors.black,  // Estilo del texto seleccionado
-        fontSize: 16,
-      ),
-      dropdownColor: Colors.white,  // Color de fondo del desplegable
-      isExpanded: true,  // Para que ocupe todo el ancho disponible
     );
   }
 
