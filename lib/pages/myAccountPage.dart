@@ -19,7 +19,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
           Container(
             child: Column(
               children: [
-                const SizedBox(height: 40),
+                const SizedBox(height: 35),
                 const Text(
                   "Mi Cuenta",
                   style: TextStyle(
@@ -39,7 +39,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00314D),
+                    color: Color.fromARGB(255, 69, 69, 70),
                   ),
                 ),
                 const SizedBox(height: 55),
@@ -53,7 +53,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PerfilPage()),
+                      MaterialPageRoute(builder: (context) => const ProfilePage()),
                     );
                   },
                 ),

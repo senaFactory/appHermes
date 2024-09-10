@@ -7,42 +7,54 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener el tamaño de la pantalla
+    final screenSize = MediaQuery.of(context).size;
+
     return Container(
+      width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0xFF00314D),
         borderRadius: BorderRadius.circular(5), // Ajusta el redondeo si es necesario
       ),
-      padding: const EdgeInsets.all(25),
+      padding: EdgeInsets.symmetric(
+        vertical: screenSize.height * 0.02, // Padding adaptable vertical
+        horizontal: screenSize.width * 0.05, // Padding adaptable horizontal
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Logo adaptable al tamaño de la pantalla
           Image.asset(
             "images/logo.png",
             color: const Color(0xFF84A5A4),
-            height: 50,
+            height: screenSize.height * 0.07, // Altura proporcional al alto de la pantalla
           ),
-          const SizedBox(width: 5), // Espacio entre el logo y el texto
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Hermes",
-                style: TextStyle(
-                  fontSize: 33,
-                  fontWeight: FontWeight.w300, // Grosor del texto
-                  color: Color(0xFFF5F4F4),
-                  letterSpacing: 2.0, // Espacio de las letras
-                  height: 1.0, // Ajusta la altura de línea
+          SizedBox(width: screenSize.width * 0.02), // Espacio adaptable entre logo y texto
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Título con tamaño proporcional al ancho de la pantalla
+                Text(
+                  "Hermes",
+                  style: TextStyle(
+                    fontSize: screenSize.width * 0.08, // Tamaño relativo al ancho
+                    fontWeight: FontWeight.w300, // Grosor del texto
+                    color: const Color(0xFFF5F4F4),
+                    letterSpacing: 2.0, // Espacio de las letras
+                    height: 1.0, // Ajusta la altura de línea
+                  ),
                 ),
-              ),
-              Text(
-                "Transformando vidas, construyendo futuro.",
-                style: TextStyle(
-                  fontSize: 7.4,
-                  color: Color(0xFFF5F4F4),
+                // Subtítulo con tamaño proporcional al ancho de la pantalla
+                Text(
+                  "Transformando vidas, construyendo futuro.",
+                  style: TextStyle(
+                    fontSize: screenSize.width * 0.02, // Tamaño proporcional al ancho
+                    color: const Color(0xFFF5F4F4),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

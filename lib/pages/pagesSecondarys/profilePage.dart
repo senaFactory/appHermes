@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
-class PerfilPage extends StatelessWidget {
-  const PerfilPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
-  // Método que construye cada columna de información personal
-  // 'Expanded' se utiliza para asegurar que cada columna use todo el espacio disponible de manera equitativa
-  Widget _buildInfoColumn(String label, String value) {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  // Controlador para el campo de número de celular (editable)
+  final TextEditingController _celularController =
+      TextEditingController(text: '3223909096');
+
+  // Método para construir cada columna con campos no editables
+  Widget _buildInfoColumn(String label, String value,
+      {bool isEditable = false}) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,7 +27,32 @@ class PerfilPage extends StatelessWidget {
               color: Color(0xFF00314D),
             ),
           ),
-          Text(value),
+          isEditable
+              ? TextFormField(
+                  controller: _celularController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 10.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                )
+              : TextFormField(
+                  initialValue: value,
+                  enabled:
+                      false, // Deshabilita el campo para que no sea editable
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 10.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
         ],
       ),
     );
@@ -26,17 +60,21 @@ class PerfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener el tamaño de la pantalla
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Stack(
         children: [
           ListView(
             children: [
-              HomeAppBar(),
-              SizedBox(height: 40), // Espacio después de la AppBar
+              const HomeAppBar(),
+              const SizedBox(height: 20), // Espacio después de la AppBar
               Center(
                 child: Column(
                   children: [
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       "Mi Perfil",
                       style: TextStyle(
                         fontSize: 18,
@@ -44,57 +82,131 @@ class PerfilPage extends StatelessWidget {
                         color: Color(0xFF00314D),
                       ),
                     ),
-                    SizedBox(height: 25),
-                    CircleAvatar(
-                      radius: 110, // Tamaño del circulo imagen del perfil.
-                      backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
-                    ),
-                    SizedBox(height: 25),
-                    Container(
-                      padding: EdgeInsets.all(20),
-                      margin: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF5F5F5), // Fondo claro para la información personal.
-                        borderRadius: BorderRadius.circular(20), // Bordes redondeados para el contenedor.
-                        boxShadow: [ // Sombra para dar profundidad al contenedor.
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 5,
-                            blurRadius: 10,
-                            offset: Offset(0, 3),
+                    const SizedBox(height: 20),
+                    // Foto de perfil y nombre con apellidos en una Row
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 25), // Espacio a la izquierda
+                        const CircleAvatar(
+                          radius:
+                              70, // Tamaño del círculo de la imagen del perfil
+                          backgroundImage:
+                              AssetImage('images/aprendiz_sena1.jpeg'),
+                        ),
+                        const SizedBox(
+                            width: 20), // Espacio entre la imagen y el texto
+                        // Column para alinear el nombre y correo a la derecha de la imagen
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // El texto se ajusta dinámicamente según el tamaño de la pantalla
+                              Text(
+                                "Juan Pedro Nalavaja Laverde",
+                                style: TextStyle(
+                                  fontSize: screenSize.width *
+                                      0.04, // Tamaño relativo al ancho
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF2B2B30),
+                                ),
+                                overflow: TextOverflow
+                                    .ellipsis, // Corta con "..." si es muy largo
+                              ),
+                              const SizedBox(
+                                  height:
+                                      5), // Pequeño espacio entre nombre y correo
+                              Text(
+                                "JuanDavidR@gmail.com",
+                                style: TextStyle(
+                                  fontSize: screenSize.width *
+                                      0.03, // Tamaño relativo al ancho
+                                  color: Color(0xFF888787),
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 25),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Row y Expanded para organizar la información en dos columnas.
                           Row(
                             children: [
-                              _buildInfoColumn("Nombre", "Juan Pedro"),
-                              _buildInfoColumn("Número de documento", "1032937844"),
+                              _buildInfoColumn("Nombres", "Juan David"),
+                              const SizedBox(width: 15),
+                              _buildInfoColumn(
+                                  "Apellidos", "Rodriguez Rodriguez"),
                             ],
                           ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              _buildInfoColumn("Apellido", "Navaja Laverde"),
-                              _buildInfoColumn("Número de celular", "312574485"),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              _buildInfoColumn("Tipo de sangre", "O+"),
-                              _buildInfoColumn("Fecha de nacimiento", "28/12/2000"),
-                            ],
-                          ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           Row(
                             children: [
                               _buildInfoColumn("Tipo de documento", "C.C"),
-                              _buildInfoColumn("Correo electrónico", "Juand@gmail.com"),
+                              const SizedBox(width: 15),
+                              _buildInfoColumn(
+                                  "Número de documento", "1032937844"),
                             ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              // El número de celular es el único campo editable
+                              _buildInfoColumn("Número de celular", "",
+                                  isEditable: true),
+                              const SizedBox(width: 15),
+                              _buildInfoColumn("Tipo de sangre", "O +"),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              _buildInfoColumn(
+                                  "Fecha de nacimiento", "28/10/2000"),
+                              const SizedBox(width: 15),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Botón de guardar alineado a la derecha con padding
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right:
+                              20), // Espacio entre el botón y el borde derecho
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // Alinea el botón a la derecha
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Lógica para guardar los cambios (solo el número de celular)
+                              print(
+                                  'Nuevo número de celular: ${_celularController.text}');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF00314D),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: const Text(
+                              "Guardar",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -104,9 +216,7 @@ class PerfilPage extends StatelessWidget {
               ),
             ],
           ),
-
-        //* Funcionalidad de la flecha hacia atras
-
+          // Funcionalidad de la flecha hacia atrás
           Positioned(
             top: 55,
             left: 5,
