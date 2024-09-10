@@ -39,7 +39,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 69, 69, 70),
+                    color: Color(0xFF454546),
                   ),
                 ),
                 const SizedBox(height: 55),

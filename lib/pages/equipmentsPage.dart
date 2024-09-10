@@ -36,15 +36,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   padding: EdgeInsets.all(16),
                   margin: EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 245, 245, 245),
+                    color: Color(0xFFF5F5F5),
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
