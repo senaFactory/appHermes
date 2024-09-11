@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height:
                                       5), // Pequeño espacio entre nombre y correo
                               Text(
-                                "JuanDavidR@gmail.com",
+                                "juanPeNavaja@gmail.com",
                                 style: TextStyle(
                                   fontSize: screenSize.width *
                                       0.03, // Tamaño relativo al ancho
@@ -141,10 +141,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           // Row y Expanded para organizar la información en dos columnas.
                           Row(
                             children: [
-                              _buildInfoColumn("Nombres", "Juan David"),
+                              _buildInfoColumn("Nombres", "Juan Pedro"),
                               const SizedBox(width: 15),
                               _buildInfoColumn(
-                                  "Apellidos", "Rodriguez Rodriguez"),
+                                  "Apellidos", "Navaja Laverde"),
                             ],
                           ),
                           const SizedBox(height: 15),

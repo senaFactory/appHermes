@@ -10,6 +10,8 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
+  String? selectedOption;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +63,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                                     ),
                                   ),
                                   Text(
-                                    "Asus Vibabook",
+                                    "Lenovo",
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
@@ -71,24 +73,36 @@ class _EquipmentspageState extends State<Equipmentspage> {
                               ),
                             ],
                           ),
-                          // Botón desplegable
+                          // Botón desplegable con "Acción"
                           DropdownButton<String>(
+                            value: selectedOption,
+                            icon: Icon(Icons.keyboard_arrow_down),
+                            hint: Text("Acción"),
+                            underline: SizedBox(), // Eliminar la línea de subrayado
                             items: [
                               DropdownMenuItem<String>(
                                 value: "Editar",
                                 child: Text("Editar"),
                               ),
                               DropdownMenuItem<String>(
-                                value: "Eliminar",
+                                value: "ELiminar",
                                 child: Text("Eliminar"),
                               ),
                             ],
-                            onChanged: (value) {},
-                            icon: Icon(Icons.more_vert),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedOption = value;
+                              });
+                            },
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                            dropdownColor: Colors.white,
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      Divider(thickness: 1.5, color: Colors.grey[300]),
                       Row(
                         children: [
                           Icon(Icons.label, size: 20, color: Colors.black54),
