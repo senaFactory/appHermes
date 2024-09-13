@@ -1,4 +1,6 @@
+import 'dart:io'; // Para trabajar con archivos
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart'; // Importar el paquete image_picker
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,6 +14,21 @@ class _ProfilePageState extends State<ProfilePage> {
   // Controlador para el campo de número de celular (editable)
   final TextEditingController _celularController =
       TextEditingController(text: '3223909096');
+
+  // Variable para almacenar la imagen seleccionada
+  File? _image;
+
+  // Método para seleccionar una imagen
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
 
   // Método para construir cada columna con campos no editables
   Widget _buildInfoColumn(String label, String value,
@@ -88,11 +105,21 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const SizedBox(width: 25), // Espacio a la izquierda
-                        const CircleAvatar(
-                          radius:
-                              70, // Tamaño del círculo de la imagen del perfil
-                          backgroundImage:
-                              AssetImage('images/aprendiz_sena1.jpeg'),
+                        GestureDetector(
+                          onTap: _pickImage, // Cuando se toca la imagen, se abre la galería
+                          child: CircleAvatar(
+                            radius: 70, // Tamaño del círculo de la imagen del perfil
+                            backgroundImage: _image != null
+                                ? FileImage(_image!) // Si hay una imagen, la muestra
+                                : const AssetImage('images/aprendiz_sena1.jpeg') as ImageProvider,
+                            child: _image == null
+                                ? Icon(
+                                    Icons.camera_alt,
+                                    size: 30,
+                                    color: Colors.white.withOpacity(0.7),
+                                  )
+                                : null,
+                          ),
                         ),
                         const SizedBox(
                             width: 20), // Espacio entre la imagen y el texto
@@ -143,8 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               _buildInfoColumn("Nombres", "Juan Pedro"),
                               const SizedBox(width: 15),
-                              _buildInfoColumn(
-                                  "Apellidos", "Navaja Laverde"),
+                              _buildInfoColumn("Apellidos", "Navaja Laverde"),
                             ],
                           ),
                           const SizedBox(height: 15),
@@ -169,8 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(height: 15),
                           Row(
                             children: [
-                              _buildInfoColumn(
-                                  "Fecha de nacimiento", "28/10/2000"),
+                              _buildInfoColumn("Fecha de nacimiento", "28/10/2000"),
                               const SizedBox(width: 15),
                             ],
                           ),
@@ -181,8 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     // Botón de guardar alineado a la derecha con padding
                     Padding(
                       padding: const EdgeInsets.only(
-                          right:
-                              20), // Espacio entre el botón y el borde derecho
+                          right: 20), // Espacio entre el botón y el borde derecho
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment
                             .end, // Alinea el botón a la derecha
@@ -190,8 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ElevatedButton(
                             onPressed: () {
                               // Lógica para guardar los cambios (solo el número de celular)
-                              print(
-                                  'Nuevo número de celular: ${_celularController.text}');
+                              print('Nuevo número de celular: ${_celularController.text}');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF00314D),
