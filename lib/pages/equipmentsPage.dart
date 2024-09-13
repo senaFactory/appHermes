@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/pagesSecondarys/formAddEquipts.dart';
+import 'package:maqueta/pages/pagesSecondarys/editEquipt.dart'; 
 import 'package:maqueta/widgets/HomeAppBar.dart';
 
 class Equipmentspage extends StatefulWidget {
@@ -12,6 +13,9 @@ class Equipmentspage extends StatefulWidget {
 class _EquipmentspageState extends State<Equipmentspage> {
   String? selectedOption;
 
+  // Instancia del modal de edición
+  final EditEquiptModal editEquiptModal = EditEquiptModal();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +23,12 @@ class _EquipmentspageState extends State<Equipmentspage> {
         children: [
           // AppBar personalizado
           HomeAppBar(),
-          SizedBox(height: 40), // Espacio después de la AppBar
+          const SizedBox(height: 40), // Espacio después de la AppBar
           Center(
             child: Column(
               children: [
                 // Título "Mis Equipos"
-                Text(
+                const Text(
                   "Mis Equipos",
                   style: TextStyle(
                     fontSize: 18,
@@ -32,13 +36,13 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     color: Color(0xFF00314D),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 // Tarjeta de equipo
                 Container(
-                  padding: EdgeInsets.all(16),
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF5F5F5),
+                    color: const Color(0xFFF5F5F5),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Column(
@@ -48,7 +52,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                            children: [
+                            children: const [
                               Icon(Icons.laptop,
                                   size: 30, color: Colors.black54),
                               SizedBox(width: 10),
@@ -76,25 +80,28 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           // Botón desplegable con "Acción"
                           DropdownButton<String>(
                             value: selectedOption,
-                            icon: Icon(Icons.keyboard_arrow_down),
-                            hint: Text("Acción"),
-                            underline: SizedBox(), // Eliminar la línea de subrayado
+                            icon: const Icon(Icons.keyboard_arrow_down),
+                            hint: const Text("Acción"),
+                            underline: const SizedBox(), // Eliminar la línea de subrayado
                             items: [
-                              DropdownMenuItem<String>(
+                              const DropdownMenuItem<String>(
                                 value: "Editar",
                                 child: Text("Editar"),
                               ),
-                              DropdownMenuItem<String>(
-                                value: "ELiminar",
-                                child: Text("Eliminar"),
+                              const DropdownMenuItem<String>(
+                                value: "Desactivar",
+                                child: Text("Desactivar"),
                               ),
                             ],
                             onChanged: (value) {
                               setState(() {
                                 selectedOption = value;
+                                if (value == "Editar") {
+                                  editEquiptModal.showEditModal(context); // Mostrar el modal
+                                }
                               });
                             },
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black,
                               fontSize: 14,
                             ),
@@ -102,15 +109,14 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           ),
                         ],
                       ),
-                      Divider(thickness: 1.5, color: Colors.grey[300]),
+                      const Divider(thickness: 1.5, color: Colors.grey),
                       Row(
-                        children: [
+                        children: const [
                           Icon(Icons.label, size: 20, color: Colors.black54),
                           SizedBox(width: 5),
                           Text(
                             "Ideapad1",
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black87),
+                            style: TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                           SizedBox(width: 15),
                           Icon(Icons.color_lens,
@@ -118,27 +124,25 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           SizedBox(width: 5),
                           Text(
                             "Azul oscuro",
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black87),
+                            style: TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
-                        children: [
+                        children: const [
                           Icon(Icons.qr_code, size: 20, color: Colors.black54),
                           SizedBox(width: 5),
                           Text(
                             "ABC1234456789",
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.black87),
+                            style: TextStyle(fontSize: 14, color: Colors.black87),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 35),
+                const SizedBox(height: 35),
                 Row(
                   mainAxisAlignment:
                       MainAxisAlignment.end, // Alinea a la derecha
@@ -154,14 +158,14 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF00314D),
-                          padding: EdgeInsets.symmetric(
+                          backgroundColor: const Color(0xFF00314D),
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Agregar equipo",
                           style: TextStyle(
                             color: Colors.white, 

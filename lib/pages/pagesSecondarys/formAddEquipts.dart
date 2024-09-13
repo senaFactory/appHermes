@@ -133,7 +133,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF00314D),
-                            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -142,7 +142,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                             'Registrar',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
