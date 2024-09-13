@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//* HomeAppBar Se encarga de mostrar la barra superior con el logo y texto.
+//* HomeAppBar se encarga de mostrar la barra superior con el logo y texto.
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({Key? key}) : super(key: key);
@@ -14,11 +14,11 @@ class HomeAppBar extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: const Color(0xFF00314D),
-        borderRadius: BorderRadius.circular(5), // Ajusta el redondeo si es necesario
+        borderRadius: BorderRadius.circular(5), // Ajusta el redondeo
       ),
       padding: EdgeInsets.symmetric(
-        vertical: screenSize.height * 0.02, // Padding adaptable vertical
-        horizontal: screenSize.width * 0.05, // Padding adaptable horizontal
+        vertical: screenSize.height * 0.02, // Adaptable vertical
+        horizontal: screenSize.width * 0.05, // Adaptable horizontal
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -39,13 +39,13 @@ class HomeAppBar extends StatelessWidget {
                   "Hermes",
                   style: TextStyle(
                     fontSize: screenSize.width * 0.08, // Tamaño relativo al ancho
-                    fontWeight: FontWeight.w300, // Grosor del texto
+                    fontWeight: FontWeight.w300, 
                     color: const Color(0xFFF5F4F4),
                     letterSpacing: 2.0, // Espacio de las letras
                     height: 1.0, // Ajusta la altura de línea
                   ),
                 ),
-                // Subtítulo con tamaño proporcional al ancho de la pantalla
+                
                 Text(
                   "Transformando vidas, construyendo futuro.",
                   style: TextStyle(

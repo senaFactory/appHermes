@@ -66,7 +66,9 @@ class EditEquiptModal {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Lógica para guardar los cambios
+                      
+                      //TODO: Lógica para guardar los cambios
+
                       print("Color actualizado: ${_colorController.text}");
                       Navigator.pop(context); // Cierra el modal
                     },

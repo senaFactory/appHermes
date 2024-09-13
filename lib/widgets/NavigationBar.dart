@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 //* Navegación entre paginas
 class CustomNavigationBar extends StatelessWidget {
   final Function(int) onTabTapped;
+  final int selectedIndex;
 
-  const CustomNavigationBar({required this.onTabTapped});
+  const CustomNavigationBar({
+    required this.onTabTapped,
+    required this.selectedIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,8 @@ class CustomNavigationBar extends StatelessWidget {
         Icon(Icons.qr_code, size: 30, color: Colors.white),
         Icon(Icons.people_alt_outlined, size: 30, color: Colors.white),
       ],
-      onTap: onTabTapped,
+      index: selectedIndex,  // Pasa el índice inicial
+      onTap: onTabTapped,     // Cambia la pestaña seleccionada
     );
   }
 }

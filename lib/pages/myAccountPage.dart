@@ -76,7 +76,9 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   ),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 30),
                   onTap: () {
-                    // Implementar funcionalidad para cerrar sesión
+
+                    //TODO: Implementar funcionalidad para cerrar sesión
+                    
                   },
                 ),
               ],

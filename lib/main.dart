@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/carnetPage.dart';
-import 'package:maqueta/pages/equipmentsPage.dart';
-import 'package:maqueta/pages/myAccountPage.dart';
-import 'package:maqueta/widgets/NavigationBar.dart';
+import 'package:maqueta/pages/auth/loginPage.dart';  
+import 'package:maqueta/widgets/homeScreen.dart';      
 
 void main() => runApp(MyApp());
 
@@ -14,50 +12,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: HomeScreen(),
+      initialRoute: '/',  // Ruta inicial: la pantalla de login
       routes: {
-        '/equipments': (context) => Equipmentspage(), 
-        '/carnet': (context) => Carnetpage(), 
-        '/myaccount': (context) => Myaccountpage(),
-      
+        '/': (context) => LoginPage(),   // Primera pantalla(login)
+        '/home': (context) => HomeScreen(),  // Pantalla principal con navegación
       },
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    Equipmentspage(), // Página 0
-    Carnetpage(), // Página 1
-    Myaccountpage(), // Página 2
-   
-  ];
-
-  //* Método que se llama cuando se selecciona una pestaña en la barra de navegación
-
-  void _onTabTapped(int index) {
-    //hace que la interfaz se reconstruya y muestre la página correspondiente.
-    setState(() {
-      _currentIndex = index; //* Actualiza el índice de la página actual
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index:
-            _currentIndex, //* Muestra la página correspondiente al índice actual
-        children: _pages,
-      ),
-      bottomNavigationBar: CustomNavigationBar(onTabTapped: _onTabTapped),
     );
   }
 }
