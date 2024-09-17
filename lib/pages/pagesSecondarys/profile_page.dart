@@ -1,7 +1,7 @@
 import 'dart:io'; // Para trabajar con archivos
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // Importar el paquete image_picker
-import 'package:maqueta/widgets/HomeAppBar.dart';
+import 'package:maqueta/widgets/home_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

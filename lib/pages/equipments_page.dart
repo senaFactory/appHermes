@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/widgets/HomeAppBar.dart';
-import 'package:maqueta/pages/pagesSecondarys/formAddEquipts.dart';
-import 'package:maqueta/pages/pagesSecondarys/editEquipt.dart';
-import 'package:maqueta/widgets/equiptCard.dart';
+import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/pages/pagesSecondarys/add_equipment_page.dart';
+import 'package:maqueta/pages/pagesSecondarys/edit_equipment_page.dart';
+import 'package:maqueta/widgets/equipment_card.dart';
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});

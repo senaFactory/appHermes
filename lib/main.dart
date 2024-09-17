@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/auth/loginPage.dart';  
-import 'package:maqueta/pages/homeScreen.dart';      
+import 'package:maqueta/pages/auth/login_page.dart';  
+import 'package:maqueta/pages/home_screen.dart';      
 
 void main() => runApp(MyApp());
 

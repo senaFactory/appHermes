@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/widgets/HomeAppBar.dart';
-import 'package:maqueta/widgets/customDropdown.dart'; 
+import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/widgets/custom_dropdown.dart'; 
 class Formaddeequipts extends StatefulWidget {
   const Formaddeequipts({super.key});
 

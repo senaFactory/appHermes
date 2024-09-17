@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/carnetPage.dart';
-import 'package:maqueta/pages/equipmentsPage.dart';
-import 'package:maqueta/pages/myAccountPage.dart';
-import 'package:maqueta/widgets/NavigationBar.dart'; 
+import 'package:maqueta/pages/carnet_page.dart';
+import 'package:maqueta/pages/equipments_page.dart';
+import 'package:maqueta/pages/my_account_page.dart';
+import 'package:maqueta/widgets/navigation_bar.dart'; 
 
 class HomeScreen extends StatefulWidget {
   @override

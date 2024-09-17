@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/pagesSecondarys/profilePage.dart';
-import 'package:maqueta/widgets/HomeAppBar.dart';
+import 'package:maqueta/pages/pagesSecondarys/profile_page.dart';
+import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
   const Myaccountpage({super.key});

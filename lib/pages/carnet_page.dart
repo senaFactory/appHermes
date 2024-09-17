@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/widgets/infoColumn.dart';
+import 'package:maqueta/widgets/info_column.dart';
 
 class Carnetpage extends StatefulWidget {
   const Carnetpage({super.key});
