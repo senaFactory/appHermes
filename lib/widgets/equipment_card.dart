@@ -6,8 +6,8 @@ class EquipmentCard extends StatelessWidget {
   final String model;
   final String color;
   final String serialNumber;
-  final Function()? onEdit;
-  final Function()? onDeactivate;
+  final VoidCallback onEdit;
+  final VoidCallback onDeactivate;
 
   const EquipmentCard({
     Key? key,
@@ -16,15 +16,17 @@ class EquipmentCard extends StatelessWidget {
     required this.model,
     required this.color,
     required this.serialNumber,
-    this.onEdit,
-    this.onDeactivate,
+    required this.onEdit,
+    required this.onDeactivate,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String? selectedOption;
+
     return Container(
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(15),
@@ -37,104 +39,93 @@ class EquipmentCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.laptop, size: 30, color: Colors.black54),
-                  const SizedBox(width: 10),
+                  Icon(Icons.laptop, size: 30, color: Colors.black54),
+                  SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         type,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         brand,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),
                 ],
               ),
-              // Menú de opciones (Editar, Desactivar) con estilo personalizado
-              Theme(
-                data: Theme.of(context).copyWith(
-                  // Cambiar el color de fondo y estilo de los ítems del menú
-                  cardColor: Colors.white,
-                  textTheme: const TextTheme().apply(bodyColor: Color(0xFF00314D)),
-                ),
-                child: DropdownButton<String>(
-                  icon: const Icon(Icons.more_vert, color: Color(0xFF00314D)), // Icono personalizado
-                  underline: const SizedBox(), // Eliminar subrayado
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF00314D), // Color del texto en el menú
+              // Menú desplegable con opciones de Editar y Desactivar
+              DropdownButton<String>(
+                value: selectedOption,
+                icon: Icon(Icons.keyboard_arrow_down),
+                hint: Text("Acción"),
+                underline: SizedBox(), // Elimina la línea de subrayado
+                items: [
+                  DropdownMenuItem<String>(
+                    value: "Editar",
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit, color: Colors.blue), // Ícono de Editar
+                        SizedBox(width: 10),
+                        Text("Editar"),
+                      ],
+                    ),
                   ),
-                  dropdownColor: Colors.white, // Color de fondo del menú desplegable
-                  items: [
-                    DropdownMenuItem<String>(
-                      value: "Editar",
-                      child: Row(
-                        children: const [
-                          Icon(Icons.edit, color: Color(0xFF00314D)),
-                          SizedBox(width: 8),
-                          Text("Editar"),
-                        ],
-                      ),
+                  DropdownMenuItem<String>(
+                    value: "Desactivar",
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle,
+                            color: Colors.red), // Ícono de Desactivar
+                        SizedBox(width: 10),
+                        Text("Desactivar"),
+                      ],
                     ),
-                    DropdownMenuItem<String>(
-                      value: "Desactivar",
-                      child: Row(
-                        children: const [
-                          Icon(Icons.circle, color: Color.fromARGB(255, 240, 95, 95)),
-                          SizedBox(width: 8),
-                          Text("Desactivar"),
-                        ],
-                      ),
-                    ),
-                  ],
-                  onChanged: (String? value) {
-                    if (value == "Editar") {
-                      onEdit?.call(); // Llama a la función de editar
-                    } else if (value == "Desactivar") {
-                      onDeactivate?.call(); // Llama a la función de desactivar
-                    }
-                  },
-                ),
+                  ),
+                ],
+                onChanged: (value) {
+                  selectedOption = value;
+                  if (value == "Editar") {
+                    onEdit(); // Acción de Editar
+                  } else if (value == "Desactivar") {
+                    onDeactivate(); // Acción de Desactivar
+                  }
+                },
+                dropdownColor: Colors.white, // Color del menú desplegable
+                borderRadius:
+                    BorderRadius.circular(10), // Bordes redondeados del menú
               ),
             ],
           ),
           const Divider(thickness: 1.5, color: Colors.grey),
           Row(
             children: [
-              const Icon(Icons.label, size: 20, color: Colors.black54),
-              const SizedBox(width: 5),
+              Icon(Icons.label, size: 20, color: Colors.black54),
+              SizedBox(width: 5),
               Text(
                 model,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
-              const SizedBox(width: 15),
-              const Icon(Icons.color_lens, size: 20, color: Colors.black54),
-              const SizedBox(width: 5),
+              SizedBox(width: 15),
+              Icon(Icons.color_lens, size: 20, color: Colors.black54),
+              SizedBox(width: 5),
               Text(
                 color,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.qr_code, size: 20, color: Colors.black54),
-              const SizedBox(width: 5),
+              Icon(Icons.qr_code, size: 20, color: Colors.black54),
+              SizedBox(width: 5),
               Text(
                 serialNumber,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),

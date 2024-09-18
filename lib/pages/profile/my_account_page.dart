@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/pagesSecondarys/profile_page.dart';
+import 'package:maqueta/pages/profile/profile_page.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
