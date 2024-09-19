@@ -12,8 +12,6 @@ class PeopleService {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        print('Response body: ${response.body}');  // Añadir esto para verificar la respuesta
-
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
         if (jsonResponse['data'] != null && jsonResponse['data'].isNotEmpty) {
@@ -26,16 +24,14 @@ class PeopleService {
             bloodType: userData['bloodType'],
             documentNumber: userData['document'].toString(),
             documentType: userData['documentType'],
-            fichaNumber: '2620612',
-            serviceCenter: 'Centro de Servicios Financieros',
-            equipments: [],
+            fichaNumber: userData['fichaNumber'] ?? '2620612', // Dato por defecto si no está en la API
+            serviceCenter: userData['serviceCenter'] ?? 'Servicios Financieros', // Dato por defecto
+            equipments: [], // Equipos vacíos por ahora
           );
         } else {
-          print('Datos del usuario no disponibles');
           throw Exception('Datos del usuario no disponibles');
         }
       } else {
-        print('Error en el servidor: ${response.statusCode}');
         throw Exception('Error en el servidor: ${response.statusCode}');
       }
     } catch (e) {
