@@ -1,6 +1,6 @@
 import 'package:maqueta/models/equipment.dart';
 
-//* Datos simulados del usuario y equipos
+//* Datos simulados de equipos
 
 List<Equipment> mockEquipments = [
   Equipment(

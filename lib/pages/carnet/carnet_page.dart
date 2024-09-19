@@ -32,14 +32,20 @@ class _CarnetpageState extends State<Carnetpage> {
             future: _fetchUserData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
+
                 // Mientras se cargan los datos
                 return const Center(child: CircularProgressIndicator());
+
               } else if (snapshot.hasError) {
+
                 // Si ocurre un error al cargar los datos
                 return _buildError(snapshot.error.toString());
+
               } else if (!snapshot.hasData || snapshot.data == null) {
+
                 // Si no hay datos disponibles
                 return _buildNoData();
+
               }
 
               // Datos cargados correctamente, mostramos el contenido

@@ -1,6 +1,8 @@
 import 'dart:io'; // Para trabajar con archivos
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; // Importar el paquete image_picker
+import 'package:maqueta/services/people_service.dart'; // Importar servicio de la API
+import 'package:maqueta/models/user.dart'; // Importar modelo de usuario
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -12,11 +14,37 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // Controlador para el campo de número de celular (editable)
-  final TextEditingController _celularController =
-      TextEditingController(text: '3223909096');
+  final TextEditingController _celularController = TextEditingController(text: '3223909096');
 
   // Variable para almacenar la imagen seleccionada
   File? _image;
+
+  // Instancia del servicio PeopleService
+  final PeopleService _peopleService = PeopleService();
+  User? user; // Variable para almacenar los datos del usuario
+  bool isLoading = true; // Variable para controlar el estado de carga
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData(); // Llamar a la API para obtener los datos del usuario
+  }
+
+  // Función para obtener los datos del usuario
+  Future<void> _fetchUserData() async {
+    try {
+      User? fetchedUser = await _peopleService.getUserById(1); // Cambiar dinámicamente si es necesario
+      setState(() {
+        user = fetchedUser;
+        isLoading = false; // Los datos han sido cargados
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false; // Ocurrió un error, detener la carga
+      });
+      print('Error al cargar los datos del usuario: $e');
+    }
+  }
 
   // Método para seleccionar una imagen
   Future<void> _pickImage() async {
@@ -31,8 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   // Método para construir cada columna con campos no editables
-  Widget _buildInfoColumn(String label, String value,
-      {bool isEditable = false}) {
+  Widget _buildInfoColumn(String label, String value, {bool isEditable = false}) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,8 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 10.0),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -59,12 +85,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 )
               : TextFormField(
                   initialValue: value,
-                  enabled:
-                      false, // Deshabilita el campo para que no sea editable
+                  enabled: false, // Deshabilita el campo para que no sea editable
                   decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 10.0),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -121,56 +145,52 @@ class _ProfilePageState extends State<ProfilePage> {
                                 : null,
                           ),
                         ),
-                        const SizedBox(
-                            width: 20), // Espacio entre la imagen y el texto
+                        const SizedBox(width: 20), // Espacio entre la imagen y el texto
                         // Column para alinear el nombre y correo a la derecha de la imagen
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // El texto se ajusta dinámicamente según el tamaño de la pantalla
-                              Text(
-                                "Juan Pedro Nalavaja Laverde",
-                                style: TextStyle(
-                                  fontSize: screenSize.width *
-                                      0.04, // Tamaño relativo al ancho
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF2B2B30),
-                                ),
-                                overflow: TextOverflow
-                                    .ellipsis, // Corta con "..." si es muy largo
-                              ),
-                              const SizedBox(
-                                  height:
-                                      5), // Pequeño espacio entre nombre y correo
-                              Text(
-                                "juanPeNavaja@gmail.com",
-                                style: TextStyle(
-                                  fontSize: screenSize.width *
-                                      0.03, // Tamaño relativo al ancho
-                                  color: Color(0xFF888787),
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              isLoading
+                                  ? const CircularProgressIndicator() // Indicador de carga mientras se obtienen los datos
+                                  : Text(
+                                      "${user!.name} ${user!.lastName}", // Mostrar nombre y apellido traídos de la API
+                                      style: TextStyle(
+                                        fontSize: screenSize.width * 0.04, // Tamaño relativo al ancho
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF2B2B30),
+                                      ),
+                                      overflow: TextOverflow.ellipsis, // Corta con "..." si es muy largo
+                                    ),
+                              const SizedBox(height: 5), // Pequeño espacio entre nombre y correo
+                              isLoading
+                                  ? const CircularProgressIndicator() // Indicador de carga mientras se obtienen los datos
+                                  : Text(
+                                      user!.email, // Mostrar email traído de la API
+                                      style: TextStyle(
+                                        fontSize: screenSize.width * 0.03, // Tamaño relativo al ancho
+                                        color: const Color(0xFF888787),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                             ],
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 25),
-
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 25, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Row y Expanded para organizar la información en dos columnas.
                           Row(
                             children: [
-                              _buildInfoColumn("Nombres", "Juan Pedro"),
+                              _buildInfoColumn("Nombres", user != null ? user!.name : "Cargando..."),
                               const SizedBox(width: 15),
-                              _buildInfoColumn("Apellidos", "Navaja Laverde"),
+                              _buildInfoColumn("Apellidos", user != null ? user!.lastName : "Cargando..."),
                             ],
                           ),
                           const SizedBox(height: 15),
@@ -178,16 +198,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               _buildInfoColumn("Tipo de documento", "C.C"),
                               const SizedBox(width: 15),
-                              _buildInfoColumn(
-                                  "Número de documento", "1032937844"),
+                              _buildInfoColumn("Número de documento", "1032937844"),
                             ],
                           ),
                           const SizedBox(height: 15),
                           Row(
                             children: [
-                              // El número de celular es el único campo editable
-                              _buildInfoColumn("Número de celular", "",
-                                  isEditable: true),
+                              _buildInfoColumn("Número de celular", "", isEditable: true),
                               const SizedBox(width: 15),
                               _buildInfoColumn("Tipo de sangre", "O +"),
                             ],
@@ -205,23 +222,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 20),
                     // Botón de guardar alineado a la derecha con padding
                     Padding(
-                      padding: const EdgeInsets.only(
-                          right: 20), // Espacio entre el botón y el borde derecho
+                      padding: const EdgeInsets.only(right: 20), // Espacio entre el botón y el borde derecho
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .end, // Alinea el botón a la derecha
+                        mainAxisAlignment: MainAxisAlignment.end, // Alinea el botón a la derecha
                         children: [
                           ElevatedButton(
                             onPressed: () {
-
-                              //TODO: Lógica para guardar los cambios (solo el número de celular)
-                              
+                              // Lógica para guardar los cambios (solo el número de celular)
                               print('Nuevo número de celular: ${_celularController.text}');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF00314D),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 50, vertical: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
