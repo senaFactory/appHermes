@@ -1,6 +1,6 @@
 import 'dart:io'; // Para trabajar con archivos
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Importar el paquete image_picker
+import 'package:image_picker/image_picker.dart'; 
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Función para obtener los datos del usuario
   Future<User?> _fetchUserData() {
-    return _peopleService.getUserById(1); // Aquí puedes cambiar el ID dinámicamente
+    return _peopleService.getUserById(4); // Aquí puedes cambiar el ID dinámicamente
   }
 
   // Método para seleccionar una imagen

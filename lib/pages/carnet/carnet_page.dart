@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class Carnetpage extends StatefulWidget {
   const Carnetpage({super.key});
@@ -11,11 +12,11 @@ class Carnetpage extends StatefulWidget {
 }
 
 class _CarnetpageState extends State<Carnetpage> {
-  final PeopleService _peopleService = PeopleService(); // Servicio para obtener los datos
+  final PeopleService _peopleService = PeopleService();
 
   // Función para obtener los datos del usuario
   Future<User?> _fetchUserData() {
-    return _peopleService.getUserById(1); // ID de usuario (puedes cambiar dinámicamente)
+    return _peopleService.getUserById(4);
   }
 
   @override
@@ -25,30 +26,18 @@ class _CarnetpageState extends State<Carnetpage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo azul en la parte superior
           _buildBackground(screenSize),
-          // Contenido principal que depende de si los datos ya han sido cargados
           FutureBuilder<User?>(
             future: _fetchUserData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-
-                // Mientras se cargan los datos
                 return const Center(child: CircularProgressIndicator());
-
               } else if (snapshot.hasError) {
-
-                // Si ocurre un error al cargar los datos
                 return _buildError(snapshot.error.toString());
-
               } else if (!snapshot.hasData || snapshot.data == null) {
-
-                // Si no hay datos disponibles
                 return _buildNoData();
-
               }
 
-              // Datos cargados correctamente, mostramos el contenido
               return _buildUserCard(screenSize, snapshot.data!);
             },
           ),
@@ -57,15 +46,15 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para el fondo azul
+  // Fondo azul en la parte superior
   Widget _buildBackground(Size screenSize) {
     return Container(
-      height: screenSize.height * 0.4, // El fondo ocupa el 40% de la pantalla
-      color: const Color(0xFF00416A), // Color de fondo azul
+      height: screenSize.height * 0.4,
+      color: const Color(0xFF00416A),
     );
   }
 
-  // Widget para mostrar el error
+  // Widget para mostrar error
   Widget _buildError(String errorMessage) {
     return Center(
       child: Text(
@@ -85,7 +74,7 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para mostrar los datos del usuario en el carnet
+  // Widget para mostrar los datos del usuario y el QR
   Widget _buildUserCard(Size screenSize, User user) {
     return ListView(
       children: [
@@ -94,11 +83,11 @@ class _CarnetpageState extends State<Carnetpage> {
           child: Column(
             children: [
               const SizedBox(height: 30),
-              _buildUserInfo(screenSize, user), // Información del usuario
+              _buildUserInfo(screenSize, user),
               const SizedBox(height: 20),
-              _buildQrImage(screenSize), // Imagen QR
+              _buildQrCode(screenSize, user), // Nuevo widget QR code
               const SizedBox(height: 20),
-              _buildUserDetails(screenSize, user), // Detalles del usuario
+              _buildUserDetails(screenSize, user),
             ],
           ),
         ),
@@ -106,13 +95,13 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para mostrar la información del usuario (nombre y aprendiz)
+  // Widget para mostrar la información del usuario
   Widget _buildUserInfo(Size screenSize, User user) {
     return Container(
-      width: screenSize.width * 0.8, // Ancho ajustado con márgenes
-      alignment: Alignment.centerLeft, // Alinea el texto a la izquierda
+      width: screenSize.width * 0.8,
+      alignment: Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Alineación del texto a la izquierda
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Hola, ${user.name}!',
@@ -135,10 +124,11 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para mostrar la imagen QR
-  Widget _buildQrImage(Size screenSize) {
+  // Nuevo widget QR code mejorado
+// Nuevo widget QR code con PrettyQrView.data
+  Widget _buildQrCode(Size screenSize, User user) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(50.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -151,11 +141,19 @@ class _CarnetpageState extends State<Carnetpage> {
           ),
         ],
       ),
-      child: Image.asset(
-        'images/QRimage.png',
-        width: screenSize.width * 0.7,
-        height: screenSize.width * 0.7,
-        fit: BoxFit.contain,
+      child: PrettyQrView.data(
+        data: 'User ID: ${user.documentNumber}',
+        decoration: const PrettyQrDecoration(
+          background: Colors.white,
+          shape: PrettyQrSmoothSymbol(
+            color: Color(0xFF00324A),
+          ),
+          image: PrettyQrDecorationImage(
+            image: AssetImage('images/logo_sena_blue.png'),
+          ),
+        ),
+        errorCorrectLevel:
+            QrErrorCorrectLevel.M, // Nivel de corrección de errores
       ),
     );
   }
