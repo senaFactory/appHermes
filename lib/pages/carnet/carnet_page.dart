@@ -16,7 +16,7 @@ class _CarnetpageState extends State<Carnetpage> {
 
   // Función para obtener los datos del usuario
   Future<User?> _fetchUserData() {
-    return _peopleService.getUserById(4);
+    return _peopleService.getUserById(2);
   }
 
   @override
@@ -146,10 +146,10 @@ class _CarnetpageState extends State<Carnetpage> {
         decoration: const PrettyQrDecoration(
           background: Colors.white,
           shape: PrettyQrSmoothSymbol(
-            color: Color(0xFF00324A),
+            color: Color.fromARGB(255, 0, 0, 0),
           ),
           image: PrettyQrDecorationImage(
-            image: AssetImage('images/logo_sena_blue.png'),
+            image: AssetImage('images/logo_sena_negro.png'),
           ),
         ),
         errorCorrectLevel:
