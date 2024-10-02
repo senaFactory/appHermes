@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Función para obtener los datos del usuario
   Future<User?> _fetchUserData() {
-    return _peopleService.getUserById(2); // Aquí puedes cambiar el ID dinámicamente
+    return _peopleService.getUserById(2 ); // Aquí puedes cambiar el ID dinámicamente
   }
 
   // Método para seleccionar una imagen

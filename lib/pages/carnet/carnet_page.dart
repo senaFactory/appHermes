@@ -142,7 +142,16 @@ class _CarnetpageState extends State<Carnetpage> {
         ],
       ),
       child: PrettyQrView.data(
-        data: 'User ID: ${user.documentNumber}',
+        data: '${[
+          user.name,
+          user.lastName,
+          user.email,
+          user.documentNumber,
+          user.documentType,
+          user.bloodType,
+          user.fichaNumber,
+          user.serviceCenter
+        ]}',
         decoration: const PrettyQrDecoration(
           background: Colors.white,
           shape: PrettyQrSmoothSymbol(

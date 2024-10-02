@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/profile/profile_page.dart';
-import 'package:maqueta/services/people_service.dart'; // Importa el servicio
-import 'package:maqueta/models/user.dart'; // Importa el modelo User
+import 'package:maqueta/services/people_service.dart'; 
+import 'package:maqueta/models/user.dart'; 
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
