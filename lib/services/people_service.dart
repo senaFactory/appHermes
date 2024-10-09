@@ -14,18 +14,25 @@ class PeopleService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
+        // Imprime la respuesta completa para ver la estructura y los datos
+        print('Response from backend: $jsonResponse');
+
         if (jsonResponse['data'] != null && jsonResponse['data'].isNotEmpty) {
           final userData = jsonResponse['data'][0];
 
+          // Imprime específicamente el campo phoneNumber para verificarlo
+          print('phoneNumber from API: ${userData['phoneNumber']}');
+
           return User(
-            name: userData['name'],
-            lastName: userData['lastname'],
-            email: userData['email'],
-            bloodType: userData['bloodType'],
+            name: userData['name'] ?? 'N/A',
+            lastName: userData['lastname'] ?? 'N/A',
+            email: userData['email'] ?? 'N/A',
+            phoneNumber: userData['phoneNumber'] ?? '',
+            bloodType: userData['bloodType'] ?? 'N/A',
             documentNumber: userData['document'].toString(),
-            documentType: userData['documentType'],
-            fichaNumber: userData['fichaNumber'] ?? '2620612', // Dato por defecto si no está en la API
-            serviceCenter: userData['serviceCenter'] ?? 'Servicios Financieros', // Dato por defecto
+            documentType: userData['documentType'] ?? 'N/A',
+            fichaNumber: userData['fichaNumber'] ?? '2620612', // Valor por defecto
+            serviceCenter: userData['serviceCenter'] ?? 'Servicios Financieros', // Valor por defecto
             equipments: [], // Equipos vacíos por ahora
           );
         } else {
