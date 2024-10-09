@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/custom_dropdown.dart'; 
+import 'package:maqueta/models/equipment.dart';
+
 class Formaddeequipts extends StatefulWidget {
   const Formaddeequipts({super.key});
 
@@ -9,15 +11,11 @@ class Formaddeequipts extends StatefulWidget {
 }
 
 class _RegisterEquipmentPageState extends State<Formaddeequipts> {
-  // Lista de opciones para el tipo de equipo
   final List<String> _equipmentTypes = ['Tablet', 'Desktop', 'Portatil'];
   String? _selectedType;
-
-  // Lista de opciones para las marcas
   final List<String> _brands = ['Apple', 'Dell', 'HP', 'Asus', 'Acer', 'Lenovo'];
   String? _selectedBrand;
 
-  // Controladores para los campos de texto
   final _modelController = TextEditingController();
   final _serialNumberController = TextEditingController();
   final _colorController = TextEditingController();
@@ -29,7 +27,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
         children: [
           ListView(
             children: [
-              // HomeAppBar con la flecha de retroceso
               Stack(
                 children: [
                   const HomeAppBar(),
@@ -38,7 +35,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                     left: 5,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                      // Flecha para regresar a la pantalla anterior.
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -51,7 +47,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Título de la página
                     const Text(
                       'Registro de Equipo',
                       style: TextStyle(
@@ -68,8 +63,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    
-                    // Usar el CustomDropdownWidget para seleccionar el tipo de equipo
                     const Text(
                       'Tipo de Equipo',
                       style: TextStyle(
@@ -89,8 +82,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    
-                    // Usar el CustomDropdownWidget para seleccionar la marca
                     const Text(
                       'Marca',
                       style: TextStyle(
@@ -110,26 +101,33 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    
-                    // Campo de texto para el modelo
                     _buildTextField('Modelo', 'Ingresa el modelo del equipo', _modelController),
                     const SizedBox(height: 20),
-                    
-                    // Campo de texto para el número de serie
                     _buildTextField('Numero de serie', 'Ingresa el numero de serie del equipo', _serialNumberController),
                     const SizedBox(height: 20),
-                    
-                    // Campo de texto para el color
                     _buildTextField('Color', 'Ingresa el color del equipo', _colorController),
                     const SizedBox(height: 30),
-                    
-                    // Botón de registro alineado a la derecha
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,  // Alinea el botón a la derecha
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            // Lógica para registrar el equipo
+                            // Crear un nuevo equipo con la información proporcionada
+                            if (_selectedType != null && _selectedBrand != null) {
+                              final newEquipment = Equipment(
+                                type: _selectedType!,
+                                brand: _selectedBrand!,
+                                model: _modelController.text,
+                                color: _colorController.text,
+                                serialNumber: _serialNumberController.text,
+                              );
+                              Navigator.of(context).pop(newEquipment);
+                            } else {
+                              // Mostrar un mensaje de error si los campos están vacíos
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Por favor llena todos los campos.')),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF00314D),
@@ -158,7 +156,6 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
     );
   }
 
-  // Método para construir los campos de texto
   Widget _buildTextField(String label, String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; 
+import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -80,7 +80,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   final user = snapshot.data!;
                   if (_celularController.text.isEmpty) {
-                    _celularController.text = user.phoneNumber.isNotEmpty ? user.phoneNumber : '';
+                    _celularController.text =
+                        user.phoneNumber.isNotEmpty ? user.phoneNumber : '';
                   }
 
                   return Center(
@@ -106,7 +107,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 radius: 70,
                                 backgroundImage: _image != null
                                     ? FileImage(_image!)
-                                    : const AssetImage('images/aprendiz_sena1.jpeg')
+                                    : const AssetImage(
+                                            'images/aprendiz_sena1.jpeg')
                                         as ImageProvider,
                                 child: _image == null
                                     ? Icon(
@@ -125,7 +127,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Text(
                                     "${user.name} ${user.lastName}",
                                     style: TextStyle(
-                                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
                                       fontWeight: FontWeight.w500,
                                       color: const Color(0xFF2B2B30),
                                     ),
@@ -135,7 +139,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Text(
                                     user.email,
                                     style: TextStyle(
-                                      fontSize: MediaQuery.of(context).size.width * 0.03,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
                                       color: const Color(0xFF888787),
                                     ),
                                     overflow: TextOverflow.ellipsis,
@@ -147,39 +153,60 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 25),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 25, vertical: 15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Expanded(child: _buildInfoColumn("Nombres", user.name)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Nombres", user.name)),
                                   const SizedBox(width: 15),
-                                  Expanded(child: _buildInfoColumn("Apellidos", user.lastName)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Apellidos", user.lastName)),
                                 ],
                               ),
                               const SizedBox(height: 15),
                               Row(
                                 children: [
-                                  Expanded(child: _buildInfoColumn("Tipo de documento", user.documentType)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Tipo de documento",
+                                          user.documentType)),
                                   const SizedBox(width: 15),
-                                  Expanded(child: _buildInfoColumn("Número de documento", user.documentNumber)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Número de documento",
+                                          user.documentNumber)),
                                 ],
                               ),
                               const SizedBox(height: 15),
                               Row(
                                 children: [
-                                  Expanded(child: _buildInfoColumn("Número de celular", _celularController.text, isEditable: true)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Número de celular",
+                                          _celularController.text,
+                                          isEditable: true)),
                                   const SizedBox(width: 15),
-                                  Expanded(child: _buildInfoColumn("Tipo de sangre", user.bloodType)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Tipo de sangre", user.bloodType)),
                                 ],
                               ),
                               const SizedBox(height: 15),
                               Row(
                                 children: [
-                                  Expanded(child: _buildInfoColumn("Número de ficha", user.fichaNumber)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Número de ficha", user.fichaNumber)),
                                   const SizedBox(width: 15),
-                                  Expanded(child: _buildInfoColumn("Centro", user.serviceCenter)),
+                                  Expanded(
+                                      child: _buildInfoColumn(
+                                          "Centro", user.serviceCenter)),
                                 ],
                               ),
                             ],
@@ -193,11 +220,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               ElevatedButton(
                                 onPressed: () {
-                                  print('Nuevo número de celular: ${_celularController.text}');
+                                  print(
+                                      'Nuevo número de celular: ${_celularController.text}');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF00314D),
-                                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 15),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -230,7 +259,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildInfoColumn(String label, String value, {bool isEditable = false}) {
+  Widget _buildInfoColumn(String label, String value,
+      {bool isEditable = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -249,7 +279,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 10.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -260,7 +291,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 enabled: false,
                 decoration: InputDecoration(
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 10.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
