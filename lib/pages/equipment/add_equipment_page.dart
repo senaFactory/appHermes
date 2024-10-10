@@ -11,7 +11,7 @@ class Formaddeequipts extends StatefulWidget {
 }
 
 class _RegisterEquipmentPageState extends State<Formaddeequipts> {
-  final List<String> _equipmentTypes = ['Tablet', 'Desktop', 'Portatil'];
+  final List<String> _equipmentTypes = ['Tablet', 'Portátil','Cámara'];
   String? _selectedType;
   final List<String> _brands = ['Apple', 'Dell', 'HP', 'Asus', 'Acer', 'Lenovo'];
   String? _selectedBrand;
@@ -19,6 +19,8 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
   final _modelController = TextEditingController();
   final _serialNumberController = TextEditingController();
   final _colorController = TextEditingController();
+
+  //TODO: Modificar formulario según accesorios 
 
   @override
   Widget build(BuildContext context) {

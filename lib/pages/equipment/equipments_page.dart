@@ -29,12 +29,14 @@ class _EquipmentspageState extends State<Equipmentspage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Column(
         children: [
           const HomeAppBar(),
           const SizedBox(height: 40),
-          Center(
-            child: Column(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   "Mis Equipos",
@@ -44,67 +46,61 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     color: Color(0xFF00314D),
                   ),
                 ),
-                const SizedBox(height: 20),
-
-                // Mostrar la lista de equipos con separación
-                ..._equipments
-                    .map((equipment) => Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: 20.0), // Espacio entre tarjetas
-                          child: EquipmentCard(
-                            type: equipment.type,
-                            brand: equipment.brand,
-                            model: equipment.model,
-                            color: equipment.color,
-                            serialNumber: equipment.serialNumber,
-                            onEdit: () {
-                              editEquiptModal.showEditModal(context);
-                            },
-                            onDeactivate: _deactivateEquipment,
-                          ),
-                        ))
-                    .toList(),
-
-                const SizedBox(height: 35),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final newEquipment = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Formaddeequipts(),
-                            ),
-                          );
-
-                          if (newEquipment != null) {
-                            _addEquipment(newEquipment);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00314D),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text(
-                          "Agregar equipo",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final newEquipment = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Formaddeequipts(),
                       ),
+                    );
+
+                    if (newEquipment != null) {
+                      _addEquipment(newEquipment);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00314D),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ],
+                  ),
+                  child: const Text(
+                    "Agregar equipo",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              itemCount: _equipments.length,
+              itemBuilder: (context, index) {
+                final equipment = _equipments[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: EquipmentCard(
+                    type: equipment.type,
+                    brand: equipment.brand,
+                    model: equipment.model,
+                    color: equipment.color,
+                    serialNumber: equipment.serialNumber,
+                    onEdit: () {
+                      editEquiptModal.showEditModal(context);
+                    },
+                    onDeactivate: _deactivateEquipment,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 35),
         ],
       ),
     );
