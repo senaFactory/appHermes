@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/carnet_page.dart';
-import 'package:maqueta/pages/equipment/equipments_page.dart';
 import 'package:maqueta/pages/profile/my_account_page.dart';
 import 'package:maqueta/widgets/navigation_bar.dart'; 
 
@@ -10,13 +9,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 1; // Índice para manejar la pestaña activa
+  int _currentIndex = 0; // Índice para manejar la pestaña activa
 
   // Lista de las páginas a mostrar en IndexedStack
   final List<Widget> _pages = [
-    Equipmentspage(), // Indice 0
-    Carnetpage(), // Indice 1
-    Myaccountpage(), // Indice 2
+    Carnetpage(), // Indice 0
+    Myaccountpage(), // Indice 1
   ];
 
   // Método que se llama cuando se selecciona una pestaña en la barra de navegación

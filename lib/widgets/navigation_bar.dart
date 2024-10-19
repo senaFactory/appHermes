@@ -19,7 +19,7 @@ class CustomNavigationBar extends StatelessWidget {
       color: const Color(0xFF00314D),
       buttonBackgroundColor: const Color(0xFF007D78),
       items: const [
-        Icon(Icons.computer, size: 30, color: Colors.white),
+        
         Icon(Icons.qr_code, size: 30, color: Colors.white),
         Icon(Icons.people_alt_outlined, size: 30, color: Colors.white),
       ],
