@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/profile/profile_page.dart';
-import 'package:maqueta/services/people_service.dart'; 
-import 'package:maqueta/models/user.dart'; 
+import 'package:maqueta/services/people_service.dart';
+import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
@@ -12,7 +12,8 @@ class Myaccountpage extends StatefulWidget {
 }
 
 class _MyaccountpageState extends State<Myaccountpage> {
-  final PeopleService _peopleService = PeopleService(); // Instancia del servicio
+  final PeopleService _peopleService =
+      PeopleService(); // Instancia del servicio
   User? user; // Almacena los datos del usuario
 
   @override
@@ -23,7 +24,8 @@ class _MyaccountpageState extends State<Myaccountpage> {
 
   // Función para obtener los datos del usuario
   Future<void> _fetchUserData() async {
-    User? fetchedUser = await _peopleService.getUserById(2); // Puedes cambiar el ID dinámicamente
+    User? fetchedUser = await _peopleService
+        .getUserById(2); // Puedes cambiar el ID dinámicamente
 
     setState(() {
       user = fetchedUser; // Actualiza el estado con el usuario obtenido
@@ -85,7 +87,8 @@ class _MyaccountpageState extends State<Myaccountpage> {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.dark_mode, color: Color(0xFF00314D)),
+                  leading:
+                      const Icon(Icons.dark_mode, color: Color(0xFF00314D)),
                   title: const Text(
                     "Modo oscuro",
                     style: TextStyle(
