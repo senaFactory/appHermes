@@ -43,7 +43,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF00314D),
+                    color: Color(0xFF39A900),
                   ),
                 ),
                 ElevatedButton(
@@ -60,7 +60,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00314D),
+                    backgroundColor: const Color(0xFF39A900),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),

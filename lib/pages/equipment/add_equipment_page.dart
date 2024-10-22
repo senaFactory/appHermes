@@ -54,7 +54,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF00314D),
+                        color: Color(0xFF39A900),
                       ),
                     ),
                     const Text(
@@ -70,7 +70,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF00314D),
+                        color: Color(0xFF39A900),
                       ),
                     ),
                     CustomDropdown(
@@ -89,7 +89,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF00314D),
+                        color: Color(0xFF39A900),
                       ),
                     ),
                     CustomDropdown(
@@ -132,7 +132,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF00314D),
+                            backgroundColor: const Color(0xFF39A900),
                             padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -167,7 +167,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF00314D),
+            color: Color(0xFF39A900),
           ),
         ),
         const SizedBox(height: 8),

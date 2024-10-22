@@ -27,7 +27,7 @@ class EditEquiptModal {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF00314D),
+                      color: Color(0xFF39A900),
                     ),
                   ),
                 ),
@@ -47,7 +47,7 @@ class EditEquiptModal {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00314D),
+                    color: Color(0xFF39A900),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -73,7 +73,7 @@ class EditEquiptModal {
                       Navigator.pop(context); // Cierra el modal
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00314D),
+                      backgroundColor: const Color(0xFF39A900),
                       padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),

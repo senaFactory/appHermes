@@ -50,7 +50,7 @@ class _CarnetpageState extends State<Carnetpage> {
   Widget _buildBackground(Size screenSize) {
     return Container(
       height: screenSize.height * 0.4,
-      color: const Color(0xFF00416A),
+      color: const Color(0xFF39A900),
     );
   }
 

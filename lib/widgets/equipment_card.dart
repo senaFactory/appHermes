@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
 class EquipmentCard extends StatelessWidget {
@@ -39,19 +41,19 @@ class EquipmentCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(Icons.laptop, size: 30, color: Colors.black54),
-                  SizedBox(width: 10),
+                  const Icon(Icons.laptop, size: 30, color: Colors.black54),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         type,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         brand,
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                        style: const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -60,26 +62,27 @@ class EquipmentCard extends StatelessWidget {
               // Menú desplegable con opciones de Editar y Desactivar
               DropdownButton<String>(
                 value: selectedOption,
-                icon: Icon(Icons.keyboard_arrow_down),
-                hint: Text("Acción"),
-                underline: SizedBox(), // Elimina la línea de subrayado
+                icon: const Icon(Icons.keyboard_arrow_down),
+                hint: const Text("Acción"),
+                underline: const SizedBox(), // Elimina la línea de subrayado
                 items: [
-                  DropdownMenuItem<String>(
+                  const DropdownMenuItem<String>(
                     value: "Editar",
                     child: Row(
                       children: [
-                        Icon(Icons.edit, color: Colors.blue), // Ícono de Editar
+                        Icon(Icons.edit,
+                            color: Color(0xFF888787)), // Ícono de Editar
                         SizedBox(width: 10),
                         Text("Editar"),
                       ],
                     ),
                   ),
-                  DropdownMenuItem<String>(
+                  const DropdownMenuItem<String>(
                     value: "Desactivar",
                     child: Row(
                       children: [
                         Icon(Icons.circle,
-                            color: Colors.red), // Ícono de Desactivar
+                            color: Color(0xFF888787)), // Ícono de Desactivar
                         SizedBox(width: 10),
                         Text("Desactivar"),
                       ],
@@ -103,29 +106,29 @@ class EquipmentCard extends StatelessWidget {
           const Divider(thickness: 1.5, color: Colors.grey),
           Row(
             children: [
-              Icon(Icons.label, size: 20, color: Colors.black54),
-              SizedBox(width: 5),
+              const Icon(Icons.label, size: 20, color: Colors.black54),
+              const SizedBox(width: 5),
               Text(
                 model,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
-              SizedBox(width: 15),
-              Icon(Icons.color_lens, size: 20, color: Colors.black54),
-              SizedBox(width: 5),
+              const SizedBox(width: 15),
+              const Icon(Icons.color_lens, size: 20, color: Colors.black54),
+              const SizedBox(width: 5),
               Text(
                 color,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
-              Icon(Icons.qr_code, size: 20, color: Colors.black54),
-              SizedBox(width: 5),
+              const Icon(Icons.qr_code, size: 20, color: Colors.black54),
+              const SizedBox(width: 5),
               Text(
                 serialNumber,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: const TextStyle(fontSize: 14, color: Colors.black87),
               ),
             ],
           ),

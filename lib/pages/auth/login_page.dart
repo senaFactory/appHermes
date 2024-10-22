@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.pushReplacementNamed(context, '/home'); // Navegar a HomeScreen
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF00314D),
+                      backgroundColor: const Color(0xFF39A900),
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),

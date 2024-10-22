@@ -21,7 +21,7 @@ class InfoColumnWidget extends StatelessWidget {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF00314D),
+            color: Color(0xFF39A900),
           ),
         ),
         Text(value),

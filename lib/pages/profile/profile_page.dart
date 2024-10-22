@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF00314D),
+                            color: Color(0xFF39A900),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -210,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
           label,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF00314D),
+            color: Color(0xFF39A900),
           ),
         ),
         const SizedBox(height: 5),
@@ -241,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
               print('Foto guardada');
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF00314D),
+              backgroundColor: const Color(0xFF39A900),
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
