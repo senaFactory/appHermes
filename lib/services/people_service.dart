@@ -21,9 +21,6 @@ class PeopleService {
         if (jsonResponse['data'] != null && jsonResponse['data'].isNotEmpty) {
           final userData = jsonResponse['data'][0];
 
-          // Imprime específicamente el campo phoneNumber para verificarlo
-          print('phoneNumber from API: ${userData['phoneNumber']}');
-
           return User(
             name: userData['name'] ?? 'N/A',
             lastName: userData['lastname'] ?? 'N/A',

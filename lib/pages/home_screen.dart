@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/carnet_page.dart';
+import 'package:maqueta/pages/equipment/equipments_page.dart';
 import 'package:maqueta/pages/profile/my_account_page.dart';
 import 'package:maqueta/widgets/navigation_bar.dart'; 
 
@@ -13,9 +14,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Lista de las páginas a mostrar en IndexedStack
   final List<Widget> _pages = [
-    Carnetpage(), // Indice 0
-    Myaccountpage(), // Indice 1
+    Equipmentspage(), // Indice 0
+    Carnetpage(), // Indice 1
+    Myaccountpage(), // Indice 2
   ];
+
 
   // Método que se llama cuando se selecciona una pestaña en la barra de navegación
   void _onTabTapped(int index) {

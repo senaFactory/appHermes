@@ -22,6 +22,7 @@ class CustomNavigationBar extends StatelessWidget {
         
         Icon(Icons.qr_code, size: 30, color: Colors.white),
         Icon(Icons.people_alt_outlined, size: 30, color: Colors.white),
+        Icon(Icons.computer, size: 30, color: Colors.white),
       ],
       index: selectedIndex,  // Pasa el índice inicial
       onTap: onTabTapped,     // Cambia la pestaña seleccionada
