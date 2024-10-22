@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0; // Índice para manejar la pestaña activa
+  int _currentIndex = 1; // Índice para manejar la pestaña activa
 
   // Lista de las páginas a mostrar en IndexedStack
   final List<Widget> _pages = [
