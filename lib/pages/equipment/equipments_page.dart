@@ -4,6 +4,7 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/services/equipment_service.dart'; // Importar el servicio
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -14,16 +15,35 @@ class Equipmentspage extends StatefulWidget {
 
 class _EquipmentspageState extends State<Equipmentspage> {
   final EditEquiptModal editEquiptModal = EditEquiptModal();
-  List<Equipment> _equipments = [];
+  final EquipmentService _equipmentService = EquipmentService(); // Instancia del servicio
+  List<Equipment> _equipments = []; // Lista de equipos
 
-  void _deactivateEquipment() {
-    print('Equipo desactivado');
+  @override
+  void initState() {
+    super.initState();
+    _fetchEquipments(); // Cargar los equipos al iniciar
   }
 
-  void _addEquipment(Equipment equipment) {
-    setState(() {
-      _equipments.add(equipment);
-    });
+  // Método para obtener los equipos desde la API
+  Future<void> _fetchEquipments() async {
+    try {
+      final equipments = await _equipmentService.getAllEquipments();
+      setState(() {
+        _equipments = equipments;
+      });
+    } catch (e) {
+      print('Error fetching equipments: $e');
+    }
+  }
+
+  // Método para agregar un equipo nuevo a través de la API
+  Future<void> _addEquipment(Equipment equipment) async {
+    try {
+      await _equipmentService.addEquipment(equipment);
+      _fetchEquipments(); // Recargar los equipos después de agregar
+    } catch (e) {
+      print('Error adding equipment: $e');
+    }
   }
 
   @override
@@ -56,7 +76,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     );
 
                     if (newEquipment != null) {
-                      _addEquipment(newEquipment);
+                      await _addEquipment(newEquipment); // Agregar equipo a la API
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -68,9 +88,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   ),
                   child: const Text(
                     "Agregar equipo",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
@@ -86,7 +104,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: EquipmentCard(
-                    type: equipment.type,
+                    type: equipment.model,
                     brand: equipment.brand,
                     model: equipment.model,
                     color: equipment.color,
@@ -94,7 +112,9 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     onEdit: () {
                       editEquiptModal.showEditModal(context);
                     },
-                    onDeactivate: _deactivateEquipment,
+                    onDeactivate: () {
+                      print('Equipo desactivado');
+                    },
                   ),
                 );
               },

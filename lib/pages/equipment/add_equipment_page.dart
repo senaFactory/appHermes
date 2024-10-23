@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/widgets/custom_dropdown.dart'; 
+import 'package:maqueta/widgets/custom_dropdown.dart';
 import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/services/equipment_service.dart'; // Importa tu servicio
 
 class Formaddeequipts extends StatefulWidget {
   const Formaddeequipts({super.key});
@@ -11,16 +12,25 @@ class Formaddeequipts extends StatefulWidget {
 }
 
 class _RegisterEquipmentPageState extends State<Formaddeequipts> {
-  final List<String> _equipmentTypes = ['Tablet', 'Portátil','Cámara'];
+  final List<String> _equipmentTypes = ['Tablet', 'Portátil'];
   String? _selectedType;
-  final List<String> _brands = ['Apple', 'Dell', 'HP', 'Asus', 'Acer', 'Lenovo'];
+  final List<String> _brands = [
+    'Apple',
+    'Dell',
+    'HP',
+    'Asus',
+    'Acer',
+    'Lenovo'
+  ];
   String? _selectedBrand;
 
   final _modelController = TextEditingController();
   final _serialNumberController = TextEditingController();
   final _colorController = TextEditingController();
+  final EquipmentService _equipmentService =
+      EquipmentService(); // Instancia del servicio
 
-  //TODO: Modificar formulario según accesorios 
+  bool _isLoading = false; // Indicador de carga
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +46,8 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                     top: 30,
                     left: 5,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      icon:
+                          const Icon(Icons.arrow_back_ios, color: Colors.white),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -103,48 +114,40 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    _buildTextField('Modelo', 'Ingresa el modelo del equipo', _modelController),
+                    _buildTextField('Modelo', 'Ingresa el modelo del equipo',
+                        _modelController),
                     const SizedBox(height: 20),
-                    _buildTextField('Numero de serie', 'Ingresa el numero de serie del equipo', _serialNumberController),
+                    _buildTextField(
+                        'Numero de serie',
+                        'Ingresa el numero de serie del equipo',
+                        _serialNumberController),
                     const SizedBox(height: 20),
-                    _buildTextField('Color', 'Ingresa el color del equipo', _colorController),
+                    _buildTextField('Color', 'Ingresa el color del equipo',
+                        _colorController),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            // Crear un nuevo equipo con la información proporcionada
-                            if (_selectedType != null && _selectedBrand != null) {
-                              final newEquipment = Equipment(
-                                type: _selectedType!,
-                                brand: _selectedBrand!,
-                                model: _modelController.text,
-                                color: _colorController.text,
-                                serialNumber: _serialNumberController.text,
-                              );
-                              Navigator.of(context).pop(newEquipment);
-                            } else {
-                              // Mostrar un mensaje de error si los campos están vacíos
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Por favor llena todos los campos.')),
-                              );
-                            }
-                          },
+                          onPressed: _isLoading ? null : _saveEquipment,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF39A900),
-                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: const Text(
-                            'Registrar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
+                          child: _isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white)
+                              : const Text(
+                                  'Registrar',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -158,7 +161,8 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
     );
   }
 
-  Widget _buildTextField(String label, String hint, TextEditingController controller) {
+  Widget _buildTextField(
+      String label, String hint, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,10 +182,46 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           ),
         ),
       ],
     );
+  }
+
+  // Método para guardar el equipo
+  Future<void> _saveEquipment() async {
+    if (_selectedType != null && _selectedBrand != null) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final newEquipment = Equipment(
+        brand: _selectedBrand!,
+        model: _modelController.text,
+        color: _colorController.text,
+        serialNumber: _serialNumberController.text,
+        state: 'Activo', // Por defecto "Activo"
+      );
+
+      try {
+        await _equipmentService.addEquipment(newEquipment);
+        Navigator.of(context)
+            .pop(newEquipment); // Volvemos con el equipo agregado
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al registrar el equipo.')),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor llena todos los campos.')),
+      );
+    }
   }
 }
