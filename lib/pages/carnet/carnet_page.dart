@@ -114,6 +114,14 @@ class _CarnetpageState extends State<Carnetpage> {
           const Text(
             'Aprendiz',
             style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+          const Text(
+            'ADSO',
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: Colors.white,
@@ -147,10 +155,10 @@ class _CarnetpageState extends State<Carnetpage> {
           user.lastName,
           user.email,
           user.documentNumber,
-          user.documentType,
+          user.acronym, 
           user.bloodType,
-          user.fichaNumber,
-          user.serviceCenter
+          user.studySheet, 
+          user.trainingCenter 
         ]}',
         decoration: const PrettyQrDecoration(
           background: Colors.white,
@@ -226,13 +234,13 @@ class _CarnetpageState extends State<Carnetpage> {
               Expanded(
                 child: InfoColumnWidget(
                   label: "Número Ficha",
-                  value: user.fichaNumber,
+                  value: user.studySheet,
                 ),
               ),
               Expanded(
                 child: InfoColumnWidget(
                   label: "Centro",
-                  value: user.serviceCenter,
+                  value: user.trainingCenter,
                 ),
               ),
             ],

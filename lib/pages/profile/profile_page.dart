@@ -170,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Expanded(
                   child:
-                      _buildInfoColumn("Tipo de Documento", user.documentType)),
+                      _buildInfoColumn("Tipo de Documento", user.acronym)),
               const SizedBox(width: 15),
               Expanded(
                   child: _buildInfoColumn(
@@ -192,9 +192,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             children: [
               Expanded(
-                  child: _buildInfoColumn("Número de Ficha", user.fichaNumber)),
+                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
               const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("Centro", user.serviceCenter)),
+              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
             ],
           ),
         ],
