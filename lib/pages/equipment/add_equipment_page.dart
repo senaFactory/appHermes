@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/custom_dropdown.dart';
 import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/services/equipment_service.dart'; // Importa tu servicio
+import 'package:maqueta/services/equipment_service.dart';
 
 class Formaddeequipts extends StatefulWidget {
   const Formaddeequipts({super.key});
@@ -14,23 +14,15 @@ class Formaddeequipts extends StatefulWidget {
 class _RegisterEquipmentPageState extends State<Formaddeequipts> {
   final List<String> _equipmentTypes = ['Tablet', 'Portátil'];
   String? _selectedType;
-  final List<String> _brands = [
-    'Apple',
-    'Dell',
-    'HP',
-    'Asus',
-    'Acer',
-    'Lenovo'
-  ];
+  final List<String> _brands = ['Apple', 'Dell', 'HP', 'Asus', 'Acer', 'Lenovo'];
   String? _selectedBrand;
 
   final _modelController = TextEditingController();
   final _serialNumberController = TextEditingController();
   final _colorController = TextEditingController();
-  final EquipmentService _equipmentService =
-      EquipmentService(); // Instancia del servicio
 
-  bool _isLoading = false; // Indicador de carga
+  final EquipmentService _equipmentService = EquipmentService();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +38,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                     top: 30,
                     left: 5,
                     child: IconButton(
-                      icon:
-                          const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -70,60 +61,26 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                     ),
                     const Text(
                       'Por favor completa la siguiente información.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Tipo de Equipo',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF39A900),
-                      ),
-                    ),
-                    CustomDropdown(
-                      hint: 'Selecciona el tipo de equipo',
-                      value: _selectedType,
-                      items: _equipmentTypes,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedType = newValue;
-                        });
-                      },
-                    ),
+                    _buildDropdown('Tipo de Equipo', _equipmentTypes, _selectedType, (value) {
+                      setState(() {
+                        _selectedType = value;
+                      });
+                    }),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Marca',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF39A900),
-                      ),
-                    ),
-                    CustomDropdown(
-                      hint: 'Selecciona la marca del equipo',
-                      value: _selectedBrand,
-                      items: _brands,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedBrand = newValue;
-                        });
-                      },
-                    ),
+                    _buildDropdown('Marca', _brands, _selectedBrand, (value) {
+                      setState(() {
+                        _selectedBrand = value;
+                      });
+                    }),
                     const SizedBox(height: 20),
-                    _buildTextField('Modelo', 'Ingresa el modelo del equipo',
-                        _modelController),
+                    _buildTextField('Modelo', 'Ingresa el modelo del equipo', _modelController),
                     const SizedBox(height: 20),
-                    _buildTextField(
-                        'Numero de serie',
-                        'Ingresa el numero de serie del equipo',
-                        _serialNumberController),
+                    _buildTextField('Número de serie', 'Ingresa el número de serie', _serialNumberController),
                     const SizedBox(height: 20),
-                    _buildTextField('Color', 'Ingresa el color del equipo',
-                        _colorController),
+                    _buildTextField('Color', 'Ingresa el color del equipo', _colorController),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -132,21 +89,14 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
                           onPressed: _isLoading ? null : _saveEquipment,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF39A900),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           ),
                           child: _isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white)
+                              ? const CircularProgressIndicator(color: Colors.white)
                               : const Text(
                                   'Registrar',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                         ),
                       ],
@@ -161,36 +111,46 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
     );
   }
 
-  Widget _buildTextField(
-      String label, String hint, TextEditingController controller) {
+  Widget _buildDropdown(String label, List<String> items, String? selectedValue, ValueChanged<String?> onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF39A900),
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF39A900)),
+        ),
+        const SizedBox(height: 8),
+        CustomDropdown(
+          hint: 'Selecciona $label',
+          value: selectedValue,
+          items: items,
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField(String label, String hint, TextEditingController controller) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF39A900)),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           ),
         ),
       ],
     );
   }
 
-  // Método para guardar el equipo
   Future<void> _saveEquipment() async {
     if (_selectedType != null && _selectedBrand != null) {
       setState(() {
@@ -198,17 +158,18 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
       });
 
       final newEquipment = Equipment(
+        id: 0, // ID temporal
+        personId: 1, // ID fijo hasta que haya login
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
         serialNumber: _serialNumberController.text,
-        state: 'Activo', // Por defecto "Activo"
+        state: true,
       );
 
       try {
         await _equipmentService.addEquipment(newEquipment);
-        Navigator.of(context)
-            .pop(newEquipment); // Volvemos con el equipo agregado
+        Navigator.of(context).pop(newEquipment); // Volver a la pantalla anterior
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error al registrar el equipo.')),

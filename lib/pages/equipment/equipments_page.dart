@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
+import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
-import 'package:maqueta/widgets/equipment_card.dart';
-import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/services/equipment_service.dart'; // Importar el servicio
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -14,35 +13,39 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
-  final EditEquiptModal editEquiptModal = EditEquiptModal();
-  final EquipmentService _equipmentService = EquipmentService(); // Instancia del servicio
-  List<Equipment> _equipments = []; // Lista de equipos
+  final EquipmentService _equipmentService = EquipmentService();
+  List<Equipment> _equipments = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchEquipments(); // Cargar los equipos al iniciar
+    _fetchEquipments(); // Cargar equipos al iniciar
   }
 
-  // Método para obtener los equipos desde la API
+  // Función para obtener equipos del usuario con ID 1
   Future<void> _fetchEquipments() async {
     try {
-      final equipments = await _equipmentService.getAllEquipments();
+      final equipments = await _equipmentService.getEquipmentsByPersonId(1);
       setState(() {
         _equipments = equipments;
       });
     } catch (e) {
-      print('Error fetching equipments: $e');
+      print('Error: $e');
     }
   }
 
-  // Método para agregar un equipo nuevo a través de la API
-  Future<void> _addEquipment(Equipment equipment) async {
-    try {
-      await _equipmentService.addEquipment(equipment);
-      _fetchEquipments(); // Recargar los equipos después de agregar
-    } catch (e) {
-      print('Error adding equipment: $e');
+  // Método para registrar un nuevo equipo y actualizar la lista
+  Future<void> _registerEquipment() async {
+    final newEquipment = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Formaddeequipts()),
+    );
+
+    if (newEquipment != null) {
+      newEquipment.personId = 1; // Asignamos el ID 1 a la persona
+
+      await _equipmentService.addEquipment(newEquipment); // Registramos el equipo
+      _fetchEquipments(); // Actualizamos la lista de equipos
     }
   }
 
@@ -67,18 +70,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    final newEquipment = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Formaddeequipts(),
-                      ),
-                    );
-
-                    if (newEquipment != null) {
-                      await _addEquipment(newEquipment); // Agregar equipo a la API
-                    }
-                  },
+                  onPressed: _registerEquipment, // Llama al método de registro
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF39A900),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -110,10 +102,10 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     color: equipment.color,
                     serialNumber: equipment.serialNumber,
                     onEdit: () {
-                      editEquiptModal.showEditModal(context);
+                      // Lógica para editar equipo
                     },
                     onDeactivate: () {
-                      print('Equipo desactivado');
+                      // Lógica para desactivar equipo
                     },
                   ),
                 );

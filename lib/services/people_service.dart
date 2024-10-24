@@ -28,7 +28,7 @@ class PeopleService {
             name: userData['name'] ?? 'N/A',
             lastName: userData['lastname'] ?? 'N/A',
             email: userData['email'] ?? 'N/A',
-            phoneNumber: userData['phone'] ?? '',
+            phoneNumber: userData['phone'] ?? 'N/A',
             bloodType: userData['bloodType']?.trim() ?? 'N/A',
             documentNumber: userData['document'].toString(),
             acronym: userData['acronym'] ?? 'N/A',

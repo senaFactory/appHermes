@@ -1,56 +1,52 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:http/http.dart' as http;
 import 'package:maqueta/models/equipment.dart';
 
 class EquipmentService {
-  final String baseUrl =
-      'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermesapp/equipment';
+  final String baseUrl = 'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermesapp/equipment/by-id/1';
 
-  // Obtener todos los equipos
-  Future<List<Equipment>> getAllEquipments() async {
-    final url = Uri.parse('$baseUrl/all');
-    try {
-      final response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        print('Equipments: $jsonResponse');
-
-        final List<dynamic> data = jsonResponse['data'];
-        return data.map((e) => Equipment.fromJson(e)).toList();
-      } else {
-        throw Exception('Error al obtener equipos: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching equipments: $e');
-      rethrow;
-    }
-  }
-
-  // Agregar un equipo
-  // Agregar un equipo con datos anidados en "data"
+  // Método para agregar equipo con manejo detallado de errores
   Future<void> addEquipment(Equipment equipment) async {
-    final url = Uri.parse('$baseUrl/add');
-
+    final url = Uri.parse(baseUrl);
+    
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          "data": equipment.toJson(), // Enviar los datos bajo la clave "data"
-        }),
+        body: json.encode(equipment.toJson()),
       );
 
-      if (response.statusCode != 201) {
-        throw Exception('Error al agregar equipo: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        print('Equipo registrado exitosamente');
+      } else {
+        // Imprimir la respuesta del servidor en caso de error
+        print('Error en la respuesta del servidor: ${response.body}');
+        throw Exception('Error al registrar el equipo: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error adding equipment: $e');
-      rethrow;
+      print('Exception al registrar equipo: $e');
+      rethrow; // Volver a lanzar la excepción para manejarla en otro nivel si es necesario
+    }
+  }
+
+  // Método para obtener equipos por ID de persona con manejo de errores
+  Future<List<Equipment>> getEquipmentsByPersonId(int personId) async {
+    final url = Uri.parse('$baseUrl/all/$personId');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body)['data'];
+        return data.map((e) => Equipment.fromJson(e)).toList();
+      } else {
+        // Imprimir la respuesta del servidor en caso de error
+        print('Error en la respuesta del servidor: ${response.body}');
+        throw Exception('Error al obtener equipos: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception al obtener equipos: $e');
+      rethrow; // Volver a lanzar la excepción para manejo superior
     }
   }
 }
-
-
-
