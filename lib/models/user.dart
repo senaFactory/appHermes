@@ -8,7 +8,9 @@ class User {
   final String bloodType;
   final String documentNumber;
   final String acronym;          
-  final String studySheet;       
+  final String studySheet;    
+  final String program;   
+  final String journal;
   final String trainingCenter;   
   final List<Equipment> equipments;
 
@@ -21,6 +23,8 @@ class User {
     required this.documentNumber,
     required this.acronym,
     required this.studySheet,
+    required this.program,
+    required this.journal,
     required this.trainingCenter,
     required this.equipments,
   });

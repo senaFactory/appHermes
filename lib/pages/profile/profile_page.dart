@@ -185,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       _buildInfoColumn("Número de Celular", user.phoneNumber)),
               const SizedBox(width: 15),
               Expanded(
-                  child: _buildInfoColumn("Tipo de Sangre", user.bloodType)),
+                  child: _buildInfoColumn("RH", user.bloodType)),
             ],
           ),
           const SizedBox(height: 15),

@@ -33,6 +33,8 @@ class PeopleService {
             documentNumber: userData['document'].toString(),
             acronym: userData['acronym'] ?? 'N/A',
             studySheet: userData['studySheet']?.toString() ?? '1231232',
+            program: userData['program'] ?? 'N/A',
+            journal: userData['journal'] ?? 'Tarde', //Agregar nombre correcto cuando ya este en el backend
             trainingCenter: userData['trainingCenter'] ?? 'CSF',
             equipments: List<Equipment>.from(
                 userData['equipments']?.map((e) => Equipment.fromJson(e)) ?? []),

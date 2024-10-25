@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class Carnetpage extends StatefulWidget {
   const Carnetpage({super.key});
@@ -14,7 +14,6 @@ class Carnetpage extends StatefulWidget {
 class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
 
-  // Función para obtener los datos del usuario
   Future<User?> _fetchUserData() {
     return _peopleService.getUserById(2);
   }
@@ -24,37 +23,25 @@ class _CarnetpageState extends State<Carnetpage> {
     var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackground(screenSize),
-          FutureBuilder<User?>(
-            future: _fetchUserData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return _buildError(snapshot.error.toString());
-              } else if (!snapshot.hasData || snapshot.data == null) {
-                return _buildNoData();
-              }
-
-              return _buildUserCard(screenSize, snapshot.data!);
-            },
-          ),
-        ],
+      backgroundColor: Colors.white, // Fondo blanco para todo el diseño
+      body: Center(
+        child: FutureBuilder<User?>(
+          future: _fetchUserData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return _buildError(snapshot.error.toString());
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return _buildNoData();
+            }
+            return _buildCarnet(screenSize, snapshot.data!);
+          },
+        ),
       ),
     );
   }
 
-  // Fondo azul en la parte superior
-  Widget _buildBackground(Size screenSize) {
-    return Container(
-      height: screenSize.height * 0.4,
-      color: const Color(0xFF39A900),
-    );
-  }
-
-  // Widget para mostrar error
   Widget _buildError(String errorMessage) {
     return Center(
       child: Text(
@@ -64,7 +51,6 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para cuando no hay datos
   Widget _buildNoData() {
     return const Center(
       child: Text(
@@ -74,179 +60,114 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  // Widget para mostrar los datos del usuario y el QR
-  Widget _buildUserCard(Size screenSize, User user) {
-    return ListView(
-      children: [
-        const SizedBox(height: 20),
-        Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              _buildUserInfo(screenSize, user),
-              const SizedBox(height: 20),
-              _buildQrCode(screenSize, user), // Nuevo widget QR code
-              const SizedBox(height: 20),
-              _buildUserDetails(screenSize, user),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  // Widget para mostrar la información del usuario
-  Widget _buildUserInfo(Size screenSize, User user) {
+  Widget _buildCarnet(Size screenSize, User user) {
     return Container(
-      width: screenSize.width * 0.8,
-      alignment: Alignment.centerLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Hola, ${user.name}!',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          const Text(
-            'Aprendiz',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-          ),
-          const Text(
-            'ADSO',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Nuevo widget QR code mejorado
-// Nuevo widget QR code con PrettyQrView.data
-  Widget _buildQrCode(Size screenSize, User user) {
-    return Container(
-      padding: const EdgeInsets.all(50.0),
+      width: screenSize.width * 0.85,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withOpacity(0.3),
             spreadRadius: 5,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: PrettyQrView.data(
-        data: '${[
-          user.name,
-          user.lastName,
-          user.email,
-          user.documentNumber,
-          user.acronym, 
-          user.bloodType,
-          user.studySheet, 
-          user.trainingCenter 
-        ]}',
-        decoration: const PrettyQrDecoration(
-          background: Colors.white,
-          shape: PrettyQrSmoothSymbol(
-            color: Color.fromARGB(255, 0, 0, 0),
-          ),
-          image: PrettyQrDecorationImage(
-            image: AssetImage('images/logo_sena_negro.png'),
-          ),
-        ),
-        errorCorrectLevel:
-            QrErrorCorrectLevel.M, // Nivel de corrección de errores
-      ),
-    );
-  }
-
-  // Widget para mostrar los detalles del usuario
-  Widget _buildUserDetails(Size screenSize, User user) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color.fromARGB(255, 253, 251, 251).withOpacity(0.2),
-            spreadRadius: 5,
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            blurRadius: 7,
+            offset: const Offset(0, 3), // Sombra debajo del carnet
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "Nombre",
-                  value: user.name,
-                ),
-              ),
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "Apellido",
-                  value: user.lastName,
-                ),
-              ),
-            ],
+          const CircleAvatar(
+            radius: 60, // Tamaño del avatar
+            backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
           ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "C.C",
-                  value: user.documentNumber,
-                ),
-              ),
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "RH",
-                  value: user.bloodType,
-                ),
-              ),
-            ],
+          const SizedBox(height: 10),
+          Text(
+            '${user.name} ${user.lastName}',
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF39A900), // Verde institucional
+            ),
           ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "Número Ficha",
-                  value: user.studySheet,
-                ),
-              ),
-              Expanded(
-                child: InfoColumnWidget(
-                  label: "Centro",
-                  value: user.trainingCenter,
-                ),
-              ),
-            ],
+          const SizedBox(height: 5),
+          Text(
+            'Aprendiz',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF39A900),
+            ),
           ),
+          const SizedBox(height: 5),
+          Text(
+            user.program,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 20),
+          _buildQrButton(user),
+          const SizedBox(height: 20),
+          _buildUserDetails(user),
         ],
       ),
+    );
+  }
+
+  Widget _buildQrButton(User user) {
+    return ElevatedButton.icon(
+      onPressed: () {
+        _showQrModal(user);
+      },
+      icon: const Icon(Icons.qr_code, color: Colors.white),
+      label: const Text(
+        "Mostrar QR",
+        style: TextStyle(color: Colors.white),
+      ),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF007D78), // Verde oscuro
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
+
+  void _showQrModal(User user) {
+    showDialog(
+      context: context,
+      builder: (context) => QrModal(user: user),
+    );
+  }
+
+  Widget _buildUserDetails(User user) {
+    return Column(
+      children: [
+        _buildInfoRow("C.C", user.documentNumber, "RH", user.bloodType),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+            "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
+        const SizedBox(height: 15),
+        _buildInfoRow("Jornada", user.journal, "Programa", user.program),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(String label1, String value1, String label2, String value2) {
+    return Row(
+      children: [
+        Expanded(
+          child: InfoColumnWidget(label: label1, value: value1),
+        ),
+        Expanded(
+          child: InfoColumnWidget(label: label2, value: value2),
+        ),
+      ],
     );
   }
 }

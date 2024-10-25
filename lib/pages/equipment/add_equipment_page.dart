@@ -158,8 +158,8 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
       });
 
       final newEquipment = Equipment(
-        id: 0, // ID temporal
-        personId: 1, // ID fijo hasta que haya login
+        id: 0,
+        personId: 1,
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
@@ -169,20 +169,37 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
 
       try {
         await _equipmentService.addEquipment(newEquipment);
-        Navigator.of(context).pop(newEquipment); // Volver a la pantalla anterior
+        _showAlertDialog('Éxito', 'El equipo ha sido registrado correctamente.');
+        Navigator.of(context).pop(newEquipment);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error al registrar el equipo.')),
-        );
+        _showAlertDialog('Error', 'Error al registrar el equipo. Inténtalo nuevamente.');
       } finally {
         setState(() {
           _isLoading = false;
         });
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor llena todos los campos.')),
-      );
+      _showAlertDialog('Campos incompletos', 'Por favor completa todos los campos.');
     }
+  }
+
+  void _showAlertDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
