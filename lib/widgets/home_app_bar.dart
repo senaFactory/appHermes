@@ -7,13 +7,14 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color =  Color(0xFF39A900);
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF00314D),
+        color: color,
         borderRadius: BorderRadius.circular(5), // Ajusta el redondeo
       ),
       padding: EdgeInsets.symmetric(
@@ -26,7 +27,7 @@ class HomeAppBar extends StatelessWidget {
           // Logo adaptable al tamaño de la pantalla
           Image.asset(
             "images/logo.png",
-            color: const Color(0xFF84A5A4),
+            color: Color.fromARGB(255, 241, 241, 241),
             height: screenSize.height * 0.07, // Altura proporcional al alto de la pantalla
           ),
           SizedBox(width: screenSize.width * 0.02), // Espacio adaptable entre logo y texto

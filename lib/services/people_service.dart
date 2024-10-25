@@ -1,32 +1,43 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:maqueta/models/user.dart';
+import 'package:maqueta/models/equipment.dart';
 
 class PeopleService {
-  final String baseUrl = 'http://10.0.2.2:8081/api/v1/hermesapp/people';
+  final String baseUrl =
+      'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermes/view/card/1';
 
   Future<User?> getUserById(int id) async {
-    final url = Uri.parse('$baseUrl/by-id/$id');
+    final url = Uri.parse('$baseUrl');
 
     try {
       final response = await http.get(url);
+      print('$response');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-        if (jsonResponse['data'] != null && jsonResponse['data'].isNotEmpty) {
-          final userData = jsonResponse['data'][0];
+        // Imprime la respuesta completa para ver la estructura y los datos
+        print('Response from backend: $jsonResponse');
+
+        if (jsonResponse != null && jsonResponse.isNotEmpty) {
+          // Extrae los datos de la respuesta
+          final userData = jsonResponse;
 
           return User(
-            name: userData['name'],
-            lastName: userData['lastname'],
-            email: userData['email'],
-            bloodType: userData['bloodType'],
+            name: userData['name'] ?? 'N/A',  
+            lastName: userData['lastname'] ?? 'N/A',
+            email: userData['email'] ?? 'N/A',
+            phoneNumber: userData['phone'] ?? 'N/A',
+            bloodType: userData['bloodType']?.trim() ?? 'N/A',
             documentNumber: userData['document'].toString(),
-            documentType: userData['documentType'],
-            fichaNumber: userData['fichaNumber'] ?? '2620612', // Dato por defecto si no está en la API
-            serviceCenter: userData['serviceCenter'] ?? 'Servicios Financieros', // Dato por defecto
-            equipments: [], // Equipos vacíos por ahora
+            acronym: userData['acronym'] ?? 'N/A',
+            studySheet: userData['studySheet']?.toString() ?? '1231232',
+            program: userData['program'] ?? 'N/A',
+            journal: userData['journal'] ?? 'Tarde', //Agregar nombre correcto cuando ya este en el backend
+            trainingCenter: userData['trainingCenter'] ?? 'CSF',
+            equipments: List<Equipment>.from(
+                userData['equipments']?.map((e) => Equipment.fromJson(e)) ?? []),
           );
         } else {
           throw Exception('Datos del usuario no disponibles');

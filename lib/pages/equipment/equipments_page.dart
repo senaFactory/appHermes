@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
-import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
-import 'package:maqueta/widgets/equipment_card.dart';
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -12,79 +13,106 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
-  // Instancia del modal de edición
-  final EditEquiptModal editEquiptModal = EditEquiptModal();
+  final EquipmentService _equipmentService = EquipmentService();
+  List<Equipment> _equipments = [];
 
-  // Método para manejar la acción de desactivar
-  void _deactivateEquipment() {
-    // Implementar la lógica para desactivar aquí
-    print('Equipo desactivado');
+  @override
+  void initState() {
+    super.initState();
+    _fetchEquipments(); // Cargar equipos al iniciar
+  }
+
+  // Función para obtener equipos del usuario con ID 1
+  Future<void> _fetchEquipments() async {
+    try {
+      final equipments = await _equipmentService.getEquipmentsByPersonId(1);
+      setState(() {
+        _equipments = equipments;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  // Método para registrar un nuevo equipo y actualizar la lista
+  Future<void> _registerEquipment() async {
+    final newEquipment = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Formaddeequipts()),
+    );
+
+    if (newEquipment != null) {
+      newEquipment.personId = 1; // Asignamos el ID 1 a la persona
+
+      await _equipmentService.addEquipment(newEquipment); // Registramos el equipo
+      _fetchEquipments(); // Actualizamos la lista de equipos
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
+      body: Column(
         children: [
           const HomeAppBar(),
-          const SizedBox(height: 40), // Espacio después de la AppBar
-          Center(
-            child: Column(
+          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   "Mis Equipos",
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF00314D),
+                    color: Color(0xFF39A900),
                   ),
                 ),
-                const SizedBox(height: 20),
-                // Tarjeta de equipo reutilizable
-                EquipmentCard(
-                  type: 'Laptop',
-                  brand: 'Lenovo',
-                  model: 'Ideapad1',
-                  color: 'Azul oscuro',
-                  serialNumber: 'ABC1234456789',
-                  onEdit: () {
-                    editEquiptModal.showEditModal(context);  // Abrir modal de edición
-                  },
-                  onDeactivate: _deactivateEquipment,  // Llamar a la función de desactivar
-                ),
-                const SizedBox(height: 35),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end, // Alinea a la derecha
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Formaddeequipts()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00314D),
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text(
-                          "Agregar equipo",
-                          style: TextStyle(
-                            color: Colors.white, 
-                          ),
-                        ),
-                      ),
+                ElevatedButton(
+                  onPressed: _registerEquipment, // Llama al método de registro
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF39A900),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                  ],
+                  ),
+                  child: const Text(
+                    "Agregar equipo",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ],
             ),
           ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              itemCount: _equipments.length,
+              itemBuilder: (context, index) {
+                final equipment = _equipments[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: EquipmentCard(
+                    type: equipment.model,
+                    brand: equipment.brand,
+                    model: equipment.model,
+                    color: equipment.color,
+                    serialNumber: equipment.serialNumber,
+                    onEdit: () {
+                      // Lógica para editar equipo
+                    },
+                    onDeactivate: () {
+                      // Lógica para desactivar equipo
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 35),
         ],
       ),
     );
