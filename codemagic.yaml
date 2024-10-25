@@ -1,0 +1,22 @@
+workflows:
+  ios-build:
+    name: iOS Build without Publishing
+    environment:
+      flutter: stable    # Use the latest stable Flutter version
+      xcode: latest      # Use the latest Xcode version
+      cocoapods: default # Ensure CocoaPods is installed
+
+    scripts:
+      - name: Clean and get dependencies
+        script: |
+          flutter clean
+          flutter pub get
+          cd ios
+          pod install
+          cd ..
+      - name: Build iOS app
+        script: flutter build ios --release --no-codesign
+
+    artifacts:
+      - build/ios/ipa/Runner.ipa  # Save the built .ipa file for download
+
