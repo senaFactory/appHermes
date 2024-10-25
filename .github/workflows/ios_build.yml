@@ -21,6 +21,7 @@ jobs:
     - name: Install CocoaPods Dependencies
       run: |
         cd ios
+        pod init
         pod install
 
     - name: Fetch Dependencies
