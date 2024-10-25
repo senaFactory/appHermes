@@ -118,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withOpacity(0.7), 
                   )
                 : null,
           ),

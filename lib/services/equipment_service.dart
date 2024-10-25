@@ -23,7 +23,7 @@ class EquipmentService {
         print('Error en la respuesta del servidor: ${response.body}');
         throw Exception('Error al registrar el equipo: ${response.statusCode}');
       }
-    } catch (e) {
+    } catch (e) {         
       print('Exception al registrar equipo: $e');
       rethrow; // Volver a lanzar la excepción para manejarla en otro nivel si es necesario
     }

@@ -25,7 +25,7 @@ class PeopleService {
           final userData = jsonResponse;
 
           return User(
-            name: userData['name'] ?? 'N/A',
+            name: userData['name'] ?? 'N/A',  
             lastName: userData['lastname'] ?? 'N/A',
             email: userData['email'] ?? 'N/A',
             phoneNumber: userData['phone'] ?? 'N/A',
