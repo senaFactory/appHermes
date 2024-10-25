@@ -1,0 +1,49 @@
+name: Flutter iOS Build
+
+on:
+  push:
+    branches:
+      - main  # Adjust based on which branch you want to trigger the build
+
+jobs:
+  build:
+    runs-on: macos-latest  # Use macOS runner since iOS builds require macOS
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Install Flutter SDK
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.22.4'  # Use the latest stable Flutter version
+
+    - name: Install CocoaPods Dependencies
+      run: |
+        cd ios
+        pod install
+
+    - name: Fetch Dependencies
+      run: flutter pub get
+
+    - name: Build iOS App
+      run: flutter build ios --release
+
+    - name: Upload Artifacts
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: iOS-IPA
+        path: build/ios/iphoneos/Runner.app  # Adjust path as needed
+
+    - name: Archive IPA (Optional for App Store Deployment)
+      run: |
+        xcrun -sdk iphoneos PackageApplication \
+        -v build/ios/iphoneos/Runner.app \
+        -o $GITHUB_WORKSPACE/Runner.ipa
+
+    - name: Upload IPA
+      uses: actions/upload-artifact@v3
+      with:
+        name: Runner-IPA
+        path: Runner.ipa
