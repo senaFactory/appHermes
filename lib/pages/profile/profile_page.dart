@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() async {
-    return await _peopleService.getUserById(2);
+    return await _peopleService.getUserById(2, "");
   }
 
   Future<void> _pickImage() async {

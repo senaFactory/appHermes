@@ -26,7 +26,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
   // Función para obtener los datos del usuario
   Future<void> _fetchUserData() async {
     User? fetchedUser = await _peopleService
-        .getUserById(2); // Puedes cambiar el ID dinámicamente
+        .getUserById(2, "s"); // Puedes cambiar el ID dinámicamente
 
     setState(() {
       user = fetchedUser; // Actualiza el estado con el usuario obtenido

@@ -15,7 +15,7 @@ class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() {
-    return _peopleService.getUserById(2);
+    return _peopleService.getUserById(2, "");
   }
 
   @override

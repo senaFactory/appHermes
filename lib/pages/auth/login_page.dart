@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:maqueta/models/auth_login.dart';
+import 'package:maqueta/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -8,12 +10,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _documentController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String dropdownValue = 'Cedula de Ciudadania'; // Valor por defecto para el tipo de documento
+  final AuthService authService = AuthService();
+  String dropdownValue =
+      'Cedula de Ciudadania'; // Valor por defecto para el tipo de documento
   bool rememberMe = false; // Estado del checkbox "Recordar"
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = const TextStyle(fontSize: 16, color: Colors.black); // Estilo base para todo el texto
+    final textStyle = const TextStyle(
+        fontSize: 16, color: Colors.black); // Estilo base para todo el texto
 
     return Scaffold(
       body: Stack(
@@ -38,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   // Logotipo de SENA
                   Image.asset('images/LogoSena.png', height: 100),
                   const SizedBox(height: 20),
-                  
+
                   // Texto de bienvenida
                   const Text(
                     "Transformando vidas, construyendo futuro.",
@@ -56,7 +61,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.article, color: Colors.grey), // Ícono del dropdown
+                        const Icon(Icons.article,
+                            color: Colors.grey), // Ícono del dropdown
                         const SizedBox(width: 10),
                         Expanded(
                           child: DropdownButtonHideUnderline(
@@ -66,7 +72,8 @@ class _LoginPageState extends State<LoginPage> {
                               iconSize: 24,
                               elevation: 16,
                               isExpanded: true,
-                              style: textStyle, // Aquí se aplica el mismo estilo que el resto
+                              style:
+                                  textStyle, // Aquí se aplica el mismo estilo que el resto
                               onChanged: (String? newValue) {
                                 setState(() {
                                   dropdownValue = newValue!;
@@ -80,7 +87,9 @@ class _LoginPageState extends State<LoginPage> {
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
-                                  child: Text(value, style: textStyle), // Estilo del texto del menú
+                                  child: Text(value,
+                                      style:
+                                          textStyle), // Estilo del texto del menú
                                 );
                               }).toList(),
                             ),
@@ -104,7 +113,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    style: textStyle, // Aplica el mismo estilo al campo de texto
+                    style:
+                        textStyle, // Aplica el mismo estilo al campo de texto
                   ),
                   const SizedBox(height: 20),
 
@@ -121,7 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    style: textStyle, // Aplica el mismo estilo al campo de texto
+                    style:
+                        textStyle, // Aplica el mismo estilo al campo de texto
                   ),
                   const SizedBox(height: 20),
 
@@ -160,9 +171,24 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Botón de Iniciar Sesión
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Implementar la lógica de inicio de sesión
-                      Navigator.pushReplacementNamed(context, '/home'); // Navegar a HomeScreen
+                      try {
+                        int document = int.parse(_documentController.text);
+                        String password = _passwordController.text;
+
+                        AuthLogin authResponse =
+                            await authService.logIn(document, password);
+
+                        print(authResponse);
+                        // Navegar a HomeScreen
+                        Navigator.pushReplacementNamed(context, '/home');
+                      } catch (e) {
+                        // Manejar el error, mostrar mensaje
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Error: ${e.toString()}')),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF39A900),

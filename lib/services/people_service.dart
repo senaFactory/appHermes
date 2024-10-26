@@ -7,25 +7,27 @@ class PeopleService {
   final String baseUrl =
       'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermes/view/card/1';
 
-  Future<User?> getUserById(int id) async {
+  Future<User?> getUserById(int id, String token) async {  // El token ahora se pasa como parámetro
     final url = Uri.parse('$baseUrl');
 
     try {
-      final response = await http.get(url);
-      print('$response');
-
+      var response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token', // Incluye el token en los headers
+          'Content-Type': 'application/json',
+        },
+      );
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-        // Imprime la respuesta completa para ver la estructura y los datos
         print('Response from backend: $jsonResponse');
 
         if (jsonResponse != null && jsonResponse.isNotEmpty) {
-          // Extrae los datos de la respuesta
           final userData = jsonResponse;
 
           return User(
-            name: userData['name'] ?? 'N/A',  
+            name: userData['name'] ?? 'N/A',
             lastName: userData['lastname'] ?? 'N/A',
             email: userData['email'] ?? 'N/A',
             phoneNumber: userData['phone'] ?? 'N/A',
@@ -34,7 +36,7 @@ class PeopleService {
             acronym: userData['acronym'] ?? 'N/A',
             studySheet: userData['studySheet']?.toString() ?? '1231232',
             program: userData['program'] ?? 'N/A',
-            journal: userData['journal'] ?? 'Tarde', //Agregar nombre correcto cuando ya este en el backend
+            journal: userData['journal'] ?? 'Tarde',
             trainingCenter: userData['trainingCenter'] ?? 'CSF',
             equipments: List<Equipment>.from(
                 userData['equipments']?.map((e) => Equipment.fromJson(e)) ?? []),
@@ -49,5 +51,5 @@ class PeopleService {
       print('Error fetching user: $e');
       throw Exception('Error al obtener datos del usuario');
     }
-  }
+  }  
 }
