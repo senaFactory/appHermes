@@ -14,14 +14,14 @@ class AuthService with ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse('https://120fh0nk-8081.use2.devtunnels.ms/api/v1/hermesapp/auth/login'),
+        Uri.parse('https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermesapp/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'document': document, 
           'password': password
         }),
       );
-              
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
         print('Response from backend: $jsonResponse');
@@ -29,10 +29,9 @@ class AuthService with ChangeNotifier {
         if (jsonResponse['status'] == true) {
           final token = jsonResponse['jwt'];
           await tokenStorage.saveToken(token);
-
           return AuthLogin(
               document: jsonResponse['document'],
-              password: jsonResponse['password']);
+              password: jsonResponse['jwt']);
         } else {
           throw Exception('Login failed: ${jsonResponse['message']}');
         }

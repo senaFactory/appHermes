@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -17,7 +18,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() async {
-    return await _peopleService.getUserById(2, "");
+    final jwt = TokenStorage().decodeJwtToken();
+    return await _peopleService.getUserById(1, jwt);
   }
 
   Future<void> _pickImage() async {
