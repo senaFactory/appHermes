@@ -53,14 +53,14 @@ class PeopleService {
                 userData['equipments']?.map((e) => Equipment.fromJson(e)) ?? []),
           );
         } else {
-          throw Exception('Datos del usuario no disponibles');
+          throw Exception('User data not available');
         }
       } else {
-        throw Exception('Error en el servidor: ${response.statusCode}');
+        throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching user: $e');
-      throw Exception('Error al obtener datos del usuario');
+      throw Exception('Error getting user data');
     }
   }  
 }

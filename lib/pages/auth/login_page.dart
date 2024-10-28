@@ -13,7 +13,6 @@ class _LoginPageState extends State<LoginPage> {
   final AuthService authService = AuthService();
   String dropdownValue =
       'Cedula de Ciudadania'; // Valor por defecto para el tipo de documento
-  bool rememberMe = false; // Estado del checkbox "Recordar"
 
   @override
   Widget build(BuildContext context) {
@@ -140,22 +139,6 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: rememberMe,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                rememberMe = value!;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'Recordar',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
                       TextButton(
                         onPressed: () {
                           // Implementar funcionalidad para olvidar contraseña
