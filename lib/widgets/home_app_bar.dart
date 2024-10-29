@@ -7,13 +7,14 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color =  Color(0xFF39A900);
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFF39A900),
+        color: color,
         borderRadius: BorderRadius.circular(5), // Ajusta el redondeo
       ),
       padding: EdgeInsets.symmetric(

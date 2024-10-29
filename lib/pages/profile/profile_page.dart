@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -17,7 +18,8 @@ class _ProfilePageState extends State<ProfilePage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() async {
-    return await _peopleService.getUserById(2);
+    final jwt = TokenStorage().decodeJwtToken();
+    return await _peopleService.getUserById(1, jwt);
   }
 
   Future<void> _pickImage() async {
@@ -118,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white.withOpacity(0.7), 
                   )
                 : null,
           ),
@@ -170,7 +172,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Expanded(
                   child:
-                      _buildInfoColumn("Tipo de Documento", user.documentType)),
+                      _buildInfoColumn("Tipo de Documento", user.acronym)),
               const SizedBox(width: 15),
               Expanded(
                   child: _buildInfoColumn(
@@ -185,16 +187,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       _buildInfoColumn("Número de Celular", user.phoneNumber)),
               const SizedBox(width: 15),
               Expanded(
-                  child: _buildInfoColumn("Tipo de Sangre", user.bloodType)),
+                  child: _buildInfoColumn("RH", user.bloodType)),
             ],
           ),
           const SizedBox(height: 15),
           Row(
             children: [
               Expanded(
-                  child: _buildInfoColumn("Número de Ficha", user.fichaNumber)),
+                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
               const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("Centro", user.serviceCenter)),
+              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
             ],
           ),
         ],

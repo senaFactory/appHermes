@@ -1,0 +1,16 @@
+platform :ios, '13.0'  # Set the minimum iOS platform version
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  pod 'ImagePicker', '~> 1.1'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'  # For Apple Silicon compatibility
+    end
+  end
+end

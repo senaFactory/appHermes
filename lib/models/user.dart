@@ -7,9 +7,11 @@ class User {
   final String phoneNumber;
   final String bloodType;
   final String documentNumber;
-  final String documentType;
-  final String fichaNumber;     // Número de ficha
-  final String serviceCenter;   // Centro de servicios
+  final String acronym;          
+  final String studySheet;    
+  final String program;   
+  final String journal;
+  final String trainingCenter;   
   final List<Equipment> equipments;
 
   User({
@@ -19,9 +21,11 @@ class User {
     required this.phoneNumber,
     required this.bloodType,
     required this.documentNumber,
-    required this.documentType,
-    required this.fichaNumber,
-    required this.serviceCenter,
+    required this.acronym,
+    required this.studySheet,
+    required this.program,
+    required this.journal,
+    required this.trainingCenter,
     required this.equipments,
   });
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
+import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
-import 'package:maqueta/widgets/equipment_card.dart';
-import 'package:maqueta/models/equipment.dart';
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -13,17 +13,40 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
-  final EditEquiptModal editEquiptModal = EditEquiptModal();
+  final EquipmentService _equipmentService = EquipmentService();
   List<Equipment> _equipments = [];
 
-  void _deactivateEquipment() {
-    print('Equipo desactivado');
+  @override
+  void initState() {
+    super.initState();
+    _fetchEquipments(); // Cargar equipos al iniciar
   }
 
-  void _addEquipment(Equipment equipment) {
-    setState(() {
-      _equipments.add(equipment);
-    });
+  // Función para obtener equipos del usuario con ID 1
+  Future<void> _fetchEquipments() async {
+    try {
+      final equipments = await _equipmentService.getEquipmentsByPersonId(1);
+      setState(() {
+        _equipments = equipments;
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  // Método para registrar un nuevo equipo y actualizar la lista
+  Future<void> _registerEquipment() async {
+    final newEquipment = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Formaddeequipts()),
+    );
+
+    if (newEquipment != null) {
+      newEquipment.personId = 1; // Asignamos el ID 1 a la persona
+
+      await _equipmentService.addEquipment(newEquipment); // Registramos el equipo
+      _fetchEquipments(); // Actualizamos la lista de equipos
+    }
   }
 
   @override
@@ -47,18 +70,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    final newEquipment = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const Formaddeequipts(),
-                      ),
-                    );
-
-                    if (newEquipment != null) {
-                      _addEquipment(newEquipment);
-                    }
-                  },
+                  onPressed: _registerEquipment, // Llama al método de registro
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF39A900),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -68,9 +80,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   ),
                   child: const Text(
                     "Agregar equipo",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
@@ -86,15 +96,17 @@ class _EquipmentspageState extends State<Equipmentspage> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
                   child: EquipmentCard(
-                    type: equipment.type,
+                    type: equipment.model,
                     brand: equipment.brand,
                     model: equipment.model,
                     color: equipment.color,
                     serialNumber: equipment.serialNumber,
                     onEdit: () {
-                      editEquiptModal.showEditModal(context);
+                      // Lógica para editar equipo
                     },
-                    onDeactivate: _deactivateEquipment,
+                    onDeactivate: () {
+                      // Lógica para desactivar equipo
+                    },
                   ),
                 );
               },
