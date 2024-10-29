@@ -44,7 +44,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
     if (newEquipment != null) {
       newEquipment.personId = 1; // Asignamos el ID 1 a la persona
 
-      await _equipmentService.addEquipment(newEquipment); // Registramos el equipo
+      await _equipmentService
+          .addEquipment(newEquipment); // Registramos el equipo
       _fetchEquipments(); // Actualizamos la lista de equipos
     }
   }
@@ -73,7 +74,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   onPressed: _registerEquipment, // Llama al método de registro
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF39A900),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -100,7 +102,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     brand: equipment.brand,
                     model: equipment.model,
                     color: equipment.color,
-                    serialNumber: equipment.serialNumber,
+                    serialNumber: equipment.serial,
                     onEdit: () {
                       // Lógica para editar equipo
                     },

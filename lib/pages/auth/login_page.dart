@@ -157,13 +157,11 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       // Implementar la lógica de inicio de sesión
                       try {
-                        int document = int.parse(_documentController.text);
-                        String password = _passwordController.text;
+                        int document = 88247916;
+                        String password = "88247916I";
 
                         AuthLogin authResponse =
                             await authService.logIn(document, password);
-
-                        print(authResponse);
                         // Navegar a HomeScreen
                         Navigator.pushReplacementNamed(context, '/home');
                       } catch (e) {
