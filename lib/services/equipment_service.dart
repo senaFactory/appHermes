@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/providers/url_storage.dart';
 
 class EquipmentService {
-  final String baseUrl = 'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermesapp/equipment/by-id/1';
+  final String virtualPort = UrlStorage().virtualPort;
+  final String urlEquipment = UrlStorage().urlEquipment;
 
-  // Método para agregar equipo con manejo detallado de errores
   Future<void> addEquipment(Equipment equipment) async {
-    final url = Uri.parse(baseUrl);
-    
+    final String baseUrl = '$virtualPort$urlEquipment';
+    final url = Uri.parse('$baseUrl/add');
+
     try {
       final response = await http.post(
         url,
@@ -23,7 +25,7 @@ class EquipmentService {
         print('Error en la respuesta del servidor: ${response.body}');
         throw Exception('Error al registrar el equipo: ${response.statusCode}');
       }
-    } catch (e) {         
+    } catch (e) {
       print('Exception al registrar equipo: $e');
       rethrow; // Volver a lanzar la excepción para manejarla en otro nivel si es necesario
     }
@@ -31,6 +33,7 @@ class EquipmentService {
 
   // Método para obtener equipos por ID de persona con manejo de errores
   Future<List<Equipment>> getEquipmentsByPersonId(int personId) async {
+    final String baseUrl = '$virtualPort$urlEquipment';
     final url = Uri.parse('$baseUrl/all/$personId');
 
     try {

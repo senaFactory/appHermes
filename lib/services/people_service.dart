@@ -3,31 +3,30 @@ import 'package:http/http.dart' as http;
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/providers/token_storage.dart';
-
+import 'package:maqueta/providers/url_storage.dart';
 
 class PeopleService {
+  final String virtualPort = UrlStorage().virtualPort;
+  final String urlInfoPerson = UrlStorage().urlCardPerson;
+  TokenStorage tokenStorage = TokenStorage();
 
-
-  final String baseUrl =
-      'https://hhj97mdq-8081.use2.devtunnels.ms/api/v1/hermes/view/card/';
-
-  Future<User?> getUserById(int? id, Future<Map<dynamic, dynamic>> token) async {  // El token ahora se pasa como parámetro
-    
-    TokenStorage tokenStorage = TokenStorage();
+  Future<User?> getUserById(
+      int? id, Future<Map<dynamic, dynamic>> token) async {
     var token = await tokenStorage.getToken();
-    var decode_token = await tokenStorage.decodeJwtToken();
-    final url = Uri.parse('$baseUrl $decode_token');
+    var decodeToken = await tokenStorage.decodeJwtToken();
+    var document = decodeToken['sub'];
+
+    final String baseUrl = '$virtualPort$urlInfoPerson';
+    final url = Uri.parse('$baseUrl/card/$document');
 
     try {
       var response = await http.get(
         url,
         headers: {
-          'Authorization': 'Bearer $token', // Incluye el token en los headers
+          'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-
-      print(response);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -50,7 +49,8 @@ class PeopleService {
             journal: userData['journal'] ?? 'Tarde',
             trainingCenter: userData['trainingCenter'] ?? 'CSF',
             equipments: List<Equipment>.from(
-                userData['equipments']?.map((e) => Equipment.fromJson(e)) ?? []),
+                userData['equipments']?.map((e) => Equipment.fromJson(e)) ??
+                    []),
           );
         } else {
           throw Exception('User data not available');
@@ -62,5 +62,5 @@ class PeopleService {
       print('Error fetching user: $e');
       throw Exception('Error getting user data');
     }
-  }  
+  }
 }

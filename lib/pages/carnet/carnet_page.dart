@@ -16,9 +16,7 @@ class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() {
-    final jwt = TokenStorage().decodeJwtToken(); 
-    print("milanes");
-    print(jwt);
+    final jwt = TokenStorage().decodeJwtToken();
     return _peopleService.getUserById(1, jwt);
   }
 
@@ -162,7 +160,8 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
-  Widget _buildInfoRow(String label1, String value1, String label2, String value2) {
+  Widget _buildInfoRow(
+      String label1, String value1, String label2, String value2) {
     return Row(
       children: [
         Expanded(
