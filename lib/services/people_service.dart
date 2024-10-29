@@ -17,6 +17,7 @@ class PeopleService {
     var document = decodeToken['sub'];
 
     final String baseUrl = '$virtualPort$urlInfoPerson';
+    print(decodeToken);
     final url = Uri.parse('$baseUrl/card/$document');
 
     try {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/widgets/info_column.dart';
+import 'package:maqueta/pages/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 

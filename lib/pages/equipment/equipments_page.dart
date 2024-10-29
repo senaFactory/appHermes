@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/services/equipment_service.dart';
 import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/widgets/equipment_card.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/pages/widgets/equipment_card.dart';
+import 'package:maqueta/pages/widgets/home_app_bar.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
 
 class Equipmentspage extends StatefulWidget {

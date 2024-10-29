@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/pages/widgets/home_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white.withOpacity(0.7), 
+                    color: Colors.white.withOpacity(0.7),
                   )
                 : null,
           ),
@@ -171,8 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             children: [
               Expanded(
-                  child:
-                      _buildInfoColumn("Tipo de Documento", user.acronym)),
+                  child: _buildInfoColumn("Tipo de Documento", user.acronym)),
               const SizedBox(width: 15),
               Expanded(
                   child: _buildInfoColumn(
@@ -186,8 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                       _buildInfoColumn("Número de Celular", user.phoneNumber)),
               const SizedBox(width: 15),
-              Expanded(
-                  child: _buildInfoColumn("RH", user.bloodType)),
+              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
             ],
           ),
           const SizedBox(height: 15),
