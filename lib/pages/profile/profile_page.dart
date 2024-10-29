@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data'; 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http; // Para peticiones HTTP
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
@@ -17,19 +19,81 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   final PeopleService _peopleService = PeopleService();
 
+  // Obtener datos del usuario a partir del token JWT
   Future<User?> _fetchUserData() async {
     final jwt = TokenStorage().decodeJwtToken();
     return await _peopleService.getUser(jwt);
   }
 
+  // Seleccionar una imagen solo en formato JPG
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      // Validar formato JPG/JPEG
+      if (!pickedFile.path.endsWith('.jpg') && !pickedFile.path.endsWith('.jpeg')) {
+        _showErrorDialog('Formato no válido', 'Selecciona una imagen en formato JPG.');
+        return;
+      }
+
       setState(() {
         _image = File(pickedFile.path);
       });
+    }
+  }
+
+  // Mostrar un diálogo de error si el formato es incorrecto
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Subir la imagen al backend en formato multipart
+  Future<void> _uploadImage(User user) async {
+    if (_image == null) {
+      _showErrorDialog('Imagen no seleccionada', 'Por favor selecciona una imagen.');
+      return;
+    }
+
+    try {
+      final imageBytes = await _image!.readAsBytes();
+
+      final uri = Uri.parse(''); 
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['documentNumber'] = user.documentNumber;
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'image',
+          imageBytes,
+          filename: '${user.documentNumber}.jpg',
+          // contentType: MediaType('image', 'jpeg'),
+        ),
+      );
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        _showErrorDialog('Éxito', 'Imagen subida correctamente.');
+      } else {
+        _showErrorDialog('Error', 'Error al subir la imagen: ${response.statusCode}.');
+      }
+    } catch (e) {
+      _showErrorDialog('Error', 'Hubo un problema al subir la imagen.');
     }
   }
 
@@ -54,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: const TextStyle(color: Colors.red),
                       ),
                     );
-                  } else if (!snapshot.hasData || snapshot.data == null) {
+                  } else if (!snapshot.hasData) {
                     return const Center(
                       child: Text(
                         'No se encontraron datos del usuario.',
@@ -82,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 25),
                         _buildProfileInfo(user),
                         const SizedBox(height: 20),
-                        _buildSaveButton(),
+                        _buildSaveButton(user),
                       ],
                     ),
                   );
@@ -114,8 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 70,
             backgroundImage: _image != null
                 ? FileImage(_image!)
-                : const AssetImage('images/aprendiz_sena1.jpeg')
-                    as ImageProvider,
+                : const AssetImage('images/aprendiz_sena1.jpeg') as ImageProvider,
             child: _image == null
                 ? Icon(
                     Icons.camera_alt,
@@ -170,31 +233,9 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 15),
           Row(
             children: [
-              Expanded(
-                  child: _buildInfoColumn("Tipo de Documento", user.acronym)),
+              Expanded(child: _buildInfoColumn("Tipo de Documento", user.acronym)),
               const SizedBox(width: 15),
-              Expanded(
-                  child: _buildInfoColumn(
-                      "Número de Documento", user.documentNumber)),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                  child:
-                      _buildInfoColumn("Número de Celular", user.phoneNumber)),
-              const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
-              const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
+              Expanded(child: _buildInfoColumn("Número de Documento", user.documentNumber)),
             ],
           ),
         ],
@@ -216,11 +257,10 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(height: 5),
         TextFormField(
           initialValue: value,
-          enabled: false, // Solo lectura
+          enabled: false,
           decoration: InputDecoration(
             isDense: true,
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+            contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -230,16 +270,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildSaveButton(User user) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
-              print('Foto guardada');
-            },
+            onPressed: () => _uploadImage(user),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF39A900),
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
