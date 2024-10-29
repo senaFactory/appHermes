@@ -17,7 +17,7 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Future<User?> _fetchUserData() {
     final jwt = TokenStorage().decodeJwtToken();
-    return _peopleService.getUserById(1, jwt);
+    return _peopleService.getUser(jwt);
   }
 
   @override

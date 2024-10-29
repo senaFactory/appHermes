@@ -27,8 +27,8 @@ class _MyaccountpageState extends State<Myaccountpage> {
   // Función para obtener los datos del usuario
   Future<void> _fetchUserData() async {
     final jwt = TokenStorage().decodeJwtToken();
-    User? fetchedUser = await _peopleService
-        .getUserById(2, jwt); // Puedes cambiar el ID dinámicamente
+    User? fetchedUser =
+        await _peopleService.getUser(jwt); // Puedes cambiar el ID dinámicamente
 
     setState(() {
       user = fetchedUser; // Actualiza el estado con el usuario obtenido
@@ -88,8 +88,8 @@ class _MyaccountpageState extends State<Myaccountpage> {
                           value: isDarkMode,
                           onChanged: (value) {
                             setState(() {
-                              isDarkMode = value; 
-                            });                
+                              isDarkMode = value;
+                            });
                           },
                         ),
                       ),

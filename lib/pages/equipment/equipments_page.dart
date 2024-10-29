@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/models/user.dart';
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/pages/equipment/add_equipment_page.dart';
 
 class Equipmentspage extends StatefulWidget {
   const Equipmentspage({super.key});
@@ -13,40 +14,22 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
-  final EquipmentService _equipmentService = EquipmentService();
-  List<Equipment> _equipments = [];
+  final PeopleService _peopleService = PeopleService();
+  final List<Equipment> _equipments = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchEquipments(); // Cargar equipos al iniciar
+    _fetchUser();
   }
 
-  // Función para obtener equipos del usuario con ID 1
-  Future<void> _fetchEquipments() async {
-    try {
-      final equipments = await _equipmentService.getEquipmentsByPersonId(1);
+  Future<void> _fetchUser() async {
+    final jwt = TokenStorage().decodeJwtToken();
+    final user = await _peopleService.getUser(jwt);
+    if (user != null) {
       setState(() {
-        _equipments = equipments;
+        _equipments.addAll(user.equipments);
       });
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  // Método para registrar un nuevo equipo y actualizar la lista
-  Future<void> _registerEquipment() async {
-    final newEquipment = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Formaddeequipts()),
-    );
-
-    if (newEquipment != null) {
-      newEquipment.personId = 1; // Asignamos el ID 1 a la persona
-
-      await _equipmentService
-          .addEquipment(newEquipment); // Registramos el equipo
-      _fetchEquipments(); // Actualizamos la lista de equipos
     }
   }
 
@@ -71,7 +54,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: _registerEquipment, // Llama al método de registro
+                  onPressed: () {}, // Llama al método de registro
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF39A900),
                     padding: const EdgeInsets.symmetric(

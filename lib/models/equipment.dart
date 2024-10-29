@@ -1,6 +1,6 @@
 class Equipment {
   final int id;
-  final int personId;
+  final int? personId;
   final String brand;
   final String model;
   final String color;
@@ -9,7 +9,7 @@ class Equipment {
 
   Equipment({
     required this.id,
-    required this.personId,
+    this.personId,
     required this.brand,
     required this.model,
     required this.color,
@@ -21,7 +21,6 @@ class Equipment {
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
       id: json['id'],
-      personId: json['person_id'] ?? 0,
       brand: json['brand'] ?? 'N/A',
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',

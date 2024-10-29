@@ -19,7 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<User?> _fetchUserData() async {
     final jwt = TokenStorage().decodeJwtToken();
-    return await _peopleService.getUserById(1, jwt);
+    return await _peopleService.getUser(jwt);
   }
 
   Future<void> _pickImage() async {
@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white.withOpacity(0.7), 
+                    color: Colors.white.withOpacity(0.7),
                   )
                 : null,
           ),
@@ -171,8 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             children: [
               Expanded(
-                  child:
-                      _buildInfoColumn("Tipo de Documento", user.acronym)),
+                  child: _buildInfoColumn("Tipo de Documento", user.acronym)),
               const SizedBox(width: 15),
               Expanded(
                   child: _buildInfoColumn(
@@ -186,8 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child:
                       _buildInfoColumn("Número de Celular", user.phoneNumber)),
               const SizedBox(width: 15),
-              Expanded(
-                  child: _buildInfoColumn("RH", user.bloodType)),
+              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
             ],
           ),
           const SizedBox(height: 15),
