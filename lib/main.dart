@@ -5,23 +5,23 @@ import 'package:maqueta/util/preferences/pref_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PreferenciaUsuario.init();
+  await UserPreferences.init();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final prefs = PreferenciaUsuario();
+    final prefs = UserPreferences();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: prefs.ultimaPagina,
+      initialRoute: prefs.lastPage,
       routes: {
-        '/': (context) => LoginPage(), // Primera pantalla(login)
-        '/home': (context) => HomeScreen(), // Pantalla principal con navegación
+        '/': (context) => LoginPage(),
+        '/home': (context) => HomeScreen(),
       },
     );
   }

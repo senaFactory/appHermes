@@ -1,15 +1,15 @@
 class Equipment {
-  final int id;
-  final int? personId;
+  final int? id;
+  String? document;
   final String brand;
   final String model;
   final String color;
   final String serial;
-  final bool state;
+  final String state;
 
   Equipment({
-    required this.id,
-    this.personId,
+    this.id,
+    this.document,
     required this.brand,
     required this.model,
     required this.color,
@@ -25,19 +25,23 @@ class Equipment {
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
       serial: json['serial'] ?? 'N/A',
-      state: json['state'] ?? false,
+      state: json['state'] ?? "false",
     );
   }
 
   // Convertir objeto Equipment a JSON para registrar
   Map<String, dynamic> toJson() {
     return {
-      'person_id': personId,
+      'document': document,
       'brand': brand,
       'serial': serial,
       'model': model,
       'color': color,
       'state': state,
     };
+  }
+
+  set setDocumentId(String idValue) {
+    document = idValue;
   }
 }

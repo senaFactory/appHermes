@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/custom_dropdown.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/services/equipment_service.dart';
 
-class Formaddeequipts extends StatefulWidget {
-  const Formaddeequipts({super.key});
+class AddEquipmentPage extends StatefulWidget {
+  static const routename = 'addEquipment';
+  const AddEquipmentPage({super.key});
 
   @override
-  State<Formaddeequipts> createState() => _RegisterEquipmentPageState();
+  State<AddEquipmentPage> createState() => _RegisterEquipmentPageState();
 }
 
-class _RegisterEquipmentPageState extends State<Formaddeequipts> {
+class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
   final List<String> _equipmentTypes = ['Tablet', 'Portátil'];
   String? _selectedType;
   final List<String> _brands = [
@@ -178,23 +180,23 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
   }
 
   Future<void> _saveEquipment() async {
+    final jwt = TokenStorage().decodeJwtToken();
     if (_selectedType != null && _selectedBrand != null) {
       setState(() {
         _isLoading = true;
       });
 
       final newEquipment = Equipment(
-        id: 0,
-        personId: 1,
+        document: null,
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
         serial: _serialNumberController.text,
-        state: true,
+        state: "true",
       );
 
       try {
-        await _equipmentService.addEquipment(newEquipment);
+        await _equipmentService.addEquipment(newEquipment, jwt);
         _showAlertDialog(
             'Éxito', 'El equipo ha sido registrado correctamente.');
         Navigator.of(context).pop(newEquipment);

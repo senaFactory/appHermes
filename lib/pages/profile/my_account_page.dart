@@ -40,10 +40,10 @@ class _MyaccountpageState extends State<Myaccountpage> {
     return Scaffold(
       body: ListView(
         children: [
-          const HomeAppBar(),
           Container(
             child: Column(
               children: [
+                const HomeAppBar(),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Column(
