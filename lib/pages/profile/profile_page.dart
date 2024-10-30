@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:maqueta/models/user.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
-import 'package:maqueta/models/user.dart';
-import 'dart:typed_data';
-import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/services/student_service.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 
@@ -17,41 +15,68 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  File? _image;
+  File? _image; // Almacena la imagen seleccionada
   final PeopleService _peopleService = PeopleService();
   final StudentService _studentService = StudentService();
   final TokenStorage tokenStorage = TokenStorage();
-  // Obtener datos del usuario a partir del token JWT
+
+  // Obtener los datos del usuario desde el backend
   Future<User?> _fetchUserData() async {
     return await _peopleService.getUser();
   }
 
+  // Seleccionar la imagen desde la galería
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final decodeToken = await tokenStorage.decodeJwtToken();
-    final document = int.parse(decodeToken['sub']);
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      if (!pickedFile.path.endsWith('.jpg') &&
-          !pickedFile.path.endsWith('.jpeg')) {
-        _showErrorDialog(
-            'Formato no válido', 'Selecciona una imagen en formato JPG.');
-        return;
+      if (pickedFile != null) {
+        if (!pickedFile.path.endsWith('.jpg') &&
+            !pickedFile.path.endsWith('.jpeg')) {
+          _showErrorDialog(
+              'Formato no válido', 'Selecciona una imagen en formato JPG.');
+          return;
+        }
+
+        setState(() {
+          _image = File(pickedFile.path); // Guardar la imagen seleccionada
+        });
+
+        _showMessage('Imagen seleccionada correctamente.');
       }
-
-      Uint8List imageBytes = await pickedFile.readAsBytes();
-      Uint8List documentBytes = Uint8List(4)
-        ..buffer.asByteData().setInt32(0, document);
-      Uint8List finalBytes =
-          Uint8List.fromList([...documentBytes, ...imageBytes]);
-      String base64Image = base64Encode(finalBytes);
-
-      await _studentService.sendImage(base64Image);
+    } catch (e) {
+      _showErrorDialog('Error', 'Hubo un problema al seleccionar la imagen.');
     }
   }
 
-  // Mostrar un diálogo de error si el formato es incorrecto
+  // Guardar la imagen enviando la ruta al backend
+  Future<void> _saveImage() async {
+    if (_image == null) {
+      _showErrorDialog(
+          'No se ha seleccionado imagen', 'Por favor selecciona una imagen.');
+      return;
+    }
+
+    try {
+      final decodeToken = await tokenStorage.decodeJwtToken();
+      final document =
+          int.parse(decodeToken['sub']); // Obtener el documento del token
+
+      await _studentService.sendImagePath(_image!.path, document);
+      _showMessage('Imagen subida correctamente.');
+    } catch (e) {
+      _showErrorDialog('Error', 'Hubo un problema al subir la imagen.');
+    }
+  }
+
+  // Mostrar un SnackBar con un mensaje
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  // Mostrar un diálogo de error
   void _showErrorDialog(String title, String message) {
     showDialog(
       context: context,
@@ -77,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           ListView(
             children: [
-              const HomeAppBar(),
+              const HomeAppBar(), // AppBar personalizada
               const SizedBox(height: 20),
               FutureBuilder<User?>(
                 future: _fetchUserData(),
@@ -93,35 +118,32 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   } else if (!snapshot.hasData) {
                     return const Center(
-                      child: Text(
-                        'No se encontraron datos del usuario.',
-                        style: TextStyle(color: Colors.grey),
-                      ),
+                      child: Text('No se encontraron datos del usuario.',
+                          style: TextStyle(color: Colors.grey)),
                     );
                   }
 
                   final user = snapshot.data!;
 
-                  return Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 15),
-                        const Text(
-                          "Mi Perfil",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF39A900),
-                          ),
+                  return Column(
+                    children: [
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Mi Perfil",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF39A900),
                         ),
-                        const SizedBox(height: 20),
-                        _buildProfileHeader(user),
-                        const SizedBox(height: 25),
-                        _buildProfileInfo(user),
-                        const SizedBox(height: 20),
-                        _buildSaveButton(user),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20),
+                      _buildProfileHeader(
+                          user), // Header con la foto e info básica
+                      const SizedBox(height: 25),
+                      _buildProfileInfo(user), // Información del usuario
+                      const SizedBox(height: 20),
+                      _buildSaveButton(), // Botón de guardar
+                    ],
                   );
                 },
               ),
@@ -140,6 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // Header con la foto de perfil e información básica
   Widget _buildProfileHeader(User user) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -151,15 +174,14 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 70,
             backgroundImage: _image != null
                 ? FileImage(_image!)
-                : const AssetImage('images/aprendiz_sena1.jpeg')
-                    as ImageProvider,
+                : null, // No imagen por defecto
             child: _image == null
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
                     color: Colors.white.withOpacity(0.7),
                   )
-                : null,
+                : null, // Ícono si no hay imagen
           ),
         ),
         const SizedBox(width: 20),
@@ -192,6 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // Información del usuario (detalles adicionales)
   Widget _buildProfileInfo(User user) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
@@ -239,17 +262,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // Componente de información individual
   Widget _buildInfoColumn(String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF39A900),
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Color(0xFF39A900))),
         const SizedBox(height: 5),
         TextFormField(
           initialValue: value,
@@ -258,36 +278,26 @@ class _ProfilePageState extends State<ProfilePage> {
             isDense: true,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSaveButton(User user) {
+  // Botón de guardar
+  Widget _buildSaveButton() {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          ElevatedButton(
-            onPressed: () => {}, //_uploadImage(user),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF39A900),
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: const Text(
-              "Guardar",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
+      child: ElevatedButton(
+        onPressed: _saveImage, // Lógica para guardar la imagen
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF39A900),
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        ),
+        child: const Text("Guardar", style: TextStyle(color: Colors.white)),
       ),
     );
   }
