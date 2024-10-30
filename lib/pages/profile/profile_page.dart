@@ -215,6 +215,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       "Número de Documento", user.documentNumber)),
             ],
           ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                  child:
+                      _buildInfoColumn("Número de Celular", user.phoneNumber)),
+              const SizedBox(width: 15),
+              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
+              const SizedBox(width: 15),
+              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
+            ],
+          ),
         ],
       ),
     );

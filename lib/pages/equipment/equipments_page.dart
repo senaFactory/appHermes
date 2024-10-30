@@ -37,7 +37,9 @@ class _EquipmentspageState extends State<Equipmentspage> {
     return Scaffold(
       body: Column(
         children: [
-          const HomeAppBar(),
+          const SafeArea(
+            child: HomeAppBar(),
+          ),
           const SizedBox(height: 40),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
