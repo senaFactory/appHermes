@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/providers/token_storage.dart';
+import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
@@ -25,21 +26,31 @@ class _CarnetpageState extends State<Carnetpage> {
     var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white, // Fondo blanco para todo el diseño
-      body: Center(
-        child: FutureBuilder<User?>(
-          future: _fetchUserData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return _buildError(snapshot.error.toString());
-            } else if (!snapshot.hasData || snapshot.data == null) {
-              return _buildNoData();
-            }
-            return _buildCarnet(screenSize, snapshot.data!);
-          },
-        ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          ListView(
+            children: [
+              const HomeAppBar(), // HomeAppBar en la parte superior
+              const SizedBox(height: 20),
+              FutureBuilder<User?>(
+                future: _fetchUserData(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return _buildError(snapshot.error.toString());
+                  } else if (!snapshot.hasData) {
+                    return _buildNoData();
+                  }
+                  return Center(
+                    child: _buildCarnet(screenSize, snapshot.data!),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -64,35 +75,40 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Widget _buildCarnet(Size screenSize, User user) {
     return Container(
-      width: screenSize.width * 0.85,
-      padding: const EdgeInsets.all(20),
+      width: screenSize.width * 0.9, // Un poco más ancho
+      margin: const EdgeInsets.symmetric(vertical: 30), // Espacio alrededor
+      padding: const EdgeInsets.all(25), // Espacio interno
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(30), // Bordes más suaves
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // Sombra debajo del carnet
+            color: Colors.black.withOpacity(0.2), // Sombra sutil
+            blurRadius: 12, // Difuminación de sombra
+            spreadRadius: 2,
+            offset: const Offset(0, 5), // Sombra hacia abajo
           ),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Imagen del usuario
           const CircleAvatar(
-            radius: 60, // Tamaño del avatar
+            radius: 70, // Imagen más grande
             backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
+
+          // Nombre del usuario
           Text(
             '${user.name} ${user.lastName}',
             style: const TextStyle(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Color(0xFF39A900), // Verde institucional
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
           const Text(
@@ -102,18 +118,26 @@ class _CarnetpageState extends State<Carnetpage> {
               fontWeight: FontWeight.w500,
               color: Color(0xFF39A900),
             ),
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 8),
+
+          // Programa del usuario
           Text(
             user.program,
             style: const TextStyle(
-              fontSize: 16,
-              color: Colors.grey,
+              fontSize: 18,
+              color: Colors.black54, // Texto más visible
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
+
+          // Botón para mostrar QR
           _buildQrButton(user),
           const SizedBox(height: 20),
+
+          // Detalles del usuario
           _buildUserDetails(user),
         ],
       ),
@@ -134,7 +158,8 @@ class _CarnetpageState extends State<Carnetpage> {
         backgroundColor: const Color(0xFF007D78), // Verde oscuro
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius:
+              BorderRadius.circular(12), // Botón con bordes redondeados
         ),
       ),
     );
