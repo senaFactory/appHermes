@@ -17,7 +17,7 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Future<User?> _fetchUserData() {
     final jwt = TokenStorage().decodeJwtToken();
-    return _peopleService.getUser(jwt);
+    return _peopleService.getUser();
   }
 
   @override
@@ -95,9 +95,9 @@ class _CarnetpageState extends State<Carnetpage> {
             ),
           ),
           const SizedBox(height: 5),
-          Text(
+          const Text(
             'Aprendiz',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Color(0xFF39A900),

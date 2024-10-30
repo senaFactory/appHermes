@@ -7,6 +7,7 @@ class CustomNavigationBar extends StatelessWidget {
   final int selectedIndex;
 
   const CustomNavigationBar({
+    super.key,
     required this.onTabTapped,
     required this.selectedIndex,
   });
@@ -19,13 +20,12 @@ class CustomNavigationBar extends StatelessWidget {
       color: const Color(0xFF39A900),
       buttonBackgroundColor: const Color(0xFF007D78),
       items: const [
-        
         Icon(Icons.computer, size: 30, color: Colors.white),
         Icon(Icons.qr_code, size: 30, color: Colors.white),
         Icon(Icons.people_alt_outlined, size: 30, color: Colors.white),
       ],
-      index: selectedIndex,  // Pasa el índice inicial
-      onTap: onTabTapped,     // Cambia la pestaña seleccionada
+      index: selectedIndex, // Pasa el índice inicial
+      onTap: onTabTapped, // Cambia la pestaña seleccionada
     );
   }
 }

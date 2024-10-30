@@ -3,6 +3,8 @@ import 'package:maqueta/models/auth_login.dart';
 import 'package:maqueta/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -16,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = const TextStyle(
+    const textStyle = TextStyle(
         fontSize: 16, color: Colors.black); // Estilo base para todo el texto
 
     return Scaffold(

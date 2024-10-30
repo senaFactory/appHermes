@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-//* Personalizacion de texto información de carnet 
+//* Personalizacion de texto información de carnet
 
 class InfoColumnWidget extends StatelessWidget {
   final String label;
   final String value;
 
   const InfoColumnWidget({
-    Key? key,
+    super.key,
     required this.label,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

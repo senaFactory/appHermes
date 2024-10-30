@@ -5,6 +5,8 @@ import 'package:maqueta/pages/profile/my_account_page.dart';
 import 'package:maqueta/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -14,9 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Lista de las páginas a mostrar en IndexedStack
   final List<Widget> _pages = [
-    Equipmentspage(), // Indice 0
-    Carnetpage(), // Indice 1
-    Myaccountpage(), // Indice 2
+    const Equipmentspage(), // Indice 0
+    const Carnetpage(), // Indice 1
+    const Myaccountpage(), // Indice 2
   ];
 
   // Método que se llama cuando se selecciona una pestaña en la barra de navegación

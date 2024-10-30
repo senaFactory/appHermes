@@ -28,7 +28,7 @@ class _MyaccountpageState extends State<Myaccountpage> {
   Future<void> _fetchUserData() async {
     final jwt = TokenStorage().decodeJwtToken();
     User? fetchedUser =
-        await _peopleService.getUser(jwt); // Puedes cambiar el ID dinámicamente
+        await _peopleService.getUser(); // Puedes cambiar el ID dinámicamente
 
     setState(() {
       user = fetchedUser; // Actualiza el estado con el usuario obtenido

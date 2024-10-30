@@ -12,7 +12,7 @@ class EquipmentCard extends StatelessWidget {
   final VoidCallback onDeactivate;
 
   const EquipmentCard({
-    Key? key,
+    super.key,
     required this.type,
     required this.brand,
     required this.model,
@@ -20,7 +20,7 @@ class EquipmentCard extends StatelessWidget {
     required this.serialNumber,
     required this.onEdit,
     required this.onDeactivate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,8 @@ class EquipmentCard extends StatelessWidget {
                       ),
                       Text(
                         brand,
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),

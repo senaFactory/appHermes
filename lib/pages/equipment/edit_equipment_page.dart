@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class EditEquiptModal {
-  final TextEditingController _colorController = TextEditingController(text: 'Azul rey');
+  final TextEditingController _colorController =
+      TextEditingController(text: 'Azul rey');
 
   // Método para mostrar el modal en el centro de la pantalla
   void showEditModal(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true,  // Cerrar el modal al tocar fuera
+      barrierDismissible: true, // Cerrar el modal al tocar fuera
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Colors.white, // Establece el fondo a blanco
@@ -21,7 +22,7 @@ class EditEquiptModal {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Título del modal
-                Center(
+                const Center(
                   child: Text(
                     "Editar registro",
                     style: TextStyle(
@@ -31,7 +32,7 @@ class EditEquiptModal {
                     ),
                   ),
                 ),
-                Center(
+                const Center(
                   child: Text(
                     "Actualizar información",
                     style: TextStyle(
@@ -42,7 +43,7 @@ class EditEquiptModal {
                 ),
                 const SizedBox(height: 20),
                 // Campo para editar el color
-                Text(
+                const Text(
                   'Color:',
                   style: TextStyle(
                     fontSize: 16,
@@ -58,7 +59,8 @@ class EditEquiptModal {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     hintText: 'Ingresa el nuevo color',
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -66,7 +68,6 @@ class EditEquiptModal {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      
                       //TODO: Lógica para guardar los cambios
 
                       print("Color actualizado: ${_colorController.text}");
@@ -74,7 +75,8 @@ class EditEquiptModal {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF39A900),
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

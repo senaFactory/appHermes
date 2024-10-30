@@ -12,7 +12,7 @@ class PeopleService {
   final EquipmentService _equipmentService = EquipmentService();
   final TokenStorage tokenStorage = TokenStorage();
 
-  Future<User?> getUser(Future<Map<dynamic, dynamic>> token) async {
+  Future<User?> getUser() async {
     var token = await tokenStorage.getToken();
     var decodeToken = await tokenStorage.decodeJwtToken();
     var document = decodeToken['sub'];

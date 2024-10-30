@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 //* HomeAppBar se encarga de mostrar la barra superior con el logo y texto.
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({Key? key}) : super(key: key);
+  const HomeAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Color color =  Color(0xFF39A900);
+    Color color = const Color(0xFF39A900);
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
 
@@ -27,10 +27,13 @@ class HomeAppBar extends StatelessWidget {
           // Logo adaptable al tamaño de la pantalla
           Image.asset(
             "images/logo.png",
-            color: Color.fromARGB(255, 241, 241, 241),
-            height: screenSize.height * 0.07, // Altura proporcional al alto de la pantalla
+            color: const Color.fromARGB(255, 241, 241, 241),
+            height: screenSize.height *
+                0.07, // Altura proporcional al alto de la pantalla
           ),
-          SizedBox(width: screenSize.width * 0.02), // Espacio adaptable entre logo y texto
+          SizedBox(
+              width: screenSize.width *
+                  0.02), // Espacio adaptable entre logo y texto
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,18 +42,20 @@ class HomeAppBar extends StatelessWidget {
                 Text(
                   "Hermes",
                   style: TextStyle(
-                    fontSize: screenSize.width * 0.08, // Tamaño relativo al ancho
-                    fontWeight: FontWeight.w300, 
+                    fontSize:
+                        screenSize.width * 0.08, // Tamaño relativo al ancho
+                    fontWeight: FontWeight.w300,
                     color: const Color(0xFFF5F4F4),
                     letterSpacing: 2.0, // Espacio de las letras
                     height: 1.0, // Ajusta la altura de línea
                   ),
                 ),
-                
+
                 Text(
                   "Transformando vidas, construyendo futuro.",
                   style: TextStyle(
-                    fontSize: screenSize.width * 0.02, // Tamaño proporcional al ancho
+                    fontSize:
+                        screenSize.width * 0.02, // Tamaño proporcional al ancho
                     color: const Color(0xFFF5F4F4),
                   ),
                 ),
