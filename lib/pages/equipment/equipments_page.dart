@@ -32,6 +32,23 @@ class _EquipmentspageState extends State<Equipmentspage> {
     }
   }
 
+  Future<void> _navigateToAddEquipmentPage() async {
+    // Navegar a la página de agregar equipo y esperar el resultado
+    final newEquipment = await Navigator.push<Equipment>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AddEquipmentPage(),
+      ),
+    );
+
+    // Si se retorna un equipo, añadirlo a la lista
+    if (newEquipment != null) {
+      setState(() {
+        _equipments.add(newEquipment);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +70,9 @@ class _EquipmentspageState extends State<Equipmentspage> {
                       color: Color(0xFF39A900),
                     ),
                   ),
+                  // Botón "Agregar equipo" siempre en el header
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddEquipmentPage(),
-                        ),
-                      );
-                    },
+                    onPressed: _navigateToAddEquipmentPage,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF39A900),
                       padding: const EdgeInsets.symmetric(
@@ -81,8 +92,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
             const SizedBox(height: 20),
             Expanded(
               child: _equipments.isEmpty
-                  ? _buildEmptyEquipmentView() // Muestra vista alternativa si no hay equipos
-                  : _buildEquipmentList(), // Muestra la lista si hay equipos
+                  ? _buildEmptyEquipmentView() // Vista alternativa si no hay equipos
+                  : _buildEquipmentList(), // Lista de equipos si existen
             ),
             const SizedBox(height: 35),
           ],
@@ -92,43 +103,22 @@ class _EquipmentspageState extends State<Equipmentspage> {
   }
 
   Widget _buildEmptyEquipmentView() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.devices_other,
             size: 80,
             color: Colors.grey,
           ),
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: 20),
+          Text(
             "No tienes equipos registrados.",
             style: TextStyle(fontSize: 18, color: Colors.grey),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddEquipmentPage(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF39A900),
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: const Text(
-              "Agregar equipo",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+          SizedBox(height: 20),
         ],
       ),
     );
