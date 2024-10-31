@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:maqueta/models/equipment.dart';
 
 class User {
@@ -7,11 +8,12 @@ class User {
   final String phoneNumber;
   final String bloodType;
   final String documentNumber;
-  final String acronym;          
-  final String studySheet;    
-  final String program;   
+  final String acronym;
+  final String studySheet;
+  final String program;
   final String journal;
-  final String trainingCenter;   
+  final String trainingCenter;
+  final Uint8List? photo;
   final List<Equipment> equipments;
 
   User({
@@ -27,5 +29,6 @@ class User {
     required this.journal,
     required this.trainingCenter,
     required this.equipments,
+    this.photo,
   });
 }

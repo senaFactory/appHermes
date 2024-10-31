@@ -10,6 +10,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final prefs = UserPreferences();
@@ -20,8 +22,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: prefs.lastPage,
       routes: {
-        '/': (context) => LoginPage(),
-        '/home': (context) => HomeScreen(),
+        '/': (context) => const LoginPage(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }

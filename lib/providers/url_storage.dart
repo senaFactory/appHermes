@@ -6,4 +6,5 @@ class UrlStorage {
   final String urlCardPerson = 'api/v1/hermesapp/view';
   final String urlLogin = 'api/v1/hermesapp/auth/login';
   final String urlEquipment = 'api/v1/hermesapp/equipment';
+  final String urlStudent = 'api/v1/hermesapp/student';
 }

@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
+import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
+import 'package:maqueta/services/student_service.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,21 +19,55 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   final PeopleService _peopleService = PeopleService();
-
+  final StudentService _studentService = StudentService();
+  final TokenStorage tokenStorage = TokenStorage();
+  // Obtener datos del usuario a partir del token JWT
   Future<User?> _fetchUserData() async {
-    final jwt = TokenStorage().decodeJwtToken();
-    return await _peopleService.getUser(jwt);
+    return await _peopleService.getUser();
   }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
+    final decodeToken = await tokenStorage.decodeJwtToken();
+    final document = int.parse(decodeToken['sub']);
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      if (!pickedFile.path.endsWith('.jpg') &&
+          !pickedFile.path.endsWith('.jpeg')) {
+        _showErrorDialog(
+            'Formato no válido', 'Selecciona una imagen en formato JPG.');
+        return;
+      }
+
+      Uint8List imageBytes = await pickedFile.readAsBytes();
+      Uint8List documentBytes = Uint8List(4)
+        ..buffer.asByteData().setInt32(0, document);
+      Uint8List finalBytes =
+          Uint8List.fromList([...documentBytes, ...imageBytes]);
+      String base64Image = base64Encode(finalBytes);
+
+      await _studentService.sendImage(base64Image);
     }
+  }
+
+  // Mostrar un diálogo de error si el formato es incorrecto
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -54,7 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: const TextStyle(color: Colors.red),
                       ),
                     );
-                  } else if (!snapshot.hasData || snapshot.data == null) {
+                  } else if (!snapshot.hasData) {
                     return const Center(
                       child: Text(
                         'No se encontraron datos del usuario.',
@@ -82,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 25),
                         _buildProfileInfo(user),
                         const SizedBox(height: 20),
-                        _buildSaveButton(),
+                        _buildSaveButton(user),
                       ],
                     ),
                   );
@@ -178,25 +215,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       "Número de Documento", user.documentNumber)),
             ],
           ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                  child:
-                      _buildInfoColumn("Número de Celular", user.phoneNumber)),
-              const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
-            ],
-          ),
-          const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
-              const SizedBox(width: 15),
-              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
-            ],
-          ),
         ],
       ),
     );
@@ -216,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
         const SizedBox(height: 5),
         TextFormField(
           initialValue: value,
-          enabled: false, // Solo lectura
+          enabled: false,
           decoration: InputDecoration(
             isDense: true,
             contentPadding:
@@ -230,16 +248,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildSaveButton() {
+  Widget _buildSaveButton(User user) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
-              print('Foto guardada');
-            },
+            onPressed: () => {}, //_uploadImage(user),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF39A900),
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),

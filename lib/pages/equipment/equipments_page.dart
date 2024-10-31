@@ -25,7 +25,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
 
   Future<void> _fetchUser() async {
     final jwt = TokenStorage().decodeJwtToken();
-    final user = await _peopleService.getUser(jwt);
+    final user = await _peopleService.getUser();
     if (user != null) {
       setState(() {
         _equipments.addAll(user.equipments);
