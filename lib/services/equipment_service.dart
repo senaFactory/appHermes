@@ -11,7 +11,7 @@ class EquipmentService {
   final TokenStorage tokenStorage = TokenStorage();
 
   Future<void> addEquipment(
-      Equipment equipment, Future<Map<dynamic, dynamic>> token) async {
+      Equipment equipment, Map<dynamic, dynamic> token) async {
     var token = await tokenStorage.getToken();
     var decodeToken = await tokenStorage.decodeJwtToken();
     var document = decodeToken['sub'];
@@ -27,8 +27,6 @@ class EquipmentService {
         'data': equipment.toJson(),
       };
 
-      print(payload);
-
       final response = await http.post(
         url,
         headers: {
@@ -38,7 +36,9 @@ class EquipmentService {
         body: json.encode(payload),
       );
 
-      if (response.statusCode == 200) {
+      print(response.body);
+
+      if (response.statusCode != 200) {
         print('Equipo registrado exitosamente');
       } else {
         print('Error en la respuesta del servidor: ${response.body}');
@@ -64,7 +64,6 @@ class EquipmentService {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);

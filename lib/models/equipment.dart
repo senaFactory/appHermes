@@ -5,7 +5,7 @@ class Equipment {
   final String model;
   final String color;
   final String serial;
-  final bool state;
+  final dynamic state;
 
   Equipment({
     this.id,
@@ -25,7 +25,7 @@ class Equipment {
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
       serial: json['serial'] ?? 'N/A',
-      state: json['state'] ?? false,
+      state: json['state'] == true ? 'true' : 'false',
     );
   }
 
@@ -37,7 +37,7 @@ class Equipment {
       'serial': serial,
       'model': model,
       'color': color,
-      'state': state,
+      'state': state.toString(),
     };
   }
 
