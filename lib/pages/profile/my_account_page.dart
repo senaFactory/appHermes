@@ -70,7 +70,6 @@ class _MyaccountpageState extends State<Myaccountpage> {
                           );
                         },
                       ),
-                      const Divider(),
                       ListTile(
                         leading: const Icon(Icons.dark_mode,
                             color: Color(0xFF000102)),
@@ -91,9 +90,12 @@ class _MyaccountpageState extends State<Myaccountpage> {
                               isDarkMode = value;
                             });
                           },
+                          inactiveThumbColor: Color.fromARGB(255, 93, 171, 65),
+                          inactiveTrackColor: const Color(0xFFB6E5A8),
+                          activeColor: Color.fromARGB(167, 0, 49, 77),
+                          activeTrackColor: Color.fromARGB(255, 198, 197, 249),
                         ),
                       ),
-                      const Divider(), // Línea divisoria entre ListTile
                       ListTile(
                         leading: const Icon(
                           Icons.logout,
