@@ -28,8 +28,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    print("mazocar2");
-    print(ImageSource);
 
     if (pickedFile != null) {
       setState(() {
@@ -51,8 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
       // Convertimos la imagen a Base64
       final bytes = await _image!.readAsBytes();
       final base64Image = base64Encode(bytes);
-      print("mazorca");
-      print(base64Image);
 
       // Enviamos la imagen al backend
       await _studentService.sendImageBase64(base64Image, document);

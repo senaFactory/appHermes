@@ -6,7 +6,7 @@ import 'package:maqueta/util/preferences/pref_user.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserPreferences.init();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

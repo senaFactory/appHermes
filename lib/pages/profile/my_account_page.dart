@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/profile/profile_page.dart';
-import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -26,7 +25,6 @@ class _MyaccountpageState extends State<Myaccountpage> {
 
   // Función para obtener los datos del usuario
   Future<void> _fetchUserData() async {
-    final jwt = TokenStorage().decodeJwtToken();
     User? fetchedUser =
         await _peopleService.getUser(); // Puedes cambiar el ID dinámicamente
 
@@ -40,86 +38,86 @@ class _MyaccountpageState extends State<Myaccountpage> {
     return Scaffold(
       body: ListView(
         children: [
-          Container(
-            child: Column(
-              children: [
-                const HomeAppBar(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading:
-                            const Icon(Icons.person, color: Color(0xFF000102)),
-                        title: const Text(
-                          "Mi Perfil",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF000102),
-                          ),
+          Column(
+            children: [
+              const HomeAppBar(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading:
+                          const Icon(Icons.person, color: Color(0xFF000102)),
+                      title: const Text(
+                        "Mi Perfil",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF000102),
                         ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 30),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfilePage(),
-                            ),
-                          );
+                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfilePage(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading:
+                          const Icon(Icons.dark_mode, color: Color(0xFF000102)),
+                      title: const Text(
+                        "Modo oscuro",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF000102),
+                        ),
+                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                      trailing: Switch(
+                        value: isDarkMode,
+                        onChanged: (value) {
+                          setState(() {
+                            isDarkMode = value;
+                          });
                         },
+                        inactiveThumbColor:
+                            const Color.fromARGB(255, 93, 171, 65),
+                        inactiveTrackColor: const Color(0xFFB6E5A8),
+                        activeColor: const Color.fromARGB(167, 0, 49, 77),
+                        activeTrackColor:
+                            const Color.fromARGB(255, 198, 197, 249),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.dark_mode,
-                            color: Color(0xFF000102)),
-                        title: const Text(
-                          "Modo oscuro",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF000102),
-                          ),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 30),
-                        trailing: Switch(
-                          value: isDarkMode,
-                          onChanged: (value) {
-                            setState(() {
-                              isDarkMode = value;
-                            });
-                          },
-                          inactiveThumbColor: Color.fromARGB(255, 93, 171, 65),
-                          inactiveTrackColor: const Color(0xFFB6E5A8),
-                          activeColor: Color.fromARGB(167, 0, 49, 77),
-                          activeTrackColor: Color.fromARGB(255, 198, 197, 249),
-                        ),
+                    ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.logout,
+                        color: Color.fromARGB(255, 255, 51, 0),
                       ),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.logout,
+                      title: const Text(
+                        "Cerrar sesión",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: Color.fromARGB(255, 255, 51, 0),
                         ),
-                        title: const Text(
-                          "Cerrar sesión",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 255, 51, 0),
-                          ),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 30),
-                        onTap: () {
-                          // Lógica para cerrar sesión
-                        },
                       ),
-                    ],
-                  ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                      onTap: () {
+                        // Lógica para cerrar sesión
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),

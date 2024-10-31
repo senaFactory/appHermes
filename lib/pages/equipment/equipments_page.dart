@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/equipment/add_equipment_page.dart';
-import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
@@ -24,7 +22,6 @@ class _EquipmentspageState extends State<Equipmentspage> {
   }
 
   Future<void> _fetchUser() async {
-    final jwt = TokenStorage().decodeJwtToken();
     final user = await _peopleService.getUser();
     if (user != null) {
       setState(() {

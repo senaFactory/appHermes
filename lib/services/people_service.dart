@@ -48,6 +48,7 @@ class PeopleService {
               phoneNumber: userData['phone'] ?? 'N/A',
               bloodType: userData['bloodType']?.trim() ?? 'N/A',
               documentNumber: userData['document'].toString(),
+              photo: userData['photo'],
               acronym: userData['acronym'] ?? 'N/A',
               studySheet: userData['studySheet']?.toString() ?? '1231232',
               program: userData['program'] ?? 'N/A',
