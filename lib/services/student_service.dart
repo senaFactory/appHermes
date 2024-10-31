@@ -1,29 +1,51 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
 
 class StudentService {
   final String baseUrl = UrlStorage().virtualPort + UrlStorage().urlStudent;
+  final TokenStorage tokenStorage = TokenStorage();
 
-  Future<void> sendImagePath(String imagePath, int document) async {
+  Future<void> sendImageBase64(String base64Image, int document) async {
     final url = Uri.parse('$baseUrl/updatePhoto/$document');
+    var token = await tokenStorage.getToken();
 
-    print('Enviando imagen a: $url');
-    print('Ruta de la imagen: $imagePath');
-    print('Documento del usuario: $document');
+    final body = jsonEncode({
+      "data": {
+        "photo": base64Image,
+      }
+    });
 
-    final response = await http.put(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'imagePath': imagePath}),
-    );
+    print('Enviando imagen en formato Base64 al backend...');
+    print('URL: $url');
+    print('Authorization Token: Bearer $token');
+    print('Cuerpo de la petición: $body');
 
-    
-    print('Respuesta del servidor: ${response.body}');
-    print('Código de estado: ${response.statusCode}');
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
 
-    if (response.statusCode != 200) {
-      throw Exception('Error al enviar la imagen: ${response.statusCode}');
+      print('Código de estado de la respuesta: ${response.statusCode}');
+      print('Cuerpo de la respuesta: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('Imagen subida correctamente.');
+      } else {
+        print(
+            'Error al enviar la imagen. Código de estado: ${response.statusCode}');
+        print('Mensaje de error del servidor: ${response.body}');
+        throw Exception('Error al enviar la imagen: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Excepción al enviar la imagen: $e');
+      throw Exception('Error al enviar la imagen: $e');
     }
   }
 }
