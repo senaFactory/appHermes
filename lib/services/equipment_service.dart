@@ -64,6 +64,7 @@ class EquipmentService {
           'Content-Type': 'application/json',
         },
       );
+      print(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);

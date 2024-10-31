@@ -192,7 +192,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
         model: _modelController.text,
         color: _colorController.text,
         serial: _serialNumberController.text,
-        state: "true",
+        state: true,
       );
 
       try {

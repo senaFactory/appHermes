@@ -5,7 +5,7 @@ class Equipment {
   final String model;
   final String color;
   final String serial;
-  final String state;
+  final bool state;
 
   Equipment({
     this.id,
@@ -25,7 +25,7 @@ class Equipment {
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
       serial: json['serial'] ?? 'N/A',
-      state: json['state'] ?? "false",
+      state: json['state'] ?? false,
     );
   }
 
