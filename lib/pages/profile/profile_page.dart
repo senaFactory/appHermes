@@ -58,6 +58,12 @@ class _ProfilePageState extends State<ProfilePage> {
       final base64Image = base64Encode(bytes);
 
       await _studentService.sendImageBase64(base64Image, document);
+
+      setState(() {
+        // Refrescamos el avatar con la imagen subida
+        _image = File(_image!.path);
+      });
+
       _showMessage('Imagen subida correctamente.');
     } catch (e) {
       _showMessage('Error al subir la imagen: $e');
@@ -167,8 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 70,
             backgroundImage: _image != null
                 ? FileImage(_image!)
-                : const AssetImage('images/aprendiz_sena1.jpeg')
-                    as ImageProvider,
+                : const AssetImage('images/icono.jpg') as ImageProvider,
             child: _image == null
                 ? Icon(
                     Icons.camera_alt,

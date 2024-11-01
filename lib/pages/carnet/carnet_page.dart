@@ -93,9 +93,12 @@ class _CarnetpageState extends State<Carnetpage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Imagen del usuario
-          const CircleAvatar(
-            radius: 80, // Imagen más grande
-            backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
+          CircleAvatar(
+            radius: 80,
+            backgroundImage: user.photo != null
+                ? MemoryImage(user.photo!) // Si la foto está disponible, usarla
+                : const AssetImage('images/icono.jpg')
+                    as ImageProvider, // Si no, usa la imagen por defecto
           ),
           const SizedBox(height: 15),
 
