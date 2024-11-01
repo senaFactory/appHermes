@@ -5,6 +5,7 @@ import 'package:maqueta/providers/token_storage.dart';
 
 class EquipmentHelper {
   static Equipment buildEquipment({
+    String? document,
     required String brand,
     required String model,
     required String color,
