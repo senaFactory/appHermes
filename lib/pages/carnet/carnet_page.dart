@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
-import 'package:maqueta/providers/token_storage.dart';
+import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
@@ -16,7 +16,6 @@ class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
 
   Future<User?> _fetchUserData() {
-    final jwt = TokenStorage().decodeJwtToken();
     return _peopleService.getUser();
   }
 
@@ -30,7 +29,7 @@ class _CarnetpageState extends State<Carnetpage> {
         children: [
           ListView(
             children: [
-              const HomeAppBar(), // HomeAppBar en la parte superior
+              const HomeAppBar(),
               FutureBuilder<User?>(
                 future: _fetchUserData(),
                 builder: (context, snapshot) {

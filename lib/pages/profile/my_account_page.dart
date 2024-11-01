@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/profile/profile_page.dart';
-import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -26,7 +25,6 @@ class _MyaccountpageState extends State<Myaccountpage> {
 
   // Función para obtener los datos del usuario
   Future<void> _fetchUserData() async {
-    final jwt = TokenStorage().decodeJwtToken();
     User? fetchedUser =
         await _peopleService.getUser(); // Puedes cambiar el ID dinámicamente
 
