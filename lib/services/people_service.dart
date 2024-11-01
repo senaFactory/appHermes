@@ -57,10 +57,7 @@ class PeopleService {
               program: userData['program'] ?? 'N/A',
               journal: userData['journal'] ?? 'Tarde',
               trainingCenter: userData['trainingCenter'] ?? 'CSF',
-              equipments: equipmentList,
-              photo: userData['photo'] != null
-                  ? base64Decode(userData['photo'])
-                  : null);
+              equipments: equipmentList);
         } else {
           throw Exception('User data not available');
         }
