@@ -163,18 +163,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileHeader(User user) {
+    ImageProvider? imageProvider;
+
+    if (_image != null) {
+      // Si el usuario seleccionó una nueva imagen, se usa esa imagen
+      imageProvider = FileImage(_image!);
+    } else if (user.photo != null && user.photo!.isNotEmpty) {
+      // Si el backend devolvió una imagen en Uint8List, se convierte en MemoryImage
+      imageProvider = MemoryImage(user.photo!);
+    } else {
+      // Imagen predeterminada en caso de que no haya ninguna imagen
+      imageProvider = const AssetImage('images/icono.jpg');
+    }
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(width: 25),
         GestureDetector(
-          onTap: _pickImage,
+          //onTap: _pickImage, // Esta parte permite al usuario seleccionar una nueva imagen
           child: CircleAvatar(
             radius: 70,
-            backgroundImage: _image != null
-                ? FileImage(_image!)
-                : const AssetImage('images/icono.jpg') as ImageProvider,
-            child: _image == null
+            backgroundImage: imageProvider,
+            child: _image == null && (user.photo == null || user.photo!.isEmpty)
                 ? Icon(
                     Icons.camera_alt,
                     size: 30,
