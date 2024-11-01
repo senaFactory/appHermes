@@ -20,14 +20,14 @@ class _EquipmentspageState extends State<Equipmentspage> {
   @override
   void initState() {
     super.initState();
-    _fetchUser();
+    _fetchAllEquipment();
   }
 
-  Future<void> _fetchUser() async {
-    final user = await _peopleService.getUser();
-    if (user != null) {
+  Future<void> _fetchAllEquipment() async {
+    final allEquipment = await _peopleService.getUser();
+    if (allEquipment != null) {
       setState(() {
-        _equipments.addAll(user.equipments);
+        _equipments.addAll(allEquipment.equipments);
       });
     }
   }
@@ -70,7 +70,6 @@ class _EquipmentspageState extends State<Equipmentspage> {
                       color: Color(0xFF39A900),
                     ),
                   ),
-                  // Botón "Agregar equipo" siempre en el header
                   ElevatedButton(
                     onPressed: _navigateToAddEquipmentPage,
                     style: ElevatedButton.styleFrom(

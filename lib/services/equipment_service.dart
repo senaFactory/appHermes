@@ -53,39 +53,25 @@ class EquipmentService {
   Future<List<Equipment>> fetchEquipments(List<int> equipmentIds) async {
     var token = await tokenStorage.getToken();
     final String baseUrl = '$virtualPort$urlEquipment/by-id/';
-
-    List<Equipment> equipmentList = [];
+    var headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
 
     try {
-      for (int id in equipmentIds) {
-        final response = await http.get(
-          Uri.parse('$baseUrl$id'),
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-        );
+      var responses = await Future.wait(equipmentIds.map((id) {
+        return http.get(Uri.parse('$baseUrl$id'), headers: headers);
+      }));
 
-        if (response.statusCode == 200) {
-          final Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-          for (final equipmentData in jsonResponse['data']) {
-            equipmentList.add(Equipment(
-              id: equipmentData['id'],
-              brand: equipmentData['brand'] ?? 'N/A',
-              serial: equipmentData['serial'] ?? 'N/A',
-              model: equipmentData['model'] ?? 'N/A',
-              color: equipmentData['color'] ?? 'N/A',
-              state: equipmentData['state'] ?? false,
-            ));
-          }
-        } else {
-          print('Error fetching equipment with id: $id');
-        }
-      }
+      return responses
+          .where((response) => response.statusCode == 200)
+          .map((response) {
+        var jsonResponse = json.decode(response.body);
+        return Equipment.fromJson(jsonResponse['data']);
+      }).toList();
     } catch (e) {
-      print(e);
+      print('Error fetching equipments: $e');
+      return [];
     }
-    return equipmentList;
   }
 }

@@ -28,20 +28,18 @@ class PeopleService {
           'Content-Type': 'application/json',
         },
       );
-      print(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        print("paso codigo 22");
         if (jsonResponse.isNotEmpty) {
           final userData = jsonResponse;
 
           List<int> equipmentIds =
               List<int>.from(userData['equipments']?.map((e) => e['id']) ?? []);
-          print("ids de equipos");
+
           List<Equipment> equipmentList =
               await _equipmentService.fetchEquipments(equipmentIds);
-          print(userData);
+
           return User(
               name: userData['name'] ?? 'N/A',
               lastName: userData['lastname'] ?? 'N/A',
@@ -65,7 +63,6 @@ class PeopleService {
         throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       throw Exception('Error getting user data');
     }
   }
