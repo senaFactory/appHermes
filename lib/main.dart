@@ -5,8 +5,8 @@ import 'package:maqueta/util/preferences/pref_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PreferenciaUsuario.init();
-  runApp(MyApp());
+  await UserPreferences.init();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,13 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final prefs = PreferenciaUsuario();
+    final prefs = UserPreferences();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: prefs.ultimaPagina,
+      initialRoute: prefs.lastPage,
       routes: {
         '/': (context) => const LoginPage(),
         '/home': (context) => const HomeScreen(),

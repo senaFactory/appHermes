@@ -24,7 +24,8 @@ class QrModal extends StatelessWidget {
           user.studySheet,
           user.program,
           user.journal,
-          user.trainingCenter
+          user.trainingCenter,
+          user.equipments.map((e) => e.toJson().toString()).join('; ')
         ]}',
         decoration: const PrettyQrDecoration(
           background: Colors.white,

@@ -10,27 +10,43 @@ class EquipmentService {
   final String urlEquipment = UrlStorage().urlEquipment;
   final TokenStorage tokenStorage = TokenStorage();
 
-  Future<void> addEquipment(Equipment equipment) async {
+  Future<void> addEquipment(
+      Equipment equipment, Map<dynamic, dynamic> token) async {
+    var token = await tokenStorage.getToken();
+    var decodeToken = await tokenStorage.decodeJwtToken();
+    var document = decodeToken['sub'];
+
     final String baseUrl = '$virtualPort$urlEquipment';
     final url = Uri.parse('$baseUrl/add');
 
     try {
+      equipment.setDocumentId = document;
+
+      // Crea el objeto con 'data'
+      final Map<String, dynamic> payload = {
+        'data': equipment.toJson(),
+      };
+
       final response = await http.post(
         url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(equipment.toJson()),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+        body: json.encode(payload),
       );
 
-      if (response.statusCode == 200) {
+      print(response.body);
+
+      if (response.statusCode != 200) {
         print('Equipo registrado exitosamente');
       } else {
-        // Imprimir la respuesta del servidor en caso de error
         print('Error en la respuesta del servidor: ${response.body}');
         throw Exception('Error al registrar el equipo: ${response.statusCode}');
       }
     } catch (e) {
       print('Exception al registrar equipo: $e');
-      rethrow; // Volver a lanzar la excepción para manejarla en otro nivel si es necesario
+      rethrow;
     }
   }
 

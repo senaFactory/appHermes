@@ -28,6 +28,7 @@ class PeopleService {
           'Content-Type': 'application/json',
         },
       );
+      print(response.body);
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -48,6 +49,9 @@ class PeopleService {
               phoneNumber: userData['phone'] ?? 'N/A',
               bloodType: userData['bloodType']?.trim() ?? 'N/A',
               documentNumber: userData['document'].toString(),
+              photo: userData['photo'] != null
+                  ? base64Decode(userData['photo'])
+                  : null,
               acronym: userData['acronym'] ?? 'N/A',
               studySheet: userData['studySheet']?.toString() ?? '1231232',
               program: userData['program'] ?? 'N/A',

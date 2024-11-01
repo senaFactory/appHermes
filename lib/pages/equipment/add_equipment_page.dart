@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+
+import 'package:maqueta/util/helpers/equipment_helper.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/widgets/custom_dropdown.dart';
-import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/services/equipment_service.dart';
 
-class Formaddeequipts extends StatefulWidget {
-  const Formaddeequipts({super.key});
+class AddEquipmentPage extends StatefulWidget {
+  static const routename = 'addEquipment';
+  const AddEquipmentPage({super.key});
 
   @override
-  State<Formaddeequipts> createState() => _RegisterEquipmentPageState();
+  State<AddEquipmentPage> createState() => _RegisterEquipmentPageState();
 }
 
-class _RegisterEquipmentPageState extends State<Formaddeequipts> {
+enum FieldType { modelo, numeroSerie, color }
+
+class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
+  final _formKey = GlobalKey<FormState>(); // Form key for validation
+
   final List<String> _equipmentTypes = ['Tablet', 'Portátil'];
   String? _selectedType;
   final List<String> _brands = [
@@ -22,6 +27,7 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
     'Acer',
     'Lenovo'
   ];
+
   String? _selectedBrand;
 
   final _modelController = TextEditingController();
@@ -56,69 +62,82 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
               ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Registro de Equipo',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF39A900),
+                child: Form(
+                  key: _formKey, // Assigning form key
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Por favor completa la siguiente información.',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
-                    ),
-                    const Text(
-                      'Por favor completa la siguiente información.',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 20),
-                    _buildDropdown(
-                        'Tipo de Equipo', _equipmentTypes, _selectedType,
-                        (value) {
-                      setState(() {
-                        _selectedType = value;
-                      });
-                    }),
-                    const SizedBox(height: 20),
-                    _buildDropdown('Marca', _brands, _selectedBrand, (value) {
-                      setState(() {
-                        _selectedBrand = value;
-                      });
-                    }),
-                    const SizedBox(height: 20),
-                    _buildTextField('Modelo', 'Ingresa el modelo del equipo',
-                        _modelController),
-                    const SizedBox(height: 20),
-                    _buildTextField('Número de serie',
-                        'Ingresa el número de serie', _serialNumberController),
-                    const SizedBox(height: 20),
-                    _buildTextField('Color', 'Ingresa el color del equipo',
-                        _colorController),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: _isLoading ? null : _saveEquipment,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF39A900),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                      const SizedBox(height: 20),
+                      _buildDropdown(
+                          'Tipo de Equipo', _equipmentTypes, _selectedType,
+                          (value) {
+                        setState(() {
+                          _selectedType = value;
+                        });
+                      }),
+                      const SizedBox(height: 20),
+                      _buildDropdown('Marca', _brands, _selectedBrand, (value) {
+                        setState(() {
+                          _selectedBrand = value;
+                        });
+                      }),
+                      const SizedBox(height: 20),
+                      _buildTextField(
+                        'Modelo',
+                        'Ingresa el modelo del equipo',
+                        _modelController,
+                        'El modelo es requerido.',
+                        FieldType
+                            .modelo, // <--- Agregar FieldType para el campo
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTextField(
+                        'Número de serie',
+                        'Ingresa el número de serie',
+                        _serialNumberController,
+                        'El número de serie es requerido.',
+                        FieldType
+                            .numeroSerie, // <--- Agregar FieldType para el campo
+                      ),
+                      const SizedBox(height: 20),
+                      _buildTextField(
+                        'Color',
+                        'Ingresa el color del equipo',
+                        _colorController,
+                        'El color es requerido.',
+                        FieldType.color, // <--- Agregar FieldType para el campo
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _isLoading ? null : _saveEquipment,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF39A900),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
+                                : const Text(
+                                    'Registrar',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  ),
                           ),
-                          child: _isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white)
-                              : const Text(
-                                  'Registrar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -141,18 +160,34 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
               color: Color(0xFF39A900)),
         ),
         const SizedBox(height: 8),
-        CustomDropdown(
-          hint: 'Selecciona $label',
+        DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          ),
+          hint: Text('Selecciona $label'),
           value: selectedValue,
-          items: items,
           onChanged: onChanged,
+          validator: (value) =>
+              value == null ? 'Por favor selecciona $label.' : null,
+          items: items.map((item) {
+            return DropdownMenuItem(
+              value: item,
+              child: Text(item),
+            );
+          }).toList(),
         ),
       ],
     );
   }
 
   Widget _buildTextField(
-      String label, String hint, TextEditingController controller) {
+      String label,
+      String hint,
+      TextEditingController controller,
+      String validationMessage,
+      FieldType fieldType) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -172,63 +207,73 @@ class _RegisterEquipmentPageState extends State<Formaddeequipts> {
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return validationMessage;
+            }
+
+            switch (fieldType) {
+              case FieldType.modelo:
+                if (value.length < 2 ||
+                    !RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                  return "El modelo debe tener al menos 2 caracteres y solo letras o números.";
+                }
+                break;
+              case FieldType.numeroSerie:
+                if (value.length < 5 ||
+                    !RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                  return "El número de serie debe tener al menos 5 caracteres y solo letras o números.";
+                }
+                break;
+              case FieldType.color:
+                if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value)) {
+                  return "El color solo puede contener letras.";
+                }
+                break;
+            }
+            return null;
+          },
         ),
       ],
     );
   }
 
   Future<void> _saveEquipment() async {
-    if (_selectedType != null && _selectedBrand != null) {
+    if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _isLoading = true;
       });
 
-      final newEquipment = Equipment(
-        id: 0,
-        personId: 1,
+      final newEquipment = EquipmentHelper.buildEquipment(
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
         serial: _serialNumberController.text,
-        state: true,
       );
 
+      Navigator.pop(context, newEquipment);
+
       try {
-        await _equipmentService.addEquipment(newEquipment);
-        _showAlertDialog(
-            'Éxito', 'El equipo ha sido registrado correctamente.');
-        Navigator.of(context).pop(newEquipment);
+        await EquipmentHelper.submitEquipment(newEquipment, _equipmentService);
+        if (mounted) {
+          EquipmentHelper.showAlertDialog(
+              context, 'Éxito', 'El equipo ha sido registrado correctamente.');
+        }
       } catch (e) {
-        _showAlertDialog(
-            'Error', 'Error al registrar el equipo. Inténtalo nuevamente.');
+        if (mounted) {
+          EquipmentHelper.showAlertDialog(context, 'Error',
+              'Error al registrar el equipo. Inténtalo nuevamente.');
+        }
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     } else {
-      _showAlertDialog(
-          'Campos incompletos', 'Por favor completa todos los campos.');
+      EquipmentHelper.showAlertDialog(context, 'Campos incompletos',
+          'Por favor completa todos los campos.');
     }
-  }
-
-  void _showAlertDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Aceptar'),
-            ),
-          ],
-        );
-      },
-    );
   }
 }
