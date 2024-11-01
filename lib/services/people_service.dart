@@ -40,7 +40,7 @@ class PeopleService {
 
           List<Equipment> equipmentList =
               await _equipmentService.fetchEquipments(equipmentIds);
-
+          print(userData);
           return User(
               name: userData['name'] ?? 'N/A',
               lastName: userData['lastname'] ?? 'N/A',
@@ -53,7 +53,10 @@ class PeopleService {
               program: userData['program'] ?? 'N/A',
               journal: userData['journal'] ?? 'Tarde',
               trainingCenter: userData['trainingCenter'] ?? 'CSF',
-              equipments: equipmentList);
+              equipments: equipmentList,
+              photo: userData['photo'] != null
+                  ? base64Decode(userData['photo'])
+                  : null);
         } else {
           throw Exception('User data not available');
         }

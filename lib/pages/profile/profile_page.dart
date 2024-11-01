@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/services/people_service.dart';
-import 'package:maqueta/models/user.dart';
-import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/services/student_service.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/models/user.dart';
+import 'package:maqueta/services/people_service.dart';
+import 'package:maqueta/providers/token_storage.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({Key? key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -18,46 +17,69 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   File? _image;
-  final PeopleService _peopleService = PeopleService();
+  bool _isLoading = false; // Controla el estado de carga
   final StudentService _studentService = StudentService();
+  final PeopleService _peopleService = PeopleService();
   final TokenStorage tokenStorage = TokenStorage();
-  // Obtener datos del usuario a partir del token JWT
+
   Future<User?> _fetchUserData() async {
     return await _peopleService.getUser();
   }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final decodeToken = await tokenStorage.decodeJwtToken();
-    final document = int.parse(decodeToken['sub']);
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       if (!pickedFile.path.endsWith('.jpg') &&
           !pickedFile.path.endsWith('.jpeg')) {
-        _showErrorDialog(
-            'Formato no válido', 'Selecciona una imagen en formato JPG.');
+        _showMessage('Por favor selecciona una imagen en formato JPG.');
         return;
       }
-
-      Uint8List imageBytes = await pickedFile.readAsBytes();
-      Uint8List documentBytes = Uint8List(4)
-        ..buffer.asByteData().setInt32(0, document);
-      Uint8List finalBytes =
-          Uint8List.fromList([...documentBytes, ...imageBytes]);
-      String base64Image = base64Encode(finalBytes);
-
-      await _studentService.sendImage(base64Image);
+      setState(() {
+        _image = File(pickedFile.path);
+      });
     }
   }
 
-  // Mostrar un diálogo de error si el formato es incorrecto
-  void _showErrorDialog(String title, String message) {
+  Future<void> _uploadImage() async {
+    if (_image == null) {
+      _showMessage('No se ha seleccionado ninguna imagen.');
+      return;
+    }
+    setState(() {
+      _isLoading = true; // Inicia la carga
+    });
+
+    try {
+      final decodeToken = await tokenStorage.decodeJwtToken();
+      final document = int.parse(decodeToken['sub']);
+      final bytes = await _image!.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      await _studentService.sendImageBase64(base64Image, document);
+
+      setState(() {
+        // Refrescamos el avatar con la imagen subida
+        _image = File(_image!.path);
+      });
+
+      _showMessage('Imagen subida correctamente.');
+    } catch (e) {
+      _showMessage('Error al subir la imagen: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Finaliza la carga
+      });
+    }
+  }
+
+  void _showMessage(String message) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(title),
+          title: const Text('Mensaje'),
           content: Text(message),
           actions: [
             TextButton(
@@ -119,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 25),
                         _buildProfileInfo(user),
                         const SizedBox(height: 20),
-                        _buildSaveButton(user),
+                        _buildSaveButton(),
                       ],
                     ),
                   );
@@ -151,8 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 70,
             backgroundImage: _image != null
                 ? FileImage(_image!)
-                : const AssetImage('images/aprendiz_sena1.jpeg')
-                    as ImageProvider,
+                : const AssetImage('images/icono.jpg') as ImageProvider,
             child: _image == null
                 ? Icon(
                     Icons.camera_alt,
@@ -215,6 +236,25 @@ class _ProfilePageState extends State<ProfilePage> {
                       "Número de Documento", user.documentNumber)),
             ],
           ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                  child:
+                      _buildInfoColumn("Número de Celular", user.phoneNumber)),
+              const SizedBox(width: 15),
+              Expanded(child: _buildInfoColumn("RH", user.bloodType)),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                  child: _buildInfoColumn("Número de Ficha", user.studySheet)),
+              const SizedBox(width: 15),
+              Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
+            ],
+          ),
         ],
       ),
     );
@@ -248,14 +288,16 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildSaveButton(User user) {
+  Widget _buildSaveButton() {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () => {}, //_uploadImage(user),
+            onPressed: _isLoading
+                ? null
+                : _uploadImage, // Bloquea el botón durante la carga
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF39A900),
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
@@ -263,10 +305,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            child: const Text(
-              "Guardar",
-              style: TextStyle(color: Colors.white),
-            ),
+            child: _isLoading // Cambia el texto por un indicador de carga
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text(
+                    "Guardar",
+                    style: TextStyle(color: Colors.white),
+                  ),
           ),
         ],
       ),

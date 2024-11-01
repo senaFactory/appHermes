@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/models/user.dart';
@@ -32,7 +31,6 @@ class _CarnetpageState extends State<Carnetpage> {
           ListView(
             children: [
               const HomeAppBar(), // HomeAppBar en la parte superior
-              const SizedBox(height: 20),
               FutureBuilder<User?>(
                 future: _fetchUserData(),
                 builder: (context, snapshot) {
@@ -77,7 +75,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return Container(
       width: screenSize.width * 0.9, // Un poco más ancho
       margin: const EdgeInsets.symmetric(vertical: 30), // Espacio alrededor
-      padding: const EdgeInsets.all(25), // Espacio interno
+      padding: const EdgeInsets.all(60), // Espacio interno
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30), // Bordes más suaves
@@ -94,15 +92,18 @@ class _CarnetpageState extends State<Carnetpage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Imagen del usuario
-          const CircleAvatar(
-            radius: 70, // Imagen más grande
-            backgroundImage: AssetImage('images/aprendiz_sena1.jpeg'),
+          CircleAvatar(
+            radius: 80,
+            backgroundImage: user.photo != null
+                ? MemoryImage(user.photo!) // Si la foto está disponible, usarla
+                : const AssetImage('images/icono.jpg')
+                    as ImageProvider, // Si no, usa la imagen por defecto
           ),
           const SizedBox(height: 15),
 
           // Nombre del usuario
           Text(
-            '${user.name} ${user.lastName}',
+            '${user.name.toUpperCase()} ${user.lastName.toUpperCase()}',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -135,12 +136,32 @@ class _CarnetpageState extends State<Carnetpage> {
 
           // Botón para mostrar QR
           _buildQrButton(user),
-          const SizedBox(height: 20),
+          const SizedBox(height: 25),
 
           // Detalles del usuario
           _buildUserDetails(user),
         ],
       ),
+    );
+  }
+
+  void _showQrModal(User user) {
+    showDialog(
+      context: context,
+      builder: (context) => QrModal(user: user),
+    );
+  }
+
+  Widget _buildUserDetails(User user) {
+    return Column(
+      children: [
+        _buildInfoRow(user.acronym, user.documentNumber, "RH", user.bloodType),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+            "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
+        const SizedBox(height: 15),
+        _buildInfoRow("Jornada", user.journal, "Programa", user.program),
+      ],
     );
   }
 
@@ -162,26 +183,6 @@ class _CarnetpageState extends State<Carnetpage> {
               BorderRadius.circular(12), // Botón con bordes redondeados
         ),
       ),
-    );
-  }
-
-  void _showQrModal(User user) {
-    showDialog(
-      context: context,
-      builder: (context) => QrModal(user: user),
-    );
-  }
-
-  Widget _buildUserDetails(User user) {
-    return Column(
-      children: [
-        _buildInfoRow("C.C", user.documentNumber, "RH", user.bloodType),
-        const SizedBox(height: 15),
-        _buildInfoRow(
-            "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
-        const SizedBox(height: 15),
-        _buildInfoRow("Jornada", user.journal, "Programa", user.program),
-      ],
     );
   }
 

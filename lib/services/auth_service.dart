@@ -12,6 +12,7 @@ class AuthService with ChangeNotifier {
 
   Future<AuthLogin> logIn(int document, String password) async {
     final String baseUrl = '$virtualPort$urlLogin';
+    print('Intentando iniciar sesión en: $baseUrl');
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
