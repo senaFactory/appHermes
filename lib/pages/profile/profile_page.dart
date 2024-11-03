@@ -79,12 +79,17 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Mensaje'),
-          content: Text(message),
+          content: Text(
+            message,
+            style: const TextStyle(fontSize: 20),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Colors.green),
+              ),
             ),
           ],
         );

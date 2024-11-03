@@ -15,7 +15,6 @@ class QrModal extends StatelessWidget {
       ),
       content: PrettyQrView.data(
         data: '${[
-          user.photo,
           user.name,
           user.lastName,
           user.email,
