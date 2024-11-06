@@ -13,18 +13,72 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _documentController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final AuthService authService = AuthService();
-  String dropdownValue =
-      'Cedula de Ciudadania'; // Valor por defecto para el tipo de documento
+  final _formKey = GlobalKey<FormState>();
+  String dropdownValue = 'Cedula de Ciudadania';
+
+  void mostrarErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Center(
+            child: Column(
+              children: [
+                Icon(
+                  Icons.error,
+                  color: const Color.fromRGBO(251, 7, 7, 1),
+                  size: MediaQuery.of(context).size.width * 0.2,
+                ),
+                Text(
+                  'Oops!',
+                  style: TextStyle(
+                      color: const Color.fromRGBO(251, 7, 7, 1),
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.width * 0.3,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    message,
+                    style: TextStyle(
+                      color: const Color.fromRGBO(251, 7, 7, 1),
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Para más información, visita www.hermes.com',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 113, 119, 121),
+                      fontSize: MediaQuery.of(context).size.width * 0.028,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(
-        fontSize: 16, color: Colors.black); // Estilo base para todo el texto
+    const textStyle = TextStyle(fontSize: 16, color: Colors.black);
 
     return Scaffold(
       body: Stack(
         children: [
-          // Imagen de fondo
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -38,162 +92,154 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logotipo de SENA
-                  Image.asset('images/LogoSena.png', height: 100),
-                  const SizedBox(height: 20),
-
-                  // Texto de bienvenida
-                  const Text(
-                    "Transformando vidas, construyendo futuro.",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Dropdown para seleccionar el tipo de documento con ícono
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('images/LogoSena.png', height: 100),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Transformando vidas, construyendo futuro.",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      textAlign: TextAlign.center,
                     ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.article,
-                            color: Colors.grey), // Ícono del dropdown
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: const Icon(Icons.arrow_downward),
-                              iconSize: 24,
-                              elevation: 16,
-                              isExpanded: true,
-                              style:
-                                  textStyle, // Aquí se aplica el mismo estilo que el resto
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownValue = newValue!;
-                                });
-                              },
-                              items: <String>[
-                                'Cedula de Ciudadania',
-                                'Tarjeta de Identidad',
-                                'Cedula de Extranjeria',
-                                'Pasaporte',
-                              ].map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value,
-                                      style:
-                                          textStyle), // Estilo del texto del menú
-                                );
-                              }).toList(),
+                    const SizedBox(height: 30),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.article, color: Colors.grey),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                iconSize: 24,
+                                elevation: 16,
+                                isExpanded: true,
+                                style: textStyle,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                },
+                                items: <String>[
+                                  'Cedula de Ciudadania',
+                                  'Tarjeta de Identidad',
+                                  'Cedula de Extranjeria',
+                                  'Pasaporte',
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value, style: textStyle),
+                                  );
+                                }).toList(),
+                              ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _documentController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Número de documento',
+                        prefixIcon: const Icon(Icons.person),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      style: textStyle,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese su número de documento';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Contraseña',
+                        prefixIcon: const Icon(Icons.lock),
+                        filled: true,
+                        fillColor: Color(0xFFFFFFFF),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      style: textStyle,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese su contraseña';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // Implementar funcionalidad para olvidar contraseña
+                          },
+                          child: const Text(
+                            '¿Olvidó su contraseña?',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            int document = int.parse(_documentController.text);
+                            String password = _passwordController.text;
 
-                  // Campo de texto para el número de documento
-                  TextField(
-                    controller: _documentController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: 'Número de documento',
-                      prefixIcon: const Icon(Icons.person),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    style:
-                        textStyle, // Aplica el mismo estilo al campo de texto
-                  ),
-                  const SizedBox(height: 20),
+                            // Llamada al servicio de autenticación
+                            AuthLogin authResponse =
+                                await authService.logIn(document, password);
 
-                  // Campo de texto para la contraseña
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: 'Contraseña',
-                      prefixIcon: const Icon(Icons.lock),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    style:
-                        textStyle, // Aplica el mismo estilo al campo de texto
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Checkbox "Recordar" y enlace "¿Olvidó su contraseña?"
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          // Implementar funcionalidad para olvidar contraseña
-                        },
-                        child: const Text(
-                          '¿Olvidó su contraseña?',
-                          style: TextStyle(color: Colors.white),
+                            Navigator.pushReplacementNamed(context, '/home');
+                          } catch (e) {
+                            if (mounted) {
+                              mostrarErrorDialog(context,
+                                  'Credenciales incorrectas. Por favor, inténtelo de nuevo.');
+                            }
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF39A900),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Botón de Iniciar Sesión
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Implementar la lógica de inicio de sesión
-                      try {
-                        // Eliminar esto
-                        int document = 88247916;
-                        String password = "88247916I";
-
-                        // int document = int.parse(_documentController.text);
-                        // String password = _passwordController.text;
-
-                        AuthLogin authResponse =
-                            await authService.logIn(document, password);
-                        // Navegar a HomeScreen
-                        Navigator.pushReplacementNamed(context, '/home');
-                      } catch (e) {
-                        // Manejar el error, mostrar mensaje
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Error: ${e.toString()}')),
-                          );
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF39A900),
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                      child: const Center(
+                        child: Text(
+                          "Iniciar Sesión",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
                       ),
                     ),
-                    child: const Center(
-                      child: Text(
-                        "Iniciar Sesión",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
