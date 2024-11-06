@@ -74,4 +74,33 @@ class EquipmentService {
       return [];
     }
   }
+
+  Future<void> editEquipment(
+    Equipment equipment,
+  ) async {
+    var token = await tokenStorage.getToken();
+    final String baseUrl = '$virtualPort$urlEquipment';
+    final url = Uri.parse('$baseUrl/update/${equipment.id}');
+
+    var decodeToken = await tokenStorage.decodeJwtToken();
+    var document = decodeToken['sub'];
+    equipment.setDocumentId = document;
+
+    final Map<String, dynamic> payload = {
+      'data': equipment.toJson(),
+    };
+
+    final response = await http.put(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(payload),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Error al editar el equipo');
+    }
+  }
 }
