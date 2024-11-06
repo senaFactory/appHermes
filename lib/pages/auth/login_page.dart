@@ -159,8 +159,12 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       // Implementar la lógica de inicio de sesión
                       try {
+                        // Eliminar esto
                         int document = 88247916;
                         String password = "88247916I";
+
+                        // int document = int.parse(_documentController.text);
+                        // String password = _passwordController.text;
 
                         AuthLogin authResponse =
                             await authService.logIn(document, password);

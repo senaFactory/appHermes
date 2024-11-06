@@ -14,8 +14,16 @@ class Carnetpage extends StatefulWidget {
 
 class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
+  late Future<User?> _userFuture;
+  bool _isRefreshing = false; // Indica si el RefreshIndicator está activo
 
-  Future<User?> _fetchUserData() {
+  @override
+  void initState() {
+    super.initState();
+    _userFuture = _fetchUserData();
+  }
+
+  Future<User?> _fetchUserData() async {
     return _peopleService.getUser();
   }
 
@@ -25,29 +33,43 @@ class _CarnetpageState extends State<Carnetpage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              const HomeAppBar(),
-              FutureBuilder<User?>(
-                future: _fetchUserData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return _buildError(snapshot.error.toString());
-                  } else if (!snapshot.hasData) {
-                    return _buildNoData();
-                  }
-                  return Center(
-                    child: _buildCarnet(screenSize, snapshot.data!),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _isRefreshing = true; // Activa el estado de refresco
+            _userFuture = _fetchUserData();
+          });
+          await _userFuture;
+          setState(() {
+            _isRefreshing = false; // Desactiva el estado de refresco
+          });
+        },
+        child: Stack(
+          children: [
+            ListView(
+              children: [
+                const HomeAppBar(),
+                FutureBuilder<User?>(
+                  future: _userFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting &&
+                        !_isRefreshing) {
+                      // Solo muestra el indicador si no está refrescando
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return _buildError(snapshot.error.toString());
+                    } else if (!snapshot.hasData) {
+                      return _buildNoData();
+                    }
+                    return Center(
+                      child: _buildCarnet(screenSize, snapshot.data!),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -72,41 +94,37 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Widget _buildCarnet(Size screenSize, User user) {
     return Container(
-      width: screenSize.width * 0.9, // Un poco más ancho
-      margin: const EdgeInsets.symmetric(vertical: 30), // Espacio alrededor
-      padding: const EdgeInsets.all(60), // Espacio interno
+      width: screenSize.width * 0.9,
+      margin: const EdgeInsets.symmetric(vertical: 30),
+      padding: const EdgeInsets.all(60),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(30), // Bordes más suaves
+        borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2), // Sombra sutil
-            blurRadius: 12, // Difuminación de sombra
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 12,
             spreadRadius: 2,
-            offset: const Offset(0, 5), // Sombra hacia abajo
+            offset: const Offset(0, 5),
           ),
         ],
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Imagen del usuario
           CircleAvatar(
             radius: 80,
             backgroundImage: user.photo != null
-                ? MemoryImage(user.photo!) // Si la foto está disponible, usarla
-                : const AssetImage('images/icono.jpg')
-                    as ImageProvider, // Si no, usa la imagen por defecto
+                ? MemoryImage(user.photo!)
+                : const AssetImage('images/icono.jpg') as ImageProvider,
           ),
           const SizedBox(height: 15),
-
-          // Nombre del usuario
           Text(
             '${user.name.toUpperCase()} ${user.lastName.toUpperCase()}',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF39A900), // Verde institucional
+              color: Color(0xFF39A900),
             ),
             textAlign: TextAlign.center,
           ),
@@ -121,23 +139,17 @@ class _CarnetpageState extends State<Carnetpage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-
-          // Programa del usuario
           Text(
             user.program,
             style: const TextStyle(
               fontSize: 18,
-              color: Colors.black54, // Texto más visible
+              color: Colors.black54,
             ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-
-          // Botón para mostrar QR
           _buildQrButton(user),
           const SizedBox(height: 25),
-
-          // Detalles del usuario
           _buildUserDetails(user),
         ],
       ),
@@ -159,7 +171,7 @@ class _CarnetpageState extends State<Carnetpage> {
         _buildInfoRow(
             "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
         const SizedBox(height: 15),
-        _buildInfoRow("Jornada", user.journal, "Programa", user.program),
+        _buildInfoRow("Jornada", user.journey, "Programa", user.program),
       ],
     );
   }
@@ -175,11 +187,10 @@ class _CarnetpageState extends State<Carnetpage> {
         style: TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF007D78), // Verde oscuro
+        backgroundColor: const Color(0xFF007D78),
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(12), // Botón con bordes redondeados
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );

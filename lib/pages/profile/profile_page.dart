@@ -59,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       await _studentService.sendImageBase64(base64Image, document);
 
+
       setState(() {
         // Refrescamos el avatar con la imagen subida
         _image = File(_image!.path);
@@ -186,7 +187,8 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         const SizedBox(width: 25),
         GestureDetector(
-          //onTap: _pickImage, // Esta parte permite al usuario seleccionar una nueva imagen
+          onTap:
+              _pickImage, // Esta parte permite al usuario seleccionar una nueva imagen
           child: CircleAvatar(
             radius: 70,
             backgroundImage: imageProvider,

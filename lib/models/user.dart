@@ -11,7 +11,7 @@ class User {
   final String acronym;
   final String studySheet;
   final String program;
-  final String journal;
+  final String journey;
   final String trainingCenter;
   final Uint8List? photo;
   final List<Equipment> equipments;
@@ -26,7 +26,7 @@ class User {
     required this.acronym,
     required this.studySheet,
     required this.program,
-    required this.journal,
+    required this.journey,
     required this.trainingCenter,
     required this.equipments,
     this.photo,

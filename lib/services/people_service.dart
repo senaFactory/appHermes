@@ -51,9 +51,9 @@ class PeopleService {
                   ? base64Decode(userData['photo'])
                   : null,
               acronym: userData['acronym'] ?? 'N/A',
-              studySheet: userData['studySheet']?.toString() ?? '1231232',
+              studySheet: userData['studySheet']?.toString() ?? 'N/A',
               program: userData['program'] ?? 'N/A',
-              journal: userData['journal'] ?? 'Tarde',
+              journey: userData['journey'] ?? 'N/A',
               trainingCenter: userData['trainingCenter'] ?? 'CSF',
               equipments: equipmentList);
         } else {

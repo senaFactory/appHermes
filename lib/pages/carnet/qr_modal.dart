@@ -23,7 +23,7 @@ class QrModal extends StatelessWidget {
           user.bloodType,
           user.studySheet,
           user.program,
-          user.journal,
+          user.journey,
           user.trainingCenter,
           user.equipments.map((e) => e.toJson().toString()).join('; ')
         ]}',
