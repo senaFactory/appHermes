@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EditEquiptModal {
-  final TextEditingController _colorController =
-      TextEditingController(text: 'Azul rey');
+  final TextEditingController _colorController;
+  final Function(String) onSave;
+
+  EditEquiptModal({required String initialColor, required this.onSave})
+      : _colorController = TextEditingController(text: initialColor);
 
   // Método para mostrar el modal en el centro de la pantalla
   void showEditModal(BuildContext context) {
@@ -11,7 +14,7 @@ class EditEquiptModal {
       barrierDismissible: true, // Cerrar el modal al tocar fuera
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white, // Establece el fondo a blanco
+          backgroundColor: Colors.white, // Fondo blanco del modal
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -68,9 +71,8 @@ class EditEquiptModal {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      //TODO: Lógica para guardar los cambios
-
-                      print("Color actualizado: ${_colorController.text}");
+                      onSave(_colorController
+                          .text); // Llama a onSave con el nuevo color
                       Navigator.pop(context); // Cierra el modal
                     },
                     style: ElevatedButton.styleFrom(

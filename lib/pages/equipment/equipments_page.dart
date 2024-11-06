@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
+import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
+import 'package:maqueta/services/equipment_service.dart';
 import 'package:maqueta/services/people_service.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
@@ -15,6 +17,7 @@ class Equipmentspage extends StatefulWidget {
 
 class _EquipmentspageState extends State<Equipmentspage> {
   final PeopleService _peopleService = PeopleService();
+  final EquipmentService _equipmentService = EquipmentService();
   final List<Equipment> _equipments = [];
 
   @override
@@ -27,6 +30,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
     final allEquipment = await _peopleService.getUser();
     if (allEquipment != null) {
       setState(() {
+        _equipments.clear(); // Limpiar la lista antes de cargar nuevos datos
         _equipments.addAll(allEquipment.equipments);
       });
     }
@@ -138,11 +142,22 @@ class _EquipmentspageState extends State<Equipmentspage> {
             color: equipment.color,
             serialNumber: equipment.serial,
             onEdit: () {
-              // Lógica para editar equipo
+              EditEquiptModal(
+                initialColor: equipment.color, // Color actual del equipo
+                onSave: (newColor) async {
+                  // Lógica para actualizar el color en el backend
+                  try {
+                    equipment.color = newColor;
+                    await _equipmentService.editEquipment(
+                        equipment); // Llama al método en el servicio
+                    print("Color actualizado a: $newColor");
+                  } catch (e) {
+                    print("Error al actualizar el color: $e");
+                  }
+                },
+              ).showEditModal(context);
             },
-            onDeactivate: () {
-              // Lógica para desactivar equipo
-            },
+            onDeactivate: () {},
           ),
         );
       },

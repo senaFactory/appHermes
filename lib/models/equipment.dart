@@ -1,11 +1,11 @@
 class Equipment {
   final int? id;
   String? document;
-  final String brand;
-  final String model;
-  final String color;
-  final String serial;
-  final dynamic state;
+  String brand;
+  String model;
+  String color;
+  String serial;
+  dynamic state;
 
   Equipment({
     this.id,
