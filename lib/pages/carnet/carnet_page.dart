@@ -14,8 +14,7 @@ class Carnetpage extends StatefulWidget {
 
 class _CarnetpageState extends State<Carnetpage> {
   final PeopleService _peopleService = PeopleService();
-  late Future<User?> _userFuture;
-  bool _isRefreshing = false; // Indica si el RefreshIndicator está activo
+  Future<User?>? _userFuture; // Quitar "late" y usar un valor nulo inicial
 
   @override
   void initState() {
@@ -27,6 +26,12 @@ class _CarnetpageState extends State<Carnetpage> {
     return _peopleService.getUser();
   }
 
+  Future<void> _refreshData() async {
+    setState(() {
+      _userFuture = _fetchUserData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -34,39 +39,24 @@ class _CarnetpageState extends State<Carnetpage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            _isRefreshing = true; // Activa el estado de refresco
-            _userFuture = _fetchUserData();
-          });
-          await _userFuture;
-          setState(() {
-            _isRefreshing = false; // Desactiva el estado de refresco
-          });
-        },
-        child: Stack(
+        onRefresh: _refreshData, // Llama a la función para recargar datos
+        child: ListView(
           children: [
-            ListView(
-              children: [
-                const HomeAppBar(),
-                FutureBuilder<User?>(
-                  future: _userFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting &&
-                        !_isRefreshing) {
-                      // Solo muestra el indicador si no está refrescando
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return _buildError(snapshot.error.toString());
-                    } else if (!snapshot.hasData) {
-                      return _buildNoData();
-                    }
-                    return Center(
-                      child: _buildCarnet(screenSize, snapshot.data!),
-                    );
-                  },
-                ),
-              ],
+            const HomeAppBar(),
+            FutureBuilder<User?>(
+              future: _userFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return _buildError(snapshot.error.toString());
+                } else if (!snapshot.hasData) {
+                  return _buildNoData();
+                }
+                return Center(
+                  child: _buildCarnet(screenSize, snapshot.data!),
+                );
+              },
             ),
           ],
         ),
