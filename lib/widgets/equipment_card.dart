@@ -64,8 +64,8 @@ class EquipmentCard extends StatelessWidget {
                 icon: const Icon(Icons.keyboard_arrow_down),
                 hint: const Text("Acción"),
                 underline: const SizedBox(), // Elimina la línea de subrayado
-                items: [
-                  const DropdownMenuItem<String>(
+                items: const [
+                  DropdownMenuItem<String>(
                     value: "Editar",
                     child: Row(
                       children: [
@@ -76,7 +76,7 @@ class EquipmentCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const DropdownMenuItem<String>(
+                  DropdownMenuItem<String>(
                     value: "Desactivar",
                     child: Row(
                       children: [

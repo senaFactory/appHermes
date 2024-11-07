@@ -9,7 +9,7 @@ import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/providers/token_storage.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -75,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showMessage(String message) {
+    if (!mounted) return; // Asegúrate de que el widget esté en pantalla
     showDialog(
       context: context,
       builder: (context) {

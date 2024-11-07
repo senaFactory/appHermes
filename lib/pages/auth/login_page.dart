@@ -175,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock),
                         filled: true,
-                        fillColor: Color(0xFFFFFFFF),
+                        fillColor: const Color(0xFFFFFFFF),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
