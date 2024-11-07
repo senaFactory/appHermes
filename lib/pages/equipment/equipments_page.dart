@@ -179,6 +179,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
+                    backgroundColor: Colors.white,
                     title: Text(
                       equipment.state == true
                           ? 'Desactivar equipo'

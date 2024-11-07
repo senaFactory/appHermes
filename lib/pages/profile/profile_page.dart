@@ -155,9 +155,10 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           content: Text(
             message,
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 17),
           ),
           actions: [
             TextButton(
