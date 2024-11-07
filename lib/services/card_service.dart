@@ -6,7 +6,7 @@ import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
 import 'package:maqueta/services/equipment_service.dart';
 
-class PeopleService {
+class CardService {
   final String virtualPort = UrlStorage().virtualPort;
   final String urlInfoPerson = UrlStorage().urlCardPerson;
   final EquipmentService _equipmentService = EquipmentService();

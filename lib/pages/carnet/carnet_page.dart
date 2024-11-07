@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/widgets/info_column.dart';
-import 'package:maqueta/services/people_service.dart';
+import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/models/user.dart';
 
 class Carnetpage extends StatefulWidget {
@@ -13,7 +13,7 @@ class Carnetpage extends StatefulWidget {
 }
 
 class _CarnetpageState extends State<Carnetpage> {
-  final PeopleService _peopleService = PeopleService();
+  final CardService _peopleService = CardService();
   Future<User?>? _userFuture; // Quitar "late" y usar un valor nulo inicial
 
   @override
