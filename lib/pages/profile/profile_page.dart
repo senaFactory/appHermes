@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/services/student_service.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/models/user.dart';
-import 'package:maqueta/services/people_service.dart';
+import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/providers/token_storage.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   File? _image;
   bool _isLoading = false; // Controla el estado de carga
   final StudentService _studentService = StudentService();
-  final PeopleService _peopleService = PeopleService();
+  final CardService _peopleService = CardService();
   final TokenStorage tokenStorage = TokenStorage();
 
   Future<User?> _fetchUserData() async {
@@ -58,7 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
       final base64Image = base64Encode(bytes);
 
       await _studentService.sendImageBase64(base64Image, document);
-
 
       setState(() {
         // Refrescamos el avatar con la imagen subida
@@ -271,6 +270,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: _buildInfoColumn("Número de Ficha", user.studySheet)),
               const SizedBox(width: 15),
               Expanded(child: _buildInfoColumn("Centro", user.trainingCenter)),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(child: _buildInfoColumn("Fecha Nacimiento", 'N/A')),
+              const SizedBox(width: 15),
+              Expanded(child: _buildInfoColumn("Dirección", 'N/A')),
             ],
           ),
         ],

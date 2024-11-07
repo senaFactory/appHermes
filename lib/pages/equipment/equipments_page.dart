@@ -3,7 +3,7 @@ import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
 import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
 import 'package:maqueta/services/equipment_service.dart';
-import 'package:maqueta/services/people_service.dart';
+import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 
@@ -16,7 +16,7 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
-  final PeopleService _peopleService = PeopleService();
+  final CardService _peopleService = CardService();
   final EquipmentService _equipmentService = EquipmentService();
   final List<Equipment> _equipments = [];
 
