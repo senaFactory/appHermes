@@ -6,7 +6,7 @@ class EquipmentCard extends StatelessWidget {
   final String model;
   final String color;
   final String serialNumber;
-  final bool isActive; // Añadido: para verificar si está activo
+  final bool isActive; // Estado del equipo: activo/inactivo
   final VoidCallback onEdit;
   final VoidCallback onDeactivate;
 
@@ -17,19 +17,20 @@ class EquipmentCard extends StatelessWidget {
     required this.model,
     required this.color,
     required this.serialNumber,
-    required this.isActive, // Añadido: para definir el estado activo/inactivo
+    required this.isActive,
     required this.onEdit,
     required this.onDeactivate,
   });
 
   @override
   Widget build(BuildContext context) {
-    print("Estado del equipo (isActive) en EquipmentCard: $isActive");
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: isActive ? const Color(0xFFF5F5F5) : Colors.grey.shade300, // Color según el estado
+        color: isActive
+            ? const Color(0xFFF5F5F5)
+            : Colors.grey.shade300, // Color según el estado
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -54,49 +55,61 @@ class EquipmentCard extends StatelessWidget {
                       ),
                       Text(
                         brand,
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ],
                   ),
                 ],
               ),
-              // Menú desplegable con opciones de Editar y Desactivar
+              // Menú desplegable con opciones de Editar y Activar/Desactivar
               DropdownButton<String>(
                 value: null,
                 icon: const Icon(Icons.keyboard_arrow_down),
-                hint: const Text("Acción"),
+                hint: Text(
+                  isActive ? "Activo" : "Inactivo",
+                  style: TextStyle(
+                    color: isActive
+                        ? Colors.green
+                        : Colors.red, // Color según el estado
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 underline: const SizedBox(), // Elimina la línea de subrayado
                 items: [
                   DropdownMenuItem<String>(
                     value: "Editar",
                     child: Row(
                       children: const [
-                        Icon(Icons.edit, color: Color(0xFF888787)), // Ícono de Editar
+                        Icon(Icons.edit, color: Color(0xFF888787)),
                         SizedBox(width: 10),
                         Text("Editar"),
                       ],
                     ),
                   ),
                   DropdownMenuItem<String>(
-                    value: "Desactivar",
+                    value: isActive ? "Desactivar" : "Activar",
                     child: Row(
-                      children: const [
-                        Icon(Icons.circle, color: Color(0xFF888787)), // Ícono de Desactivar
-                        SizedBox(width: 10),
-                        Text("Desactivar"),
+                      children: [
+                        Icon(
+                          isActive ? Icons.remove_circle : Icons.check_circle,
+                          color: isActive ? Colors.red : Colors.green,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(isActive ? "Desactivar" : "Activar"),
                       ],
                     ),
                   ),
                 ],
                 onChanged: (value) {
                   if (value == "Editar") {
-                    onEdit(); // Acción de Editar
-                  } else if (value == "Desactivar") {
-                    onDeactivate(); // Acción de Desactivar
+                    onEdit();
+                  } else {
+                    onDeactivate(); // Activa o desactiva el equipo
                   }
                 },
-                dropdownColor: Colors.white, // Color del menú desplegable
-                borderRadius: BorderRadius.circular(10), // Bordes redondeados del menú
+                dropdownColor: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
             ],
           ),
