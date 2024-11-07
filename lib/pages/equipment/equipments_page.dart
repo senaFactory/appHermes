@@ -28,16 +28,15 @@ class _EquipmentspageState extends State<Equipmentspage> {
 
   Future<void> _fetchAllEquipment() async {
     final allEquipment = await _peopleService.getUser();
-    if (allEquipment != null) {
-      setState(() {
-        _equipments.clear(); // Limpiar la lista antes de cargar nuevos datos
+    setState(() {
+      _equipments.clear();
+      if (allEquipment != null) {
         _equipments.addAll(allEquipment.equipments);
-      });
-    }
+      }
+    });
   }
 
   Future<void> _navigateToAddEquipmentPage() async {
-    // Navegar a la página de agregar equipo y esperar el resultado
     final newEquipment = await Navigator.push<Equipment>(
       context,
       MaterialPageRoute(
@@ -45,7 +44,6 @@ class _EquipmentspageState extends State<Equipmentspage> {
       ),
     );
 
-    // Si se retorna un equipo, añadirlo a la lista
     if (newEquipment != null) {
       setState(() {
         _equipments.add(newEquipment);
@@ -94,9 +92,13 @@ class _EquipmentspageState extends State<Equipmentspage> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: _equipments.isEmpty
-                  ? _buildEmptyEquipmentView() // Vista alternativa si no hay equipos
-                  : _buildEquipmentList(), // Lista de equipos si existen
+              child: RefreshIndicator(
+                onRefresh:
+                    _fetchAllEquipment, // Llama a _fetchAllEquipment al hacer refresh
+                child: _equipments.isEmpty
+                    ? _buildEmptyEquipmentView()
+                    : _buildEquipmentList(),
+              ),
             ),
             const SizedBox(height: 35),
           ],
@@ -143,16 +145,16 @@ class _EquipmentspageState extends State<Equipmentspage> {
             serialNumber: equipment.serial,
             onEdit: () {
               EditEquiptModal(
-                initialColor: equipment.color, // Color actual del equipo
-                onSave: (newColor) async {
-                  // Lógica para actualizar el color en el backend
+                initialColor: equipment.color,
+                initialSerial: equipment.serial,
+                onSave: (newColor, newSerial) async {
                   try {
                     equipment.color = newColor;
-                    await _equipmentService.editEquipment(
-                        equipment); // Llama al método en el servicio
-                    print("Color actualizado a: $newColor");
+                    equipment.serial = newSerial;
+                    await _equipmentService.editEquipment(equipment);
+                    await _fetchAllEquipment();
                   } catch (e) {
-                    print("Error al actualizar el color: $e");
+                    print("Error al actualizar el equipo: $e");
                   }
                 },
               ).showEditModal(context);

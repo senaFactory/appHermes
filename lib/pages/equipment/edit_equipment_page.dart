@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 
 class EditEquiptModal {
   final TextEditingController _colorController;
-  final Function(String) onSave;
+  final TextEditingController _serialController;
+  final Function(String, String) onSave;
 
-  EditEquiptModal({required String initialColor, required this.onSave})
-      : _colorController = TextEditingController(text: initialColor);
+  EditEquiptModal({
+    required String initialColor,
+    required String initialSerial,
+    required this.onSave,
+  })  : _colorController = TextEditingController(text: initialColor),
+        _serialController = TextEditingController(text: initialSerial);
 
   // Método para mostrar el modal en el centro de la pantalla
   void showEditModal(BuildContext context) {
@@ -67,12 +72,36 @@ class EditEquiptModal {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Campo para editar el serial
+                const Text(
+                  'Serial:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF39A900),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _serialController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    hintText: 'Ingresa el nuevo serial',
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 // Botón para guardar el registro
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      onSave(_colorController
-                          .text); // Llama a onSave con el nuevo color
+                      onSave(
+                        _colorController.text,
+                        _serialController.text,
+                      ); // Llama a onSave con color y serial
                       Navigator.pop(context); // Cierra el modal
                     },
                     style: ElevatedButton.styleFrom(

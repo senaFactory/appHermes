@@ -39,6 +39,7 @@ class PeopleService {
 
           List<Equipment> equipmentList =
               await _equipmentService.fetchEquipments(equipmentIds);
+          print(equipmentList);
 
           return User(
               name: userData['name'] ?? 'N/A',
