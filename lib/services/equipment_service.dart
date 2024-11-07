@@ -103,4 +103,12 @@ class EquipmentService {
       throw Exception('Error al editar el equipo');
     }
   }
+
+  Future<void> toggleEquipmentState(Equipment equipment) async {
+    // Cambia el estado localmente (de activo a inactivo o viceversa)
+    equipment.state = equipment.state == true ? false : true;
+
+    // Realiza una actualización en el backend con el nuevo estado
+    await editEquipment(equipment);
+  }
 }

@@ -36,6 +36,20 @@ class _EquipmentspageState extends State<Equipmentspage> {
     });
   }
 
+  Future<void> _toggleEquipmentState(Equipment equipment) async {
+    equipment.state = !(equipment.state == true); // Cambia el estado
+    print(
+        "Nuevo estado del equipo: ${equipment.state}"); // Verifica el nuevo estado
+
+    try {
+      await _equipmentService.editEquipment(equipment);
+      print("Equipo actualizado en el servidor");
+      await _fetchAllEquipment(); // Actualiza la lista en la interfaz
+    } catch (e) {
+      print("Error al actualizar el estado del equipo: $e");
+    }
+  }
+
   Future<void> _navigateToAddEquipmentPage() async {
     final newEquipment = await Navigator.push<Equipment>(
       context,
@@ -93,8 +107,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
             const SizedBox(height: 20),
             Expanded(
               child: RefreshIndicator(
-                onRefresh:
-                    _fetchAllEquipment, // Llama a _fetchAllEquipment al hacer refresh
+                onRefresh: _fetchAllEquipment,
                 child: _equipments.isEmpty
                     ? _buildEmptyEquipmentView()
                     : _buildEquipmentList(),
@@ -135,6 +148,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
       itemCount: _equipments.length,
       itemBuilder: (context, index) {
         final equipment = _equipments[index];
+
         return Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: EquipmentCard(
@@ -143,6 +157,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
             model: equipment.model,
             color: equipment.color,
             serialNumber: equipment.serial,
+            isActive: equipment.state == true,
             onEdit: () {
               EditEquiptModal(
                 initialColor: equipment.color,
@@ -159,7 +174,41 @@ class _EquipmentspageState extends State<Equipmentspage> {
                 },
               ).showEditModal(context);
             },
-            onDeactivate: () {},
+            onDeactivate: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      equipment.state == true
+                          ? 'Desactivar equipo'
+                          : 'Activar equipo',
+                    ),
+                    content: Text(
+                      equipment.state == true
+                          ? '¿Estás seguro de que deseas desactivar este equipo?'
+                          : '¿Estás seguro de que deseas activar este equipo?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                           print("Confirmación de ${equipment.state == true ? 'desactivación' : 'activación'} recibida");
+                          Navigator.of(context)
+                              .pop(); // Cierra el diálogo primero
+                          await _toggleEquipmentState(
+                              equipment); // Luego ejecuta la función asincrónica
+                        },
+                        child: const Text('Confirmar'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         );
       },

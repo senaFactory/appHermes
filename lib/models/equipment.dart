@@ -25,7 +25,7 @@ class Equipment {
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
       serial: json['serial'] ?? 'N/A',
-      state: json['state'] == true ? 'true' : 'false',
+      state: json['state'] == true || json['state'] == "true", // bool en frontend
     );
   }
 
@@ -37,7 +37,7 @@ class Equipment {
       'serial': serial,
       'model': model,
       'color': color,
-      'state': state.toString(),
+      'state': state.toString(), // String en backend
     };
   }
 
