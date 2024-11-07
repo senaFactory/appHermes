@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:maqueta/models/student.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
 
@@ -48,4 +49,36 @@ class StudentService {
       throw Exception('Error al enviar la imagen: $e');
     }
   }
+  
+  Future<void> updateStudentData(Student student, int document) async {
+    final url = Uri.parse('$baseUrl/updateMovil/$document'); // Ruta para actualización parcial
+    var token = await tokenStorage.getToken();
+
+    final body = jsonEncode({
+      "date_birth": student.dateBirth, // Asegúrate de que esté en formato `YYYY-MM-DD`
+      "blood_type": student.bloodType,
+      "address": student.address,
+    });
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Error al actualizar los datos: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error al actualizar los datos: $e');
+    }
+  }
 }
+
+
+
+
