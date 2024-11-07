@@ -183,6 +183,13 @@ class _EquipmentspageState extends State<Equipmentspage> {
                       equipment.state == true
                           ? 'Desactivar equipo'
                           : 'Activar equipo',
+                      style: TextStyle(
+                        color: equipment.state == true
+                            ? Colors.red
+                            : Colors
+                                .green, // Rojo para desactivar, verde para activar
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     content: Text(
                       equipment.state == true
@@ -192,17 +199,30 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancelar'),
+                        child: const Text(
+                          'Cancelar',
+                          style: TextStyle(
+                            color: Color(
+                                0xFF39A900), // Verde institucional para cancelar
+                          ),
+                        ),
                       ),
                       TextButton(
                         onPressed: () async {
-                           print("Confirmación de ${equipment.state == true ? 'desactivación' : 'activación'} recibida");
+                          print(
+                              "Confirmación de ${equipment.state == true ? 'desactivación' : 'activación'} recibida");
                           Navigator.of(context)
                               .pop(); // Cierra el diálogo primero
                           await _toggleEquipmentState(
                               equipment); // Luego ejecuta la función asincrónica
                         },
-                        child: const Text('Confirmar'),
+                        child: const Text(
+                          'Confirmar',
+                          style: TextStyle(
+                            color: Color(
+                                0xFF39A900), // Verde institucional para confirmar
+                          ),
+                        ),
                       ),
                     ],
                   );
