@@ -49,6 +49,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   image_picker: ^1.1.2
+  flutter_launcher_icons: ^0.13.1
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -62,6 +63,12 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "images/logo_sena_negro.png" # Ruta al ícono de tu app
+  remove_alpha_ios: true # Elimina transparencia para evitar problemas en iOS
+
 flutter:
 
   # The following line ensures that the Material Icons font is
