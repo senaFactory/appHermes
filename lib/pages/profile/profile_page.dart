@@ -83,18 +83,58 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      if (!pickedFile.path.endsWith('.jpg') &&
-          !pickedFile.path.endsWith('.jpeg')) {
-        _showMessage('Por favor selecciona una imagen en formato JPG.');
-        return;
-      }
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
+    await showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.green),
+                title: const Text('Tomar una foto'),
+                onTap: () async {
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.camera);
+                  Navigator.of(context).pop(); // Cierra el modal
+                  if (pickedFile != null) {
+                    if (!pickedFile.path.endsWith('.jpg') &&
+                        !pickedFile.path.endsWith('.jpeg')) {
+                      _showMessage(
+                          'Por favor selecciona una imagen en formato JPG.');
+                      return;
+                    }
+                    setState(() {
+                      _image = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.blue),
+                title: const Text('Seleccionar de galería'),
+                onTap: () async {
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
+                  Navigator.of(context).pop(); // Cierra el modal
+                  if (pickedFile != null) {
+                    if (!pickedFile.path.endsWith('.jpg') &&
+                        !pickedFile.path.endsWith('.jpeg')) {
+                      _showMessage(
+                          'Por favor selecciona una imagen en formato JPG.');
+                      return;
+                    }
+                    setState(() {
+                      _image = File(pickedFile.path);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _saveProfile() async {

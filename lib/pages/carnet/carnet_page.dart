@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/models/user.dart';
 
@@ -14,7 +13,7 @@ class Carnetpage extends StatefulWidget {
 
 class _CarnetpageState extends State<Carnetpage> {
   final CardService _peopleService = CardService();
-  Future<User?>? _userFuture; // Quitar "late" y usar un valor nulo inicial
+  Future<User?>? _userFuture;
 
   @override
   void initState() {
@@ -39,7 +38,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh: _refreshData, // Llama a la función para recargar datos
+        onRefresh: _refreshData,
         child: ListView(
           children: [
             const HomeAppBar(),
@@ -86,7 +85,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return Container(
       width: screenSize.width * 0.9,
       margin: const EdgeInsets.symmetric(vertical: 30),
-      padding: const EdgeInsets.all(60),
+      padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -101,6 +100,7 @@ class _CarnetpageState extends State<Carnetpage> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             radius: 80,
@@ -154,15 +154,24 @@ class _CarnetpageState extends State<Carnetpage> {
   }
 
   Widget _buildUserDetails(User user) {
-    return Column(
-      children: [
-        _buildInfoRow(user.acronym, user.documentNumber, "RH", user.bloodType),
-        const SizedBox(height: 15),
-        _buildInfoRow(
-            "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
-        const SizedBox(height: 15),
-        _buildInfoRow("Jornada", user.journey, "Programa", user.program),
-      ],
+    return Padding(
+      padding:
+          const EdgeInsets.symmetric(horizontal: 40.0), // Márgenes laterales
+      child: Column(
+        children: [
+          _buildInfoRow(
+              user.acronym, user.documentNumber, "RH", user.bloodType),
+          const SizedBox(height: 20),
+          _buildInfoRow(
+            "Número Ficha",
+            user.studySheet,
+            "Centro",
+            user.trainingCenter,
+          ),
+          const SizedBox(height: 20),
+          _buildInfoRow("Jornada", user.journey, "Programa", user.program),
+        ],
+      ),
     );
   }
 
@@ -187,14 +196,59 @@ class _CarnetpageState extends State<Carnetpage> {
   }
 
   Widget _buildInfoRow(
-      String label1, String value1, String label2, String value2) {
+    String label1,
+    String value1,
+    String label2,
+    String value2,
+  ) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: InfoColumnWidget(label: label1, value: value1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label1,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF39A900),
+                ),
+              ),
+              Text(
+                value1,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ),
+        const SizedBox(width: 80), // Espacio entre columnas
         Expanded(
-          child: InfoColumnWidget(label: label2, value: value2),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label2,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF39A900),
+                ),
+              ),
+              Text(
+                value2,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
