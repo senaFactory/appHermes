@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/models/auth_login.dart';
-import 'package:maqueta/pages/carnet/carnet_page.dart';
 import 'package:maqueta/pages/home_screen.dart';
 import 'package:maqueta/services/auth_service.dart';
 
