@@ -156,20 +156,56 @@ class _CarnetpageState extends State<Carnetpage> {
   Widget _buildUserDetails(User user) {
     return Padding(
       padding:
-          const EdgeInsets.symmetric(horizontal: 40.0), // Márgenes laterales
-      child: Column(
+          const EdgeInsets.symmetric(horizontal: 25.0), // Márgenes laterales
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(2), // Ajusta el ancho de la primera columna
+          1: FlexColumnWidth(1), // Espaciado
+          2: FlexColumnWidth(2), // Ajusta el ancho de la segunda columna
+        },
         children: [
-          _buildInfoRow(
-              user.acronym, user.documentNumber, "RH", user.bloodType),
-          const SizedBox(height: 20),
-          _buildInfoRow(
-            "Número Ficha",
-            user.studySheet,
-            "Centro",
-            user.trainingCenter,
+          _buildTableRow("C.C", user.documentNumber, "RH", user.bloodType),
+          _buildTableRow(
+              "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
+          _buildTableRow("Jornada", user.journey, "Programa", user.program),
+        ],
+      ),
+    );
+  }
+
+  TableRow _buildTableRow(
+      String label1, String value1, String label2, String value2) {
+    return TableRow(
+      children: [
+        _buildTableCell(label1, value1),
+        const SizedBox(width: 20), // Espacio entre columnas
+        _buildTableCell(label2, value2),
+      ],
+    );
+  }
+
+  Widget _buildTableCell(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          vertical: 10.0), // Espaciado vertical entre filas
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF39A900),
+            ),
           ),
-          const SizedBox(height: 20),
-          _buildInfoRow("Jornada", user.journey, "Programa", user.program),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
         ],
       ),
     );
@@ -192,65 +228,6 @@ class _CarnetpageState extends State<Carnetpage> {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoRow(
-    String label1,
-    String value1,
-    String label2,
-    String value2,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label1,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF39A900),
-                ),
-              ),
-              Text(
-                value1,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 80), // Espacio entre columnas
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label2,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF39A900),
-                ),
-              ),
-              Text(
-                value2,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
