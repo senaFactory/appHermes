@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/models/auth_login.dart';
+import 'package:maqueta/pages/carnet/carnet_page.dart';
+import 'package:maqueta/pages/home_screen.dart';
 import 'package:maqueta/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
@@ -215,7 +217,13 @@ class _LoginPageState extends State<LoginPage> {
                             AuthLogin authResponse =
                                 await authService.logIn(document, password);
 
-                            Navigator.pushReplacementNamed(context, '/home');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HomeScreen(role: authResponse.role),
+                              ),
+                            );
                           } catch (e) {
                             if (mounted) {
                               mostrarErrorDialog(context,

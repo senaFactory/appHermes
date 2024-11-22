@@ -7,7 +7,8 @@ import 'package:maqueta/providers/token_storage.dart'; // Importa TokenStorage
 import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
-  const Myaccountpage({super.key});
+  final String role; 
+  const Myaccountpage({super.key, required this.role});
 
   @override
   State<Myaccountpage> createState() => _MyaccountpageState();

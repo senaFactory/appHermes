@@ -15,15 +15,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = UserPreferences();
+    
+    final String lastPage = prefs.lastPage; 
+    final String? role = prefs.role; 
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: prefs.lastPage,
+      initialRoute: lastPage.isNotEmpty ? lastPage : '/',
       routes: {
         '/': (context) => const LoginPage(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) =>
+            HomeScreen(role: role ?? 'guest'), 
       },
     );
   }

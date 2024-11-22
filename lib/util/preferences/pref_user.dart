@@ -14,4 +14,12 @@ class UserPreferences {
   set lastPage(String value) {
     _prefs.setString('lastPage', value);
   }
+  String? get role => _prefs.getString('role');
+  set role(String? value) {
+    if (value != null) {
+      _prefs.setString('role', value);
+    } else {
+      _prefs.remove('role');
+    }
+  }
 }

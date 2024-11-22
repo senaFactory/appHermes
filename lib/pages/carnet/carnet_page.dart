@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/widgets/info_column.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/models/user.dart';
 
 class Carnetpage extends StatefulWidget {
-  const Carnetpage({super.key});
+  final String role;
+
+  const Carnetpage({required this.role, Key? key}) : super(key: key);
 
   @override
   State<Carnetpage> createState() => _CarnetpageState();
@@ -14,7 +15,7 @@ class Carnetpage extends StatefulWidget {
 
 class _CarnetpageState extends State<Carnetpage> {
   final CardService _peopleService = CardService();
-  Future<User?>? _userFuture; // Quitar "late" y usar un valor nulo inicial
+  Future<User?>? _userFuture;
 
   @override
   void initState() {
@@ -39,7 +40,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: RefreshIndicator(
-        onRefresh: _refreshData, // Llama a la función para recargar datos
+        onRefresh: _refreshData,
         child: ListView(
           children: [
             const HomeAppBar(),
@@ -86,7 +87,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return Container(
       width: screenSize.width * 0.9,
       margin: const EdgeInsets.symmetric(vertical: 30),
-      padding: const EdgeInsets.all(60),
+      padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -101,6 +102,7 @@ class _CarnetpageState extends State<Carnetpage> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             radius: 80,
@@ -119,9 +121,9 @@ class _CarnetpageState extends State<Carnetpage> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
-          const Text(
-            'Aprendiz',
-            style: TextStyle(
+          Text(
+            widget.role, // Acceder al rol correctamente
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Color(0xFF39A900),
@@ -154,15 +156,57 @@ class _CarnetpageState extends State<Carnetpage> {
   }
 
   Widget _buildUserDetails(User user) {
-    return Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(2),
+          1: FlexColumnWidth(2),
+        },
+        children: [
+          _buildTableRow("C.C", user.documentNumber, "RH", user.bloodType),
+          _buildTableRow(
+              "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
+          _buildTableRow("Jornada", user.journey, "Programa", user.program),
+        ],
+      ),
+    );
+  }
+
+  TableRow _buildTableRow(
+      String label1, String value1, String label2, String value2) {
+    return TableRow(
       children: [
-        _buildInfoRow(user.acronym, user.documentNumber, "RH", user.bloodType),
-        const SizedBox(height: 15),
-        _buildInfoRow(
-            "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
-        const SizedBox(height: 15),
-        _buildInfoRow("Jornada", user.journey, "Programa", user.program),
+        _buildTableCell(label1, value1),
+        _buildTableCell(label2, value2),
       ],
+    );
+  }
+
+  Widget _buildTableCell(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF39A900),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -183,20 +227,6 @@ class _CarnetpageState extends State<Carnetpage> {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoRow(
-      String label1, String value1, String label2, String value2) {
-    return Row(
-      children: [
-        Expanded(
-          child: InfoColumnWidget(label: label1, value: value1),
-        ),
-        Expanded(
-          child: InfoColumnWidget(label: label2, value: value2),
-        ),
-      ],
     );
   }
 }

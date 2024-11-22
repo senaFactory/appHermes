@@ -26,7 +26,8 @@ class AuthService with ChangeNotifier {
         if (jsonResponse['status'] == true) {
           final token = jsonResponse['jwt'];
           await tokenStorage.saveToken(token);
-          return AuthLogin(
+          return AuthLogin(                       
+              role: jsonResponse['role'],
               document: jsonResponse['document'],
               password: jsonResponse['jwt']);
         } else {
