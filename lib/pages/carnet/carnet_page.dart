@@ -157,11 +157,13 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Widget _buildUserDetails(User user) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 25.0), // Márgenes laterales
       child: Table(
         columnWidths: const {
-          0: FlexColumnWidth(2),
-          1: FlexColumnWidth(2),
+          0: FlexColumnWidth(2), // Ajusta el ancho de la primera columna
+          1: FlexColumnWidth(1), // Espaciado
+          2: FlexColumnWidth(2), // Ajusta el ancho de la segunda columna
         },
         children: [
           _buildTableRow("C.C", user.documentNumber, "RH", user.bloodType),
@@ -178,6 +180,7 @@ class _CarnetpageState extends State<Carnetpage> {
     return TableRow(
       children: [
         _buildTableCell(label1, value1),
+        const SizedBox(width: 20), // Espacio entre columnas
         _buildTableCell(label2, value2),
       ],
     );
@@ -185,7 +188,8 @@ class _CarnetpageState extends State<Carnetpage> {
 
   Widget _buildTableCell(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(
+          vertical: 10.0), // Espaciado vertical entre filas
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -197,7 +201,6 @@ class _CarnetpageState extends State<Carnetpage> {
               color: Color(0xFF39A900),
             ),
           ),
-          const SizedBox(height: 4),
           Text(
             value,
             style: const TextStyle(

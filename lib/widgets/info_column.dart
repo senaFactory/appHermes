@@ -9,7 +9,7 @@ class InfoColumnWidget extends StatelessWidget {
   const InfoColumnWidget({
     super.key,
     required this.label,
-    required this.value,
+    required this.value, required CrossAxisAlignment alignment,
   });
 
   @override
