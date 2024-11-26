@@ -66,7 +66,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "images/logo_sena_negro.png" # Ruta al ícono de tu app
+  image_path: "images/logo_sena.png" # Ruta al ícono de tu app
   remove_alpha_ios: true # Elimina transparencia para evitar problemas en iOS
 
 flutter:
@@ -79,7 +79,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-    - images/logo_sena_negro.png
+    - images/logo_sena.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -40,6 +40,8 @@ class CardService {
           List<Equipment> equipmentList =
               await _equipmentService.fetchEquipments(equipmentIds);
 
+          print(userData)              ;
+
           return User(
               name: userData['name'] ?? 'N/A',
               lastName: userData['lastname'] ?? 'N/A',
@@ -54,7 +56,7 @@ class CardService {
               studySheet: userData['studySheet']?.toString() ?? 'N/A',
               program: userData['program'] ?? 'N/A',
               journey: userData['journey'] ?? 'N/A',
-              trainingCenter: userData['trainingCenter'] ?? 'CSF',
+              trainingCenter: userData['trainingCenter'] ?? 'N/A',
               equipments: equipmentList);
         } else {
           throw Exception('User data not available');
