@@ -16,6 +16,7 @@ class Carnetpage extends StatefulWidget {
 class _CarnetpageState extends State<Carnetpage> {
   final CardService _peopleService = CardService();
   Future<User?>? _userFuture;
+  ImageProvider? _cachedPhoto;
 
   @override
   void initState() {
@@ -24,7 +25,18 @@ class _CarnetpageState extends State<Carnetpage> {
   }
 
   Future<User?> _fetchUserData() async {
-    return _peopleService.getUser();
+    final user = await _peopleService.getUser();
+
+    if (user?.photo != null && user!.photo!.isNotEmpty) {
+      try {
+        // Usa directamente el Uint8List para crear el MemoryImage
+        _cachedPhoto = MemoryImage(user.photo!);
+      } catch (e) {
+        debugPrint("Error al procesar la imagen: $e");
+      }
+    }
+
+    return user;
   }
 
   Future<void> _refreshData() async {
@@ -106,9 +118,8 @@ class _CarnetpageState extends State<Carnetpage> {
         children: [
           CircleAvatar(
             radius: 80,
-            backgroundImage: user.photo != null
-                ? MemoryImage(user.photo!)
-                : const AssetImage('images/icono.jpg') as ImageProvider,
+            backgroundImage: _cachedPhoto ?? 
+                const AssetImage('images/icono.jpg') as ImageProvider,
           ),
           const SizedBox(height: 15),
           Text(
@@ -122,7 +133,7 @@ class _CarnetpageState extends State<Carnetpage> {
           ),
           const SizedBox(height: 5),
           Text(
-            widget.role, // Acceder al rol correctamente
+            widget.role,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
