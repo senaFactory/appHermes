@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/models/auth_login.dart';
 import 'package:maqueta/pages/carnet/carnet_page.dart';
 import 'package:maqueta/pages/equipment/equipments_page.dart';
 import 'package:maqueta/pages/profile/my_account_page.dart';
-import 'package:maqueta/services/auth_service.dart';
 import 'package:maqueta/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,11 +13,11 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 1; // Índice para manejar la pestaña activa
 
-  late final List<Widget> _pages; // Inicializar en initState para incluir el rol
+  late final List<Widget>
+      _pages; // Inicializar en initState para incluir el rol
 
   @override
   void initState() {
@@ -55,4 +53,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
