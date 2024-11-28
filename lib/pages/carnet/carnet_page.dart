@@ -133,7 +133,7 @@ class _CarnetpageState extends State<Carnetpage> {
           ),
           const SizedBox(height: 5),
           Text(
-            widget.role,
+            widget.role.replaceFirst("ROLE_", ""),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
