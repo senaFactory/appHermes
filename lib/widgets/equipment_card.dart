@@ -77,10 +77,10 @@ class EquipmentCard extends StatelessWidget {
                 ),
                 underline: const SizedBox(), // Elimina la línea de subrayado
                 items: [
-                  DropdownMenuItem<String>(
+                  const DropdownMenuItem<String>(
                     value: "Editar",
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(Icons.edit, color: Color(0xFF888787)),
                         SizedBox(width: 10),
                         Text("Editar"),

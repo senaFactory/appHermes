@@ -7,7 +7,7 @@ import 'package:maqueta/models/user.dart';
 class Carnetpage extends StatefulWidget {
   final String role;
 
-  const Carnetpage({required this.role, Key? key}) : super(key: key);
+  const Carnetpage({required this.role, super.key});
 
   @override
   State<Carnetpage> createState() => _CarnetpageState();
@@ -118,7 +118,7 @@ class _CarnetpageState extends State<Carnetpage> {
         children: [
           CircleAvatar(
             radius: 80,
-            backgroundImage: _cachedPhoto ?? 
+            backgroundImage: _cachedPhoto ??
                 const AssetImage('images/icono.jpg') as ImageProvider,
           ),
           const SizedBox(height: 15),
