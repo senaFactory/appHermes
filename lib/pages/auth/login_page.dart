@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final AuthService authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'Cedula de Ciudadania';
+  bool _isPasswordVisible = false;
 
   void mostrarErrorDialog(BuildContext context, String message) {
     showDialog(
@@ -107,44 +108,44 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 30),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.article, color: Colors.grey),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: dropdownValue,
-                                icon: const Icon(Icons.arrow_downward),
-                                iconSize: 24,
-                                elevation: 16,
-                                isExpanded: true,
-                                style: textStyle,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue!;
-                                  });
-                                },
-                                items: <String>[
-                                  'Cedula de Ciudadania',
-                                  'Tarjeta de Identidad',
-                                  'Cedula de Extranjeria',
-                                  'Pasaporte',
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value, style: textStyle),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
                           ),
                         ],
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.grey),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.article, color: Colors.grey),
+                        ),
+                        style: textStyle,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
+                        },
+                        items: <String>[
+                          'Cedula de Ciudadania',
+                          'Tarjeta de Identidad',
+                          'Cedula de Extranjeria',
+                          'Permiso especial de permanencia',
+                          'Permiso de proteccion temporal',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value, style: textStyle),
+                          );
+                        }).toList(),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -171,10 +172,22 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
                         hintText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                         filled: true,
                         fillColor: const Color(0xFFFFFFFF),
                         border: OutlineInputBorder(
@@ -188,21 +201,6 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            // Implementar funcionalidad para olvidar contraseña
-                          },
-                          child: const Text(
-                            '¿Olvidó su contraseña?',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
