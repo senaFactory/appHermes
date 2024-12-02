@@ -15,8 +15,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthService authService = AuthService();
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'Cedula de Ciudadania';
-  bool _isPasswordVisible = false;
+  String dropdownValue = 'Cédula de Ciudadanía';
+  bool _obscureText = true;
 
   void mostrarErrorDialog(BuildContext context, String message) {
     showDialog(
@@ -35,9 +35,10 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Oops!',
                   style: TextStyle(
-                      color: const Color.fromRGBO(251, 7, 7, 1),
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                      fontWeight: FontWeight.bold),
+                    color: const Color.fromRGBO(251, 7, 7, 1),
+                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -122,28 +123,39 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: DropdownButtonFormField<String>(
                         value: dropdownValue,
-                        icon: const Icon(Icons.arrow_drop_down,
-                            color: Colors.grey),
-                        decoration: const InputDecoration(
+                        icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                        decoration: InputDecoration(
                           border: InputBorder.none,
-                          prefixIcon: Icon(Icons.article, color: Colors.grey),
+                          prefixIcon: const Icon(Icons.article, color: Colors.grey),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 18),
                         ),
-                        style: textStyle,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87,
+                        ),
                         onChanged: (String? newValue) {
                           setState(() {
                             dropdownValue = newValue!;
                           });
                         },
                         items: <String>[
-                          'Cedula de Ciudadania',
+                          'Cédula de Ciudadanía',
                           'Tarjeta de Identidad',
-                          'Cedula de Extranjeria',
-                          'Permiso especial de permanencia',
-                          'Permiso de proteccion temporal',
+                          'Cédula de Extranjeria',
+                          'Permiso especial de permanencía',
+                          'Permiso de protección temporal',
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value, style: textStyle),
+                            child: Text(
+                              value,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87,
+                              ),
+                            ),
                           );
                         }).toList(),
                       ),
@@ -172,24 +184,23 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
                         hintText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                            _obscureText ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.grey,
                           ),
                           onPressed: () {
                             setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
+                              _obscureText = !_obscureText;
                             });
                           },
                         ),
                         filled: true,
-                        fillColor: const Color(0xFFFFFFFF),
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -201,6 +212,21 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // Implementar funcionalidad para olvidar contraseña
+                          },
+                          child: const Text(
+                            '¿Olvidaste tu contraseña?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
