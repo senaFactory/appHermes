@@ -124,11 +124,14 @@ class _LoginPageState extends State<LoginPage> {
                       child: DropdownButtonFormField<String>(
                         value: dropdownValue,
                         isExpanded: true, // Corrige el desbordamiento.
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.grey),
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          prefixIcon: const Icon(Icons.article, color: Colors.grey),
-                          contentPadding: const EdgeInsets.symmetric(vertical: 18),
+                          prefixIcon:
+                              const Icon(Icons.article, color: Colors.grey),
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 18),
                         ),
                         style: const TextStyle(
                           fontSize: 16,
@@ -191,7 +194,9 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: const Icon(Icons.lock),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureText ? Icons.visibility : Icons.visibility_off,
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -213,6 +218,21 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            // Implementar funcionalidad para olvidar contraseña
+                          },
+                          child: const Text(
+                            '¿Olvidaste tu contraseña?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
