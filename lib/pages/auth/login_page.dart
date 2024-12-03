@@ -123,6 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: DropdownButtonFormField<String>(
                         value: dropdownValue,
+                        isExpanded: true, // Corrige el desbordamiento.
                         icon: const Icon(Icons.arrow_drop_down, color: Colors.grey),
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -214,21 +215,6 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            // Implementar funcionalidad para olvidar contraseña
-                          },
-                          child: const Text(
-                            '¿Olvidaste tu contraseña?',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -236,7 +222,6 @@ class _LoginPageState extends State<LoginPage> {
                             int document = int.parse(_documentController.text);
                             String password = _passwordController.text;
 
-                            // Llamada al servicio de autenticación
                             AuthLogin authResponse =
                                 await authService.logIn(document, password);
 
