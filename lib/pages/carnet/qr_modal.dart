@@ -15,17 +15,7 @@ class QrModal extends StatelessWidget {
       ),
       content: PrettyQrView.data(
         data: '${[
-          user.name,
-          user.lastName,
-          user.email,
           user.documentNumber,
-          user.acronym,
-          user.bloodType,
-          user.studySheet,
-          user.program,
-          user.journey,
-          user.trainingCenter,
-          user.equipments.map((e) => e.toJson().toString()).join('; ')
         ]}',
         decoration: const PrettyQrDecoration(
           background: Colors.white,

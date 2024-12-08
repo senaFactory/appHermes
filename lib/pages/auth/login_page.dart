@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/models/auth_login.dart';
 import 'package:maqueta/pages/home_screen.dart';
 import 'package:maqueta/services/auth_service.dart';
 
@@ -16,7 +15,9 @@ class _LoginPageState extends State<LoginPage> {
   final AuthService authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'Cedula de Ciudadania';
+  bool _isLoading = false;
 
+  /// Mostrar un diálogo de error
   void mostrarErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
@@ -80,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
+          // Fondo
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -90,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+          // Formulario de inicio de sesión
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -98,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Logo
                     Image.asset('images/LogoSena.png', height: 100),
                     const SizedBox(height: 20),
                     const Text(
@@ -106,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 30),
+                    // Tipo de documento
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
@@ -148,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    // Campo de documento
                     TextFormField(
                       controller: _documentController,
                       keyboardType: TextInputType.number,
@@ -169,6 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(height: 20),
+                    // Campo de contraseña
                     TextFormField(
                       controller: _passwordController,
                       obscureText: true,
@@ -190,61 +197,60 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            // Implementar funcionalidad para olvidar contraseña
-                          },
-                          child: const Text(
-                            '¿Olvidó su contraseña?',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          try {
-                            int document = int.parse(_documentController.text);
-                            String password = _passwordController.text;
+                    // Botón de inicio de sesión
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
 
-                            // Llamada al servicio de autenticación
-                            AuthLogin authResponse =
-                                await authService.logIn(document, password);
+                                try {
+                                  int document =
+                                      int.parse(_documentController.text);
+                                  String password = _passwordController.text;
 
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    HomeScreen(role: authResponse.role),
+                                  String token = await authService.logIn(
+                                      document, password);
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomeScreen(role: token),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  if (mounted) {
+                                    mostrarErrorDialog(
+                                      context,
+                                      'Credenciales incorrectas o rol no permitido. Por favor, inténtelo de nuevo.',
+                                    );
+                                  }
+                                } finally {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF39A900),
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            );
-                          } catch (e) {
-                            if (mounted) {
-                              mostrarErrorDialog(context,
-                                  'Credenciales incorrectas. Por favor, inténtelo de nuevo.');
-                            }
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF39A900),
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Iniciar Sesión",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                      ),
-                    ),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "Iniciar Sesión",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
               ),

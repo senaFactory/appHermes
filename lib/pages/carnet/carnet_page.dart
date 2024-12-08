@@ -101,7 +101,7 @@ class _CarnetpageState extends State<Carnetpage> {
       margin: const EdgeInsets.symmetric(vertical: 30),
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.white, // Cambiar el fondo a blanco
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -133,7 +133,8 @@ class _CarnetpageState extends State<Carnetpage> {
           ),
           const SizedBox(height: 5),
           Text(
-            widget.role.replaceFirst("ROLE_", ""),
+            _getRoleDisplayName(
+                widget.role), // Mostrar nombre del rol formateado
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -159,6 +160,27 @@ class _CarnetpageState extends State<Carnetpage> {
     );
   }
 
+  String _getRoleDisplayName(String role) {
+    switch (role) {
+      case 'ROLE_SUPER_ADMIN':
+        return 'Super Administrador';
+      case 'ROLE_ADMIN':
+        return 'Administrador';
+      case 'ROLE_COORDINATOR':
+        return 'Coordinador';
+      case 'ROLE_TEACHER':
+        return 'Instructor';
+      case 'ROLE_STUDENT':
+        return 'Aprendiz';
+      case 'ROLE_VIGILANT':
+        return 'Vigilante';
+      case 'ROLE_GUEST':
+        return 'Invitado';
+      default:
+        return 'Rol Desconocido';
+    }
+  }
+
   void _showQrModal(User user) {
     showDialog(
       context: context,
@@ -179,6 +201,10 @@ class _CarnetpageState extends State<Carnetpage> {
           _buildTableRow(
               "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
           _buildTableRow("Jornada", user.journey, "Programa", user.program),
+          if (widget.role == 'ROLE_COORDINATOR' && user.coordination != null)
+            _buildTableRow("Coordinación", user.coordination!, "", ""),
+          if (widget.role == 'ROLE_VIGILANT' && user.headquarter != null)
+            _buildTableRow("Sede", user.headquarter!, "", ""),
         ],
       ),
     );

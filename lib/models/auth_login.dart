@@ -1,29 +1,34 @@
 class AuthLogin {
   final int document;
   final String password;
-  final String role;
+  final List<String> roles; // Manejar múltiples roles
 
   AuthLogin({
     required this.document,
     required this.password,
-    required this.role
+    required this.roles,
   });
 
-  // Convertir JSON a objeto AuthLogin
+  /// Convertir JSON a objeto AuthLogin
   factory AuthLogin.fromJson(Map<String, dynamic> json) {
     return AuthLogin(
-      role: json['role'],
       document: json['document'],
-      password: json['password'],      
+      password: json['jwt'], // Utilizamos el JWT como "password"
+      roles: (json['roles'] as List<dynamic>).map((e) => e.toString()).toList(),
     );
   }
 
-  // Convertir objeto AuthLogin a JSON para registrar
+  /// Convertir objeto AuthLogin a JSON para registrar o depuración
   Map<String, dynamic> toJson() {
     return {
-      'role': role,
       'document': document,
-      'password': password
+      'password': password,
+      'roles': roles,
     };
+  }
+
+  /// Obtener el rol principal o concatenar roles
+  String getPrimaryRole() {
+    return roles.isNotEmpty ? roles.first : "ROLE_UNKNOWN";
   }
 }

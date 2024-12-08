@@ -9,9 +9,8 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Equipmentspage extends StatefulWidget {
   final Equipment? newEquipment;
-  final String role; 
+  final String role;
   const Equipmentspage({super.key, this.newEquipment, required this.role});
-  
 
   @override
   State<Equipmentspage> createState() => _EquipmentspageState();
@@ -33,7 +32,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
     setState(() {
       _equipments.clear();
       if (allEquipment != null) {
-        _equipments.addAll(allEquipment.equipments);
+        _equipments.addAll(allEquipment.equipments!);
       }
     });
   }
