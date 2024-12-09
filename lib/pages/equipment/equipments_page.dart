@@ -9,7 +9,7 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 
 class Equipmentspage extends StatefulWidget {
   final Equipment? newEquipment;
-  final String role;
+  final String? role;
   const Equipmentspage({super.key, this.newEquipment, required this.role});
 
   @override

@@ -9,7 +9,7 @@ class AuthService {
   final String urlLogin = UrlStorage().urlLogin;
   final TokenStorage tokenStorage = TokenStorage();
 
-  /// Método para iniciar sesión, aceptar datos desde la vista y guardar el token.
+  /// Iniciar sesión y retornar el rol del usuario
   Future<String> logIn(int document, String password) async {
     final String baseUrl = '$virtualPort$urlLogin';
 
@@ -39,7 +39,16 @@ class AuthService {
           if (token != null) {
             // Almacenar el token
             await tokenStorage.saveToken(token);
-            return token;
+            debugPrint('Token JWT almacenado correctamente.');
+
+            // Obtener el rol principal del token
+            final String? role = await tokenStorage.getPrimaryRole();
+            if (role != null) {
+              debugPrint('Rol principal del usuario: $role');
+              return role;
+            } else {
+              throw Exception('No se pudo determinar el rol del usuario.');
+            }
           } else {
             throw Exception('El servidor no devolvió un token válido.');
           }

@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prefs = UserPreferences();
-    
-    final String lastPage = prefs.lastPage; 
-    final String? role = prefs.role; 
+
+    final String lastPage = prefs.lastPage;
+    final String? role = prefs.role;
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -27,8 +27,7 @@ class MyApp extends StatelessWidget {
       initialRoute: lastPage.isNotEmpty ? lastPage : '/',
       routes: {
         '/': (context) => const LoginPage(),
-        '/home': (context) =>
-            HomeScreen(role: role ?? 'guest'), 
+        '/home': (context) => HomeScreen(role: role),
       },
     );
   }

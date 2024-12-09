@@ -91,25 +91,35 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: Colors.green),
-                title: const Text('Tomar una foto'),
-                onTap: () async {
-                  final pickedFile =
-                      await picker.pickImage(source: ImageSource.camera);
-                  Navigator.of(context).pop(); // Cierra el modal
-                  if (pickedFile != null) {
-                    if (!pickedFile.path.endsWith('.jpg') &&
-                        !pickedFile.path.endsWith('.jpeg')) {
+                  leading: const Icon(Icons.camera_alt, color: Colors.green),
+                  title: const Text('Tomar una foto'),
+                  onTap: () async {
+                    try {
+                      final pickedFile =
+                          await picker.pickImage(source: ImageSource.camera);
+                      Navigator.of(context).pop(); // Cierra el modal
+
+                      if (pickedFile == null) {
+                        _showMessage('No se seleccionó ninguna imagen.');
+                        return;
+                      }
+
+                      if (!pickedFile.path.endsWith('.jpg') &&
+                          !pickedFile.path.endsWith('.jpeg')) {
+                        _showMessage(
+                            'Por favor selecciona una imagen en formato JPG.');
+                        return;
+                      }
+
+                      setState(() {
+                        _image = File(pickedFile.path);
+                      });
+                    } catch (e) {
+                      // Manejo de errores genéricos
                       _showMessage(
-                          'Por favor selecciona una imagen en formato JPG.');
-                      return;
+                          'Ocurrió un error al seleccionar la imagen: $e');
                     }
-                    setState(() {
-                      _image = File(pickedFile.path);
-                    });
-                  }
-                },
-              ),
+                  }),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.blue),
                 title: const Text('Seleccionar de galería'),

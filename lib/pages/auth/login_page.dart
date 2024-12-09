@@ -212,14 +212,16 @@ class _LoginPageState extends State<LoginPage> {
                                       int.parse(_documentController.text);
                                   String password = _passwordController.text;
 
-                                  String token = await authService.logIn(
+                                  // Llamar al servicio de inicio de sesión
+                                  final String role = await authService.logIn(
                                       document, password);
 
+                                  // Navegar a la pantalla principal pasando el rol
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          HomeScreen(role: token),
+                                          HomeScreen(role: role),
                                     ),
                                   );
                                 } catch (e) {
