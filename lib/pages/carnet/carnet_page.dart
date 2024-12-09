@@ -155,7 +155,7 @@ class _CarnetPageState extends State<CarnetPage> {
         return 'Super Administrador';
       case 'ADMIN':
         return 'Administrador';
-      case 'COORDINATOR':
+      case 'COORDINADOR':
         return 'Coordinador';
       case 'INSTRUCTOR':
         return 'Instructor';

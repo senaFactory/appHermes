@@ -14,8 +14,9 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthService authService = AuthService();
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'Cedula de Ciudadania';
+  String dropdownValue = 'Cédula de Ciudadanía';
   bool _isLoading = false;
+  bool _obscureText = true;
 
   /// Mostrar un diálogo de error
   void mostrarErrorDialog(BuildContext context, String message) {
@@ -136,10 +137,11 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
                                 items: <String>[
-                                  'Cedula de Ciudadania',
+                                  'Cédula de Ciudadanía',
                                   'Tarjeta de Identidad',
-                                  'Cedula de Extranjeria',
-                                  'Pasaporte',
+                                  'Cédula de Extranjeria',
+                                  'Permiso especial de permanencía',
+                                  'Permiso de protección temporal',
                                 ].map<DropdownMenuItem<String>>((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
@@ -178,12 +180,25 @@ class _LoginPageState extends State<LoginPage> {
                     // Campo de contraseña
                     TextFormField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
                         hintText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                        ),
                         filled: true,
-                        fillColor: const Color(0xFFFFFFFF),
+                        fillColor: Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

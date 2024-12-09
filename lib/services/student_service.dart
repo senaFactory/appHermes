@@ -9,6 +9,7 @@ class StudentService {
   final String baseUrlPerson =
       UrlStorage().virtualPort + UrlStorage().urlPerson;
   final TokenStorage tokenStorage = TokenStorage();
+  final UrlStorage urlStorage = UrlStorage();
 
   Future<void> sendImageBase64(String base64Image, int document) async {
     final url = Uri.parse('$baseUrlPerson/updatePhoto/$document');
@@ -53,30 +54,42 @@ class StudentService {
   }
 
   Future<Student> getUserData() async {
-    var decodeToken = await tokenStorage.decodeJwtToken();
-    var document = decodeToken['sub'];
-    var token = await tokenStorage.getToken();
-
-    final url = Uri.parse('$baseUrl/findDocument/$document');
-
     try {
-      var response = await http.get(
-        url,
+      // Decodificar el token para obtener el rol y el documento
+      var token = await tokenStorage.getToken();
+      if (token == null) throw Exception('Token is null or expired');
+
+      var decodeToken = await tokenStorage.decodeJwtToken();
+      var document = decodeToken['sub'];
+      var role = await tokenStorage.getPrimaryRole();
+      if (role == null) throw Exception('Role is not available in the token');
+
+      // Obtener la URL específica según el rol
+      final String url = urlStorage.getRoleUrl(role, document);
+      print('[DEBUG] Request URL: $url'); // Para depuración
+
+      // Realizar la solicitud HTTP
+      final response = await http.get(
+        Uri.parse(url),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
 
+      print('[DEBUG] Response Status: ${response.statusCode}');
+      print('[DEBUG] Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        if (jsonResponse.isNotEmpty) {
-          final userData = jsonResponse['data']['person'];
+        print('[DEBUG] Decoded JSON Response: $jsonResponse');
 
+        if (jsonResponse.isNotEmpty) {
+          // Solo retornamos `dateBirth`, `bloodType` y `address`
           return Student(
-            dateBirth: userData['date_birth'] ?? 'N/A',
-            bloodType: userData['blood_type']?.trim() ?? 'N/A',
-            address: userData['address'] ?? 'N/A',
+            dateBirth: jsonResponse['dateBirth'] ?? 'N/A',
+            bloodType: jsonResponse['bloodType']?.trim() ?? 'N/A',
+            address: jsonResponse['address'] ?? 'N/A',
           );
         } else {
           throw Exception('User data not available');
@@ -85,7 +98,8 @@ class StudentService {
         throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error getting user data');
+      print('[ERROR] Error fetching user data: $e');
+      throw Exception('Error getting user data: $e');
     }
   }
 
