@@ -91,25 +91,35 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: Colors.green),
-                title: const Text('Tomar una foto'),
-                onTap: () async {
-                  final pickedFile =
-                      await picker.pickImage(source: ImageSource.camera);
-                  Navigator.of(context).pop(); // Cierra el modal
-                  if (pickedFile != null) {
-                    if (!pickedFile.path.endsWith('.jpg') &&
-                        !pickedFile.path.endsWith('.jpeg')) {
+                  leading: const Icon(Icons.camera_alt, color: Colors.green),
+                  title: const Text('Tomar una foto'),
+                  onTap: () async {
+                    try {
+                      final pickedFile =
+                          await picker.pickImage(source: ImageSource.camera);
+                      Navigator.of(context).pop(); // Cierra el modal
+
+                      if (pickedFile == null) {
+                        _showMessage('No se seleccionó ninguna imagen.');
+                        return;
+                      }
+
+                      if (!pickedFile.path.endsWith('.jpg') &&
+                          !pickedFile.path.endsWith('.jpeg')) {
+                        _showMessage(
+                            'Por favor selecciona una imagen en formato JPG.');
+                        return;
+                      }
+
+                      setState(() {
+                        _image = File(pickedFile.path);
+                      });
+                    } catch (e) {
+                      // Manejo de errores genéricos
                       _showMessage(
-                          'Por favor selecciona una imagen en formato JPG.');
-                      return;
+                          'Ocurrió un error al seleccionar la imagen: $e');
                     }
-                    setState(() {
-                      _image = File(pickedFile.path);
-                    });
-                  }
-                },
-              ),
+                  }),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.blue),
                 title: const Text('Seleccionar de galería'),
@@ -298,14 +308,141 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  Widget _buildRoleSpecificFields(User user, String? role) {
+    print('[DEBUG] ROL QUE INGRESA: $role');
+    switch (role) {
+      case "APRENDIZ":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Número de Ficha", user.studySheet, false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
+      case "ADMIN":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Posición", user.position ?? "N/A", false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
+      case "COORDINADOR":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Coordinación", user.coordination ?? "N/A", false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
+      case "INSTRUCTOR":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Coordinación", user.coordination ?? "N/A", false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
+      case "SEGURIDAD":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Sede", user.headquarter ?? "N/A", false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
+      case "INVITADO":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: _buildInfoColumn(
+                        "Evento", user.event?.join(", ") ?? "N/A", false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child: _buildInfoColumn("Centro(s)",
+                        user.trainingCenters?.join(", ") ?? "N/A", false)),
+              ],
+            ),
+          ],
+        );
+      case "SUPER ADMIN":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: _buildInfoColumn("Correo", user.email, false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Teléfono", user.phoneNumber, false)),
+              ],
+            ),
+          ],
+        );
+      default:
+        throw Exception('ROL NO EXISTE');
+    }
+  }
+
   Widget _buildProfileHeader(User user) {
     ImageProvider? imageProvider;
 
+    // Validamos si la imagen seleccionada es válida
     if (_image != null) {
       imageProvider = FileImage(_image!);
     } else if (user.photo != null && user.photo!.isNotEmpty) {
-      imageProvider = MemoryImage(user.photo!);
+      try {
+        // Intentamos construir la imagen desde la memoria
+        imageProvider = MemoryImage(user.photo!);
+      } catch (e) {
+        // Si ocurre algún error, usamos la imagen por defecto
+        debugPrint("Error al construir MemoryImage: $e");
+        imageProvider = const AssetImage('images/icono.jpg');
+      }
     } else {
+      // Si no hay imagen válida, usamos la imagen por defecto
       imageProvider = const AssetImage('images/icono.jpg');
     }
 
@@ -318,11 +455,14 @@ class _ProfilePageState extends State<ProfilePage> {
           child: CircleAvatar(
             radius: 70,
             backgroundImage: imageProvider,
-            child: _image == null && (user.photo == null || user.photo!.isEmpty)
-                ? Icon(
+            child: (_image == null &&
+                    (user.photo == null ||
+                        user.photo!.isEmpty ||
+                        imageProvider == const AssetImage('images/icono.jpg')))
+                ? const Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white70,
                   )
                 : null,
           ),
@@ -358,6 +498,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileInfo(User user) {
+    Future<String> getRoleFromTokenStorage() async {
+      final TokenStorage tokenStorage = TokenStorage();
+      String? role = await tokenStorage.getPrimaryRole();
+      return role ??
+          "INVITADO"; // Retorna "INVITADO" si no hay un rol disponible
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: Column(
@@ -393,16 +540,20 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           const SizedBox(height: 15),
-          Row(
-            children: [
-              Expanded(
-                  child: _buildInfoColumn(
-                      "Número de Ficha", user.studySheet, false)),
-              const SizedBox(width: 15),
-              Expanded(
-                  child:
-                      _buildInfoColumn("Centro", user.trainingCenter, false)),
-            ],
+          FutureBuilder<String>(
+            future:
+                getRoleFromTokenStorage(), // Obtener el rol de forma asíncrona
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(); // Indicador de carga mientras se obtiene el rol
+              } else if (snapshot.hasError || !snapshot.hasData) {
+                return const Text("No se pudo obtener el rol");
+              }
+
+              String role = snapshot.data!;
+              return _buildRoleSpecificFields(
+                  user, role); // Renderizar campos específicos según el rol
+            },
           ),
           const SizedBox(height: 15),
           Row(

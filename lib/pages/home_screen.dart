@@ -5,7 +5,7 @@ import 'package:maqueta/pages/profile/my_account_page.dart';
 import 'package:maqueta/widgets/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String role; // Agregar el argumento del rol
+  final String? role; // Agregar el argumento del rol
 
   const HomeScreen({super.key, required this.role}); // Constructor con rol
 
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Inicializar las páginas y pasar el rol a las que lo necesitan
     _pages = [
       Equipmentspage(role: widget.role), // EquipmentsPage acepta rol
-      Carnetpage(role: widget.role), // CarnetPage acepta rol
+      CarnetPage(role: widget.role), // CarnetPage acepta rol
       Myaccountpage(role: widget.role), // MyAccountPage acepta rol
     ];
   }

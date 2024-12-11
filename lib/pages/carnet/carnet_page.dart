@@ -3,18 +3,19 @@ import 'package:maqueta/pages/carnet/qr_modal.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/models/user.dart';
+import 'package:maqueta/widgets/info_column.dart';
 
-class Carnetpage extends StatefulWidget {
-  final String role;
+class CarnetPage extends StatefulWidget {
+  final String? role;
 
-  const Carnetpage({required this.role, super.key});
+  const CarnetPage({required this.role, Key? key}) : super(key: key);
 
   @override
-  State<Carnetpage> createState() => _CarnetpageState();
+  State<CarnetPage> createState() => _CarnetPageState();
 }
 
-class _CarnetpageState extends State<Carnetpage> {
-  final CardService _peopleService = CardService();
+class _CarnetPageState extends State<CarnetPage> {
+  final CardService _cardService = CardService();
   Future<User?>? _userFuture;
   ImageProvider? _cachedPhoto;
 
@@ -25,17 +26,14 @@ class _CarnetpageState extends State<Carnetpage> {
   }
 
   Future<User?> _fetchUserData() async {
-    final user = await _peopleService.getUser();
-
+    final user = await _cardService.getUser();
     if (user?.photo != null && user!.photo!.isNotEmpty) {
       try {
-        // Usa directamente el Uint8List para crear el MemoryImage
         _cachedPhoto = MemoryImage(user.photo!);
       } catch (e) {
         debugPrint("Error al procesar la imagen: $e");
       }
     }
-
     return user;
   }
 
@@ -133,7 +131,7 @@ class _CarnetpageState extends State<Carnetpage> {
           ),
           const SizedBox(height: 5),
           Text(
-            widget.role,
+            _getRoleDisplayName(widget.role),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -141,95 +139,271 @@ class _CarnetpageState extends State<Carnetpage> {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
-            user.program,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black54,
-            ),
-            textAlign: TextAlign.center,
-          ),
           const SizedBox(height: 20),
           _buildQrButton(user),
           const SizedBox(height: 25),
-          _buildUserDetails(user),
+          _buildUserDetails(user, widget.role),
         ],
       ),
     );
   }
 
-  void _showQrModal(User user) {
-    showDialog(
-      context: context,
-      builder: (context) => QrModal(user: user),
-    );
+  String _getRoleDisplayName(String? role) {
+    debugPrint('[DEBUG] ROL: $role');
+    switch (role) {
+      case 'SUPER ADMIN':
+        return 'Super Administrador';
+      case 'ADMIN':
+        return 'Administrador';
+      case 'COORDINADOR':
+        return 'Coordinador';
+      case 'INSTRUCTOR':
+        return 'Instructor';
+      case 'APRENDIZ':
+        return 'Aprendiz';
+      case 'SEGURIDAD':
+        return 'Vigilante';
+      case 'INVITADO':
+        return 'Invitado';
+      default:
+        throw Exception('ROL NO EXISTE');
+    }
   }
 
-  Widget _buildUserDetails(User user) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(2),
-          1: FlexColumnWidth(2),
-        },
-        children: [
-          _buildTableRow("C.C", user.documentNumber, "RH", user.bloodType),
-          _buildTableRow(
-              "Número Ficha", user.studySheet, "Centro", user.trainingCenter),
-          _buildTableRow("Jornada", user.journey, "Programa", user.program),
-        ],
-      ),
-    );
+  Widget _buildUserDetails(User user, String? role) {
+    switch (role) {
+      case "APRENDIZ":
+        return _buildApprenticeDetails(user);
+      case "COORDINATOR":
+        return _buildCoordinatorDetails(user);
+      case "ADMIN":
+        return _buildAdminDetails(user);
+      case "SEGURIDAD":
+        return _buildSecurityDetails(user);
+      case "INVITADO":
+        return _buildGuestDetails(user);
+      case "INSTRUCTOR":
+        return _buildInstructorDetails(user);
+      case "SUPER ADMIN":
+        return _buildSuperAdminDetails(user);
+      default:
+        throw Exception('ROL NO EXISTE');
+    }
   }
 
-  TableRow _buildTableRow(
-      String label1, String value1, String label2, String value2) {
-    return TableRow(
+  Widget _buildSuperAdminDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTableCell(label1, value1),
-        _buildTableCell(label2, value2),
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Correo",
+          user.email,
+          "Teléfono",
+          user.phoneNumber,
+        ),
       ],
     );
   }
 
-  Widget _buildTableCell(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF39A900),
-            ),
+  Widget _buildApprenticeDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+            "Número de Ficha", user.studySheet, "Centro", user.trainingCenter),
+        const SizedBox(height: 10),
+        _buildInfoRow("Jornada", user.journey, "Programa", user.program),
+      ],
+    );
+  }
+
+  // Método para construir el carnet del ADMIN
+  Widget _buildAdminDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Posición",
+          user.position ?? "N/A",
+          "Correo",
+          user.email,
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+          "Teléfono",
+          user.phoneNumber,
+          "Centro",
+          user.trainingCenter,
+        ),
+      ],
+    );
+  }
+
+// Método para construir el carnet del COORDINATOR
+  Widget _buildCoordinatorDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Coordinación",
+          user.coordination ?? "N/A",
+          "Correo",
+          user.email,
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+          "Teléfono",
+          user.phoneNumber,
+          "Centro",
+          user.trainingCenter,
+        ),
+      ],
+    );
+  }
+
+// Método para construir el carnet del SEGURIDAD
+  Widget _buildSecurityDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Centro de Formación",
+          user.trainingCenter,
+          "Sede",
+          user.headquarter ?? "N/A",
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+          "Identificación",
+          user.documentNumber,
+          "Teléfono",
+          user.phoneNumber,
+        ),
+      ],
+    );
+  }
+
+// Método para construir el carnet del INVITADO
+  Widget _buildGuestDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Evento",
+          user.event?.join(", ") ?? "N/A",
+          "Sede",
+          user.headquarter ?? "N/A",
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+          "Centro(s)",
+          user.trainingCenters?.join(", ") ?? "N/A",
+          "Correo",
+          user.email,
+        ),
+      ],
+    );
+  }
+
+// Método para construir el carnet del INSTRUCTOR
+  Widget _buildInstructorDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Coordinación",
+          user.coordination ?? "N/A",
+          "Correo",
+          user.email,
+        ),
+        const SizedBox(height: 15),
+        _buildInfoRow(
+          "Teléfono",
+          user.phoneNumber,
+          "Centro",
+          user.trainingCenter,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(
+      String label1, String value1, String label2, String value2) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: InfoColumnWidget(
+            label: label1,
+            value: value1,
           ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black,
-            ),
+        ),
+        Expanded(
+          child: InfoColumnWidget(
+            label: label2,
+            value: value2,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildQrButton(User user) {
     return ElevatedButton.icon(
-      onPressed: () {
-        _showQrModal(user);
-      },
+      onPressed: () => _showQrModal(user),
       icon: const Icon(Icons.qr_code, color: Colors.white),
       label: const Text(
         "Mostrar QR",
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white), // Texto en negro
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF007D78),
@@ -238,6 +412,13 @@ class _CarnetpageState extends State<Carnetpage> {
           borderRadius: BorderRadius.circular(12),
         ),
       ),
+    );
+  }
+
+  void _showQrModal(User user) {
+    showDialog(
+      context: context,
+      builder: (context) => QrModal(user: user),
     );
   }
 }

@@ -7,4 +7,22 @@ class UrlStorage {
   final String urlLogin = 'api/v1/hermesapp/auth/login';
   final String urlEquipment = 'api/v1/hermesapp/equipment';
   final String urlStudent = 'api/v1/hermesapp/student';
+  final String urlPerson = 'api/v1/hermesapp/person';
+
+  final Map<String, String> roleEndpoints = {
+    "APRENDIZ": "api/v1/hermesapp/card/student",
+    "COORDINADOR": "api/v1/hermesapp/card/coordinator",
+    "ADMIN": "api/v1/hermesapp/card/admin",
+    "SUPER ADMIN": "api/v1/hermesapp/card/superAdmin",
+    "SEGURIDAD": "api/v1/hermesapp/card/vigilant",
+    "INVITADO": "api/v1/hermesapp/card/guest",
+    "INSTRUCTOR": "api/v1/hermesapp/card/teacher",
+  };
+
+  String getRoleUrl(String role, String document) {
+    if (!roleEndpoints.containsKey(role)) {
+      throw Exception('Unkown Role');
+    }
+    return '$virtualPort${roleEndpoints[role]}/$document';
+  }
 }
