@@ -23,7 +23,7 @@ class AuthService {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(requestBody),
+        body: json.encode({'document': document, 'password': password}),
       );
 
       // Depuración de la respuesta
@@ -32,7 +32,6 @@ class AuthService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        print('[DEBUG] Respuesta decodificada: $jsonResponse');
 
         if (jsonResponse['status'] == true) {
           final token = jsonResponse['jwt'];
