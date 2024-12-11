@@ -25,7 +25,8 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
     'HP',
     'Asus',
     'Acer',
-    'Lenovo'
+    'Lenovo',
+    'Huawei',
   ];
 
   String? _selectedBrand;
@@ -148,39 +149,40 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
   }
 
   Widget _buildDropdown(String label, List<String> items, String? selectedValue,
-      ValueChanged<String?> onChanged) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF39A900)),
+    ValueChanged<String?> onChanged) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF39A900)),
+      ),
+      const SizedBox(height: 8),
+      DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          ),
-          hint: Text('Selecciona $label'),
-          value: selectedValue,
-          onChanged: onChanged,
-          validator: (value) =>
-              value == null ? 'Por favor selecciona $label.' : null,
-          items: items.map((item) {
-            return DropdownMenuItem(
-              value: item,
-              child: Text(item),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
+        dropdownColor: Colors.white, // Cambiar el fondo a blanco puro
+        hint: Text('Selecciona $label'),
+        value: selectedValue,
+        onChanged: onChanged,
+        validator: (value) =>
+            value == null ? 'Por favor selecciona $label.' : null,
+        items: items.map((item) {
+          return DropdownMenuItem(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+      ),
+    ],
+  );
+}
 
   Widget _buildTextField(
       String label,
