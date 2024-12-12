@@ -58,7 +58,10 @@ class CardService {
           '[DEBUG] Response Body: ${response.body}'); // Ver el cuerpo de la respuesta
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        // Intentar decodificar utilizando una limpieza adicional
+        String body = utf8.decode(response.bodyBytes);
+        final jsonResponse = json.decode(body) as Map<String, dynamic>;
+        
         print(
             '[DEBUG] Decoded JSON Response: $jsonResponse'); // Ver la respuesta JSON decodificada
 
