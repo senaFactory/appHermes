@@ -9,6 +9,7 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/providers/token_storage.dart';
+import 'package:image/image.dart' as img;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -72,6 +73,29 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<File?> _fixImageOrientation(File file) async {
+    try {
+      // Leer la imagen como bytes
+      final bytes = await file.readAsBytes();
+
+      // Decodificar la imagen usando el paquete `image`
+      final originalImage = img.decodeImage(bytes);
+
+      if (originalImage == null) return null;
+
+      // Corregir la orientación usando los metadatos EXIF
+      final fixedImage = img.bakeOrientation(originalImage);
+
+      // Guardar la imagen corregida en un nuevo archivo temporal
+      final fixedFile = File('${file.path}_fixed.jpg');
+      await fixedFile.writeAsBytes(img.encodeJpg(fixedImage));
+      return fixedFile;
+    } catch (e) {
+      _showMessage('Error al corregir la orientación: $e');
+      return null;
     }
   }
 

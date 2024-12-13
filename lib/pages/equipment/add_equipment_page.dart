@@ -251,7 +251,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
-        serial: _serialNumberController.text,
+        serial: _serialNumberController.text,         
       );
 
       Navigator.pop(context, newEquipment);
