@@ -115,35 +115,45 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: [
               ListTile(
-                  leading: const Icon(Icons.camera_alt, color: Colors.green),
-                  title: const Text('Tomar una foto'),
-                  onTap: () async {
-                    try {
-                      final pickedFile =
-                          await picker.pickImage(source: ImageSource.camera);
-                      Navigator.of(context).pop(); // Cierra el modal
+                leading: const Icon(Icons.camera_alt, color: Colors.green),
+                title: const Text('Tomar una foto'),
+                onTap: () async {
+                  try {
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.camera);
+                    Navigator.of(context).pop(); // Cierra el modal
 
-                      if (pickedFile == null) {
-                        _showMessage('No se seleccionó ninguna imagen.');
-                        return;
-                      }
-
-                      if (!pickedFile.path.endsWith('.jpg') &&
-                          !pickedFile.path.endsWith('.jpeg')) {
-                        _showMessage(
-                            'Por favor selecciona una imagen en formato JPG.');
-                        return;
-                      }
-
-                      setState(() {
-                        _image = File(pickedFile.path);
-                      });
-                    } catch (e) {
-                      // Manejo de errores genéricos
-                      _showMessage(
-                          'Ocurrió un error al seleccionar la imagen: $e');
+                    if (pickedFile == null) {
+                      _showMessage('No se seleccionó ninguna imagen.');
+                      return;
                     }
-                  }),
+
+                    if (!pickedFile.path.endsWith('.jpg') &&
+                        !pickedFile.path.endsWith('.jpeg')) {
+                      _showMessage(
+                          'Por favor selecciona una imagen en formato JPG.');
+                      return;
+                    }
+
+                    // Corregir la orientación
+                    final correctedFile =
+                        await _fixImageOrientation(File(pickedFile.path));
+
+                    if (correctedFile == null) {
+                      _showMessage('No se pudo corregir la imagen.');
+                      return;
+                    }
+
+                    setState(() {
+                      _image = correctedFile;
+                    });
+                  } catch (e) {
+                    // Manejo de errores genéricos
+                    _showMessage(
+                        'Ocurrió un error al seleccionar la imagen: $e');
+                  }
+                },
+              ),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.blue),
                 title: const Text('Seleccionar de galería'),
