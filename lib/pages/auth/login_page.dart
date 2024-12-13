@@ -36,9 +36,10 @@ class _LoginPageState extends State<LoginPage> {
                 Text(
                   'Oops!',
                   style: TextStyle(
-                      color: const Color.fromRGBO(251, 7, 7, 1),
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                      fontWeight: FontWeight.bold),
+                    color: const Color.fromRGBO(251, 7, 7, 1),
+                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -113,10 +114,17 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 30),
                     // Tipo de documento
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Row(
                         children: [

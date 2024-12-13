@@ -9,6 +9,7 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/providers/token_storage.dart';
+import 'package:image/image.dart' as img;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -75,6 +76,29 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  Future<File?> _fixImageOrientation(File file) async {
+    try {
+      // Leer la imagen como bytes
+      final bytes = await file.readAsBytes();
+
+      // Decodificar la imagen usando el paquete `image`
+      final originalImage = img.decodeImage(bytes);
+
+      if (originalImage == null) return null;
+
+      // Corregir la orientación usando los metadatos EXIF
+      final fixedImage = img.bakeOrientation(originalImage);
+
+      // Guardar la imagen corregida en un nuevo archivo temporal
+      final fixedFile = File('${file.path}_fixed.jpg');
+      await fixedFile.writeAsBytes(img.encodeJpg(fixedImage));
+      return fixedFile;
+    } catch (e) {
+      _showMessage('Error al corregir la orientación: $e');
+      return null;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -91,35 +115,45 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: [
               ListTile(
-                  leading: const Icon(Icons.camera_alt, color: Colors.green),
-                  title: const Text('Tomar una foto'),
-                  onTap: () async {
-                    try {
-                      final pickedFile =
-                          await picker.pickImage(source: ImageSource.camera);
-                      Navigator.of(context).pop(); // Cierra el modal
+                leading: const Icon(Icons.camera_alt, color: Colors.green),
+                title: const Text('Tomar una foto'),
+                onTap: () async {
+                  try {
+                    final pickedFile =
+                        await picker.pickImage(source: ImageSource.camera);
+                    Navigator.of(context).pop(); // Cierra el modal
 
-                      if (pickedFile == null) {
-                        _showMessage('No se seleccionó ninguna imagen.');
-                        return;
-                      }
-
-                      if (!pickedFile.path.endsWith('.jpg') &&
-                          !pickedFile.path.endsWith('.jpeg')) {
-                        _showMessage(
-                            'Por favor selecciona una imagen en formato JPG.');
-                        return;
-                      }
-
-                      setState(() {
-                        _image = File(pickedFile.path);
-                      });
-                    } catch (e) {
-                      // Manejo de errores genéricos
-                      _showMessage(
-                          'Ocurrió un error al seleccionar la imagen: $e');
+                    if (pickedFile == null) {
+                      _showMessage('No se seleccionó ninguna imagen.');
+                      return;
                     }
-                  }),
+
+                    if (!pickedFile.path.endsWith('.jpg') &&
+                        !pickedFile.path.endsWith('.jpeg')) {
+                      _showMessage(
+                          'Por favor selecciona una imagen en formato JPG.');
+                      return;
+                    }
+
+                    // Corregir la orientación
+                    final correctedFile =
+                        await _fixImageOrientation(File(pickedFile.path));
+
+                    if (correctedFile == null) {
+                      _showMessage('No se pudo corregir la imagen.');
+                      return;
+                    }
+
+                    setState(() {
+                      _image = correctedFile;
+                    });
+                  } catch (e) {
+                    // Manejo de errores genéricos
+                    _showMessage(
+                        'Ocurrió un error al seleccionar la imagen: $e');
+                  }
+                },
+              ),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: Colors.blue),
                 title: const Text('Seleccionar de galería'),

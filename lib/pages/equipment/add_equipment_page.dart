@@ -26,7 +26,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
     'Asus',
     'Acer',
     'Lenovo',
-    'Huawei',
+    'Huawei'
   ];
 
   String? _selectedBrand;
@@ -184,6 +184,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
   );
 }
 
+
   Widget _buildTextField(
       String label,
       String hint,
@@ -250,7 +251,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
         brand: _selectedBrand!,
         model: _modelController.text,
         color: _colorController.text,
-        serial: _serialNumberController.text,
+        serial: _serialNumberController.text,         
       );
 
       Navigator.pop(context, newEquipment);

@@ -18,9 +18,13 @@ class User {
   final String? headquarter;
   final List<String>? roles;
   final Uint8List? photo;
+  final String? state;
 
   // Equipos desde el backend
-  final List<Equipment>? equipments;
+  final List<Equipment> equipments;
+
+  // Equipos seleccionados (independientes)
+  final List<Equipment> selectedEquipments;
 
   // Campos adicionales
   final String? position;
@@ -42,10 +46,12 @@ class User {
     required this.program,
     required this.journey,
     required this.trainingCenter,
+    this.state,
     this.headquarter,
     this.roles,
     this.photo,
     this.equipments = const [],
+    this.selectedEquipments = const [],
     this.position,
     this.address,
     this.dateBirth,
@@ -67,6 +73,7 @@ class User {
       studySheet: json['studySheet']?.toString() ?? 'N/A',
       program: json['program'] ?? 'N/A',
       journey: json['journey'] ?? 'N/A',
+      state: json['state'] ?? 'N/A',
       roles: (json['roles'] as List<dynamic>?)?.cast<String>() ?? [],
       photo: json['photo'] != null ? base64Decode(json['photo']) : null,
       trainingCenter: json['trainingCenter'] ?? 'N/A',
@@ -74,6 +81,11 @@ class User {
               ?.map((e) => Equipment.fromJson(e))
               .toList() ??
           [],
+      selectedEquipments: (json['selectedEquipments'] as List<dynamic>?)
+              ?.map((e) => Equipment.fromJson(e))
+              .toList() ??
+          [],
+
       // Campos adicionales
       position: json['position'] ?? 'N/A',
       address: json['address'] ?? 'N/A',
@@ -100,9 +112,11 @@ class User {
     String? journey,
     String? trainingCenter,
     String? headquarter,
+    String? state,
     List<String>? roles,
     Uint8List? photo,
     List<Equipment>? equipments,
+    List<Equipment>? selectedEquipments,
     String? position,
     String? address,
     String? dateBirth,
@@ -123,9 +137,11 @@ class User {
       journey: journey ?? this.journey,
       trainingCenter: trainingCenter ?? this.trainingCenter,
       headquarter: headquarter ?? this.headquarter,
+      state: state ?? this.state,
       roles: roles ?? this.roles,
       photo: photo ?? this.photo,
       equipments: equipments ?? this.equipments,
+      selectedEquipments: selectedEquipments ?? this.selectedEquipments,
       position: position ?? this.position,
       address: address ?? this.address,
       dateBirth: dateBirth ?? this.dateBirth,
@@ -150,9 +166,11 @@ class User {
       'program': program,
       'journey': journey,
       'roles': roles,
+      'state': state,
       'trainingCenter': trainingCenter,
       'headquarter': headquarter,
-      'equipments': equipments!.map((e) => e.toJson()).toList(),
+      'equipments': equipments.map((e) => e.toJson()).toList(),
+      'selectedEquipments': selectedEquipments.map((e) => e.toJson()).toList(),
       'position': position,
       'address': address,
       'dateBirth': dateBirth,

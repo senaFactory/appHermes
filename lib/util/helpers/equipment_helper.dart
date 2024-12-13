@@ -10,6 +10,7 @@ class EquipmentHelper {
     required String model,
     required String color,
     required String serial,
+    bool location = false,
     bool state = true,
   }) {
     return Equipment(
@@ -17,6 +18,7 @@ class EquipmentHelper {
       brand: brand,
       model: model,
       color: color,
+      location: location,      
       serial: serial,
       state: state,
     );
