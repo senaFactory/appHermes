@@ -1,6 +1,15 @@
 class UrlStorage {
-  // Change the port when you're in a new development environment
-  final String virtualPort = 'https://hhj97mdq-8081.use2.devtunnels.ms/';
+/*
+                        CAMBIAR EL ACTUAL PUERTO POR LA URL DEL BACK DESPLEGADO
+                              |||||||||||||||||||||||||||||||||||||
+                              ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+  EJEMPLO:                              
+  final String virtualPort = 'https://hermes-back-datacenter.com/';
+
+  UNA VEZ HAYA CAMBIADO EL PUERTO VAYA A LA TERMINAL Y SIGA LOS PASOS DEL MANUAL
+
+*/
+  final String virtualPort = 'https://kgsrt5lf-8081.use2.devtunnels.ms/';
 
   // Routes Back-End
   final String urlCardPerson = 'api/v1/hermesapp/view';

@@ -139,16 +139,7 @@ class _CarnetPageState extends State<CarnetPage> {
             ),
             textAlign: TextAlign.center,
           ),
-          Text(
-            (user.state ?? 'N/A').toUpperCase(),
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF39A900),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
           _buildQrButton(user),
           const SizedBox(height: 25),
           _buildUserDetails(user, widget.role),
@@ -225,6 +216,18 @@ class _CarnetPageState extends State<CarnetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Center(
+          child: Text(
+            'ESTADO: ${(user.state ?? 'N/A').toUpperCase()}',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF39A900),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 10),
         _buildInfoRow(
           "Tipo Documento (${user.acronym})",
           user.documentNumber,
