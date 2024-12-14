@@ -8,7 +8,7 @@ import 'package:maqueta/widgets/info_column.dart';
 class CarnetPage extends StatefulWidget {
   final String? role;
 
-  const CarnetPage({required this.role, Key? key}) : super(key: key);
+  const CarnetPage({required this.role, super.key});
 
   @override
   State<CarnetPage> createState() => _CarnetPageState();
@@ -31,7 +31,7 @@ class _CarnetPageState extends State<CarnetPage> {
       try {
         _cachedPhoto = MemoryImage(user.photo!);
       } catch (e) {
-        debugPrint("Error al procesar la imagen: $e");
+        throw Exception('Error! showing the photo');
       }
     }
     return user;
@@ -146,28 +146,6 @@ class _CarnetPageState extends State<CarnetPage> {
         ],
       ),
     );
-  }
-
-  String _getRoleDisplayName(String? role) {
-    debugPrint('[DEBUG] ROL: $role');
-    switch (role) {
-      case 'SUPER ADMIN':
-        return 'Super Administrador';
-      case 'ADMIN':
-        return 'Administrador';
-      case 'COORDINADOR':
-        return 'Coordinador';
-      case 'INSTRUCTOR':
-        return 'Instructor';
-      case 'APRENDIZ':
-        return 'Aprendiz';
-      case 'SEGURIDAD':
-        return 'Vigilante';
-      case 'INVITADO':
-        return 'Invitado';
-      default:
-        throw Exception('ROL NO EXISTE');
-    }
   }
 
   Widget _buildUserDetails(User user, String? role) {

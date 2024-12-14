@@ -23,9 +23,6 @@ class User {
   // Equipos desde el backend
   final List<Equipment> equipments;
 
-  // Equipos seleccionados (independientes)
-  final List<Equipment> selectedEquipments;
-
   // Campos adicionales
   final String? position;
   final String? address;
@@ -51,7 +48,6 @@ class User {
     this.roles,
     this.photo,
     this.equipments = const [],
-    this.selectedEquipments = const [],
     this.position,
     this.address,
     this.dateBirth,
@@ -78,10 +74,6 @@ class User {
       photo: json['photo'] != null ? base64Decode(json['photo']) : null,
       trainingCenter: json['trainingCenter'] ?? 'N/A',
       equipments: (json['equipments'] as List<dynamic>?)
-              ?.map((e) => Equipment.fromJson(e))
-              .toList() ??
-          [],
-      selectedEquipments: (json['selectedEquipments'] as List<dynamic>?)
               ?.map((e) => Equipment.fromJson(e))
               .toList() ??
           [],
@@ -116,7 +108,6 @@ class User {
     List<String>? roles,
     Uint8List? photo,
     List<Equipment>? equipments,
-    List<Equipment>? selectedEquipments,
     String? position,
     String? address,
     String? dateBirth,
@@ -141,7 +132,6 @@ class User {
       roles: roles ?? this.roles,
       photo: photo ?? this.photo,
       equipments: equipments ?? this.equipments,
-      selectedEquipments: selectedEquipments ?? this.selectedEquipments,
       position: position ?? this.position,
       address: address ?? this.address,
       dateBirth: dateBirth ?? this.dateBirth,
@@ -170,7 +160,6 @@ class User {
       'trainingCenter': trainingCenter,
       'headquarter': headquarter,
       'equipments': equipments.map((e) => e.toJson()).toList(),
-      'selectedEquipments': selectedEquipments.map((e) => e.toJson()).toList(),
       'position': position,
       'address': address,
       'dateBirth': dateBirth,

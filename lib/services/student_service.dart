@@ -21,11 +21,6 @@ class StudentService {
       }
     });
 
-    print('Enviando imagen en formato Base64 al backend...');
-    print('URL: $url');
-    print('Authorization Token: Bearer $token');
-    print('Cuerpo de la petición: $body');
-
     try {
       final response = await http.put(
         url,
@@ -36,20 +31,12 @@ class StudentService {
         body: body,
       );
 
-      print('Código de estado de la respuesta: ${response.statusCode}');
-      print('Cuerpo de la respuesta: ${response.body}');
-
       if (response.statusCode == 200) {
-        print('Imagen subida correctamente.');
       } else {
-        print(
-            'Error al enviar la imagen. Código de estado: ${response.statusCode}');
-        print('Mensaje de error del servidor: ${response.body}');
         throw Exception('Error al enviar la imagen: ${response.statusCode}');
       }
     } catch (e) {
-      print('Excepción al enviar la imagen: $e');
-      throw Exception('Error al enviar la imagen: $e');
+      throw Exception('Error al enviar la imagen');
     }
   }
 
@@ -66,7 +53,6 @@ class StudentService {
 
       // Obtener la URL específica según el rol
       final String url = urlStorage.getRoleUrl(role, document);
-      print('[DEBUG] Request URL: $url'); // Para depuración
 
       // Realizar la solicitud HTTP
       final response = await http.get(
@@ -77,12 +63,8 @@ class StudentService {
         },
       );
 
-      print('[DEBUG] Response Status: ${response.statusCode}');
-      print('[DEBUG] Response Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        print('[DEBUG] Decoded JSON Response: $jsonResponse');
 
         if (jsonResponse.isNotEmpty) {
           // Solo retornamos `dateBirth`, `bloodType` y `address`
@@ -98,8 +80,7 @@ class StudentService {
         throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
-      print('[ERROR] Error fetching user data: $e');
-      throw Exception('Error getting user data: $e');
+      throw Exception('Error getting user data');
     }
   }
 
@@ -133,7 +114,7 @@ class StudentService {
         throw Exception('Error al actualizar los datos: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Error al actualizar los datos: $e');
+      throw Exception('Error al actualizar los datos');
     }
   }
 }

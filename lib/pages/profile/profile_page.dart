@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
       }
     } catch (e) {
-      _showMessage('Error al cargar los datos: $e');
+      _showMessage('Error al cargar los datos');
       setState(() {
         _isLoading = false;
       });
@@ -94,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
       await fixedFile.writeAsBytes(img.encodeJpg(fixedImage));
       return fixedFile;
     } catch (e) {
-      _showMessage('Error al corregir la orientación: $e');
+      _showMessage('Error al corregir la orientación');
       return null;
     }
   }
@@ -149,8 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     });
                   } catch (e) {
                     // Manejo de errores genéricos
-                    _showMessage(
-                        'Ocurrió un error al seleccionar la imagen: $e');
+                    _showMessage('Ocurrió un error al seleccionar la imagen');
                   }
                 },
               ),
@@ -225,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _initialAddress = _addressController.text;
       });
     } catch (e) {
-      _showMessage('Error al guardar los datos: $e');
+      _showMessage('Error al guardar los datos');
     } finally {
       setState(() {
         _isLoading = false; // Finaliza la carga
@@ -343,7 +342,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildRoleSpecificFields(User user, String? role) {
-    print('[DEBUG] ROL QUE INGRESA: $role');
     switch (role) {
       case "APRENDIZ":
         return Column(
@@ -472,7 +470,6 @@ class _ProfilePageState extends State<ProfilePage> {
         imageProvider = MemoryImage(user.photo!);
       } catch (e) {
         // Si ocurre algún error, usamos la imagen por defecto
-        debugPrint("Error al construir MemoryImage: $e");
         imageProvider = const AssetImage('images/icono.jpg');
       }
     } else {

@@ -36,16 +36,11 @@ class EquipmentService {
         body: json.encode(payload),
       );
 
-      print(response.body);
-
       if (response.statusCode != 200) {
-        print('Equipo registrado exitosamente');
       } else {
-        print('Error en la respuesta del servidor: ${response.body}');
         throw Exception('Error al registrar el equipo: ${response.statusCode}');
       }
     } catch (e) {
-      print('Exception al registrar equipo: $e');
       rethrow;
     }
   }
@@ -70,7 +65,6 @@ class EquipmentService {
         return Equipment.fromJson(jsonResponse['data']);
       }).toList();
     } catch (e) {
-      print('Error fetching equipments: $e');
       return [];
     }
   }

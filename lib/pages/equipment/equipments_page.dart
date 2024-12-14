@@ -39,15 +39,12 @@ class _EquipmentspageState extends State<Equipmentspage> {
 
   Future<void> _toggleEquipmentState(Equipment equipment) async {
     equipment.state = !(equipment.state == true); // Cambia el estado
-    print(
-        "Nuevo estado del equipo: ${equipment.state}"); // Verifica el nuevo estado
-
     try {
       await _equipmentService.editEquipment(equipment);
-      print("Equipo actualizado en el servidor");
+
       await _fetchAllEquipment(); // Actualiza la lista en la interfaz
     } catch (e) {
-      print("Error al actualizar el estado del equipo: $e");
+      throw Exception('Failed to get Equipments');
     }
   }
 
@@ -170,7 +167,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
                     await _equipmentService.editEquipment(equipment);
                     await _fetchAllEquipment();
                   } catch (e) {
-                    print("Error al actualizar el equipo: $e");
+                    throw Exception('Failed to Edit Equipment');
                   }
                 },
               ).showEditModal(context);
@@ -211,8 +208,6 @@ class _EquipmentspageState extends State<Equipmentspage> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          print(
-                              "Confirmación de ${equipment.state == true ? 'desactivación' : 'activación'} recibida");
                           Navigator.of(context)
                               .pop(); // Cierra el diálogo primero
                           await _toggleEquipmentState(

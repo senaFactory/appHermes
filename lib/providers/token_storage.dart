@@ -25,10 +25,8 @@ class TokenStorage {
         throw Exception('No token found in storage');
       }
       final decodedToken = JwtDecoder.decode(token);
-      print('[DEBUG] Decoded token payload: $decodedToken');
       return decodedToken;
     } catch (e) {
-      print('[ERROR] Error decoding token: $e');
       return {};
     }
   }
@@ -36,34 +34,23 @@ class TokenStorage {
   Future<String?> getPrimaryRole() async {
     List<String> roles = await getRolesFromToken();
 
-    print(
-        '[DEBUG] Roles from token: $roles'); // Ver los roles que obtenemos del token
-
     // Filtrar roles importantes según tu lógica
     if (roles.contains('ROLE_SUPER ADMIN')) {
-      print('[DEBUG] Role found: SUPER ADMIN');
       return 'SUPER ADMIN';
     } else if (roles.contains('ROLE_ADMIN')) {
-      print('[DEBUG] Role found: ADMIN');
       return 'ADMIN';
     } else if (roles.contains('ROLE_COORDINADOR')) {
-      print('[DEBUG] Role found: COORDINADOR');
       return 'COORDINADOR';
     } else if (roles.contains('ROLE_INSTRUCTOR')) {
-      print('[DEBUG] Role found: INSTRUCTOR');
       return 'INSTRUCTOR';
     } else if (roles.contains('ROLE_APRENDIZ')) {
-      print('[DEBUG] Role found: APRENDIZ');
       return 'APRENDIZ';
     } else if (roles.contains('ROLE_SEGURIDAD')) {
-      print('[DEBUG] Role found: SEGURIDAD');
       return 'SEGURIDAD';
     } else if (roles.contains('ROLE_INVITADO')) {
-      print('[DEBUG] Role found: INVITADO');
       return 'INVITADO';
     }
 
-    print('[DEBUG] No primary role found');
     return null;
   }
 
