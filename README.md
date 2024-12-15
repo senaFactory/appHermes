@@ -1,4 +1,4 @@
-# **Hermes**
+# **Hermes - Carnetización**
 
 Hermes es una aplicación diseñada para **gestionar la carnetización** y la **generación de códigos QR únicos**, con el objetivo de controlar y optimizar el acceso de los usuarios 
 a las instalaciones de la institución.
