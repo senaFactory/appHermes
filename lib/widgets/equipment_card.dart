@@ -41,7 +41,8 @@ class EquipmentCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.laptop, size: 30, color: Colors.black54),
+                  const Icon(Icons.miscellaneous_services,
+                      size: 30, color: Colors.black54),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
