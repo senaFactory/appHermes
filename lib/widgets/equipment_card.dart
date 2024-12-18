@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
 class EquipmentCard extends StatelessWidget {
-  final String type;
+  final String name;
   final String brand;
   final String model;
   final String color;
   final String serialNumber;
-  final bool isActive; // Estado del equipo: activo/inactivo
-  final VoidCallback onEdit;
+  final bool isActive;
+  final VoidCallback? onEdit; // Permite que onEdit sea opcional
   final VoidCallback onDeactivate;
 
   const EquipmentCard({
     super.key,
-    required this.type,
+    required this.name,
     required this.brand,
     required this.model,
     required this.color,
     required this.serialNumber,
     required this.isActive,
-    required this.onEdit,
+    this.onEdit, // Opcional
     required this.onDeactivate,
   });
 
@@ -47,7 +47,7 @@ class EquipmentCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        type,
+                        name,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -77,16 +77,18 @@ class EquipmentCard extends StatelessWidget {
                 ),
                 underline: const SizedBox(), // Elimina la línea de subrayado
                 items: [
-                  const DropdownMenuItem<String>(
-                    value: "Editar",
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit, color: Color(0xFF888787)),
-                        SizedBox(width: 10),
-                        Text("Editar"),
-                      ],
+                  // Opcional: Mostrar "Editar" solo si `onEdit` no es nulo
+                  if (onEdit != null)
+                    const DropdownMenuItem<String>(
+                      value: "Editar",
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, color: Color(0xFF888787)),
+                          SizedBox(width: 10),
+                          Text("Editar"),
+                        ],
+                      ),
                     ),
-                  ),
                   DropdownMenuItem<String>(
                     value: isActive ? "Desactivar" : "Activar",
                     child: Row(
@@ -102,10 +104,10 @@ class EquipmentCard extends StatelessWidget {
                   ),
                 ],
                 onChanged: (value) {
-                  if (value == "Editar") {
-                    onEdit();
-                  } else {
-                    onDeactivate(); // Activa o desactiva el equipo
+                  if (value == "Editar" && onEdit != null) {
+                    onEdit!(); // Ejecuta onEdit solo si no es nulo
+                  } else if (value == "Activar" || value == "Desactivar") {
+                    onDeactivate();
                   }
                 },
                 dropdownColor: Colors.white,

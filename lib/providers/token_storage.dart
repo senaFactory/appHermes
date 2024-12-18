@@ -31,33 +31,10 @@ class TokenStorage {
     }
   }
 
-  Future<String?> getPrimaryRole() async {
-    List<String> roles = await getRolesFromToken();
-
-    // Filtrar roles importantes según tu lógica
-    if (roles.contains('ROLE_SUPER ADMIN')) {
-      return 'SUPER ADMIN';
-    } else if (roles.contains('ROLE_ADMIN')) {
-      return 'ADMIN';
-    } else if (roles.contains('ROLE_COORDINADOR')) {
-      return 'COORDINADOR';
-    } else if (roles.contains('ROLE_INSTRUCTOR')) {
-      return 'INSTRUCTOR';
-    } else if (roles.contains('ROLE_APRENDIZ')) {
-      return 'APRENDIZ';
-    } else if (roles.contains('ROLE_SEGURIDAD')) {
-      return 'SEGURIDAD';
-    } else if (roles.contains('ROLE_INVITADO')) {
-      return 'INVITADO';
-    }
-
-    return null;
-  }
-
+  /// Obtiene todos los roles desde el token
   Future<List<String>> getRolesFromToken() async {
     Map<String, dynamic> decodedToken = await decodeJwtToken();
     if (decodedToken.isNotEmpty && decodedToken.containsKey('authorities')) {
-      // Verifica si 'authorities' es un String y luego lo divides por coma
       var authorities = decodedToken['authorities'];
       if (authorities is String) {
         return authorities.split(',').map((e) => e.trim()).toList();
@@ -66,5 +43,44 @@ class TokenStorage {
       }
     }
     return [];
+  }
+
+  /// Obtiene el rol principal de acuerdo con la jerarquía definida
+  Future<String?> getPrimaryRole() async {
+    List<String> roles = await getRolesFromToken();
+    return _determineHighestPriorityRole(roles);
+  }
+
+  /// Determina el rol con mayor jerarquía en función de la lista de roles del usuario
+  Future<String?> getHighestPriorityRole() async {
+    List<String> roles = await getRolesFromToken();
+    return _determineHighestPriorityRole(roles);
+  }
+
+  /// Determina la jerarquía de los roles según la importancia definida
+  String? _determineHighestPriorityRole(List<String> roles) {
+    // Lista de roles en orden de jerarquía (de mayor a menor)
+    const List<String> roleHierarchy = [
+      'ROLE_SUPER ADMIN',
+      'ROLE_ADMIN',
+      'ROLE_COORDINADOR',
+      'ROLE_SEGURIDAD',
+      'ROLE_INSTRUCTOR',
+      'ROLE_APRENDIZ',
+      'ROLE_INVITADO',
+    ];
+
+    for (String role in roleHierarchy) {
+      if (roles.contains(role)) {
+        return _formatRole(role);
+      }
+    }
+
+    return null; // Si no encuentra ningún rol importante
+  }
+
+  /// Convierte la forma 'ROLE_SUPER ADMIN' a 'SUPER ADMIN'
+  String _formatRole(String role) {
+    return role.replaceAll('ROLE_', '').trim();
   }
 }

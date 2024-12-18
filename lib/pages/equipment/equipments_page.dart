@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/pages/equipment/add_equipment_page.dart';
 import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
+import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/services/equipment_service.dart';
 import 'package:maqueta/services/card_service.dart';
 import 'package:maqueta/widgets/equipment_card.dart';
@@ -10,6 +11,7 @@ import 'package:maqueta/widgets/home_app_bar.dart';
 class Equipmentspage extends StatefulWidget {
   final Equipment? newEquipment;
   final String? role;
+
   const Equipmentspage({super.key, this.newEquipment, required this.role});
 
   @override
@@ -17,16 +19,28 @@ class Equipmentspage extends StatefulWidget {
 }
 
 class _EquipmentspageState extends State<Equipmentspage> {
+  String? userRole; // Variable para almacenar el rol del usuario
   final CardService _peopleService = CardService();
   final EquipmentService _equipmentService = EquipmentService();
+  final TokenStorage tokenStorage = TokenStorage();
   final List<Equipment> _equipments = [];
 
   @override
   void initState() {
     super.initState();
+    _getUserRole(); // Obtiene el rol del usuario
     _fetchAllEquipment();
   }
 
+  /// Obtiene el rol del usuario y lo almacena en userRole
+  Future<void> _getUserRole() async {
+    final role = await tokenStorage.getHighestPriorityRole();
+    setState(() {
+      userRole = role;
+    });
+  }
+
+  /// Obtiene la lista de equipos
   Future<void> _fetchAllEquipment() async {
     final allEquipment = await _peopleService.getUser();
     setState(() {
@@ -37,17 +51,18 @@ class _EquipmentspageState extends State<Equipmentspage> {
     });
   }
 
+  /// Cambia el estado de activación/inactivación de un equipo
   Future<void> _toggleEquipmentState(Equipment equipment) async {
     equipment.state = !(equipment.state == true); // Cambia el estado
     try {
       await _equipmentService.editEquipment(equipment);
-
       await _fetchAllEquipment(); // Actualiza la lista en la interfaz
     } catch (e) {
       throw Exception('Failed to get Equipments');
     }
   }
 
+  /// Navega a la pantalla para agregar un equipo
   Future<void> _navigateToAddEquipmentPage() async {
     final newEquipment = await Navigator.push<Equipment>(
       context,
@@ -84,21 +99,23 @@ class _EquipmentspageState extends State<Equipmentspage> {
                       color: Color(0xFF39A900),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: _navigateToAddEquipmentPage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF39A900),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                  // Mostrar botón "Agregar equipo" solo si el rol es SUPER ADMIN o ADMIN
+                  if (userRole == 'SUPER ADMIN' || userRole == 'ADMIN')
+                    ElevatedButton(
+                      onPressed: _navigateToAddEquipmentPage,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF39A900),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text(
+                        "Agregar equipo",
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    child: const Text(
-                      "Agregar equipo",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -150,28 +167,47 @@ class _EquipmentspageState extends State<Equipmentspage> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: EquipmentCard(
-            type: equipment.model,
+            name: equipment.name,
             brand: equipment.brand,
             model: equipment.model,
             color: equipment.color,
             serialNumber: equipment.serial,
             isActive: equipment.state == true,
-            onEdit: () {
-              EditEquiptModal(
-                initialColor: equipment.color,
-                initialSerial: equipment.serial,
-                onSave: (newColor, newSerial) async {
-                  try {
-                    equipment.color = newColor;
-                    equipment.serial = newSerial;
-                    await _equipmentService.editEquipment(equipment);
-                    await _fetchAllEquipment();
-                  } catch (e) {
-                    throw Exception('Failed to Edit Equipment');
+
+            // Solo muestra el botón de editar si el rol es SUPER ADMIN o ADMIN
+            onEdit: (userRole == 'SUPER ADMIN' || userRole == 'ADMIN')
+                ? () {
+                    EditEquiptModal(
+                      initialFields: {
+                        "Color": equipment.color,
+                        "Serial": equipment.serial,
+                        "Tipo": equipment.name,
+                        "Marca": equipment.brand,
+                        "Modelo": equipment.model,
+                      },
+                      onSave: (updatedFields) async {
+                        try {
+                          equipment.color =
+                              updatedFields["Color"] ?? equipment.color;
+                          equipment.serial =
+                              updatedFields["Serial"] ?? equipment.serial;
+                          equipment.name =
+                              updatedFields["Tipo"] ?? equipment.name;
+                          equipment.brand =
+                              updatedFields["Marca"] ?? equipment.brand;
+                          equipment.model =
+                              updatedFields["Modelo"] ?? equipment.model;
+
+                          await _equipmentService.editEquipment(equipment);
+                          await _fetchAllEquipment();
+                        } catch (e) {
+                          throw Exception('Failed to Edit Equipment');
+                        }
+                      },
+                    ).showEditModal(context);
                   }
-                },
-              ).showEditModal(context);
-            },
+                : null,
+
             onDeactivate: () {
               showDialog(
                 context: context,
@@ -183,10 +219,8 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           ? 'Desactivar equipo'
                           : 'Activar equipo',
                       style: TextStyle(
-                        color: equipment.state == true
-                            ? Colors.red
-                            : Colors
-                                .green, // Rojo para desactivar, verde para activar
+                        color:
+                            equipment.state == true ? Colors.red : Colors.green,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -200,25 +234,17 @@ class _EquipmentspageState extends State<Equipmentspage> {
                         onPressed: () => Navigator.of(context).pop(),
                         child: const Text(
                           'Cancelar',
-                          style: TextStyle(
-                            color: Color(
-                                0xFF39A900), // Verde institucional para cancelar
-                          ),
+                          style: TextStyle(color: Color(0xFF39A900)),
                         ),
                       ),
                       TextButton(
                         onPressed: () async {
-                          Navigator.of(context)
-                              .pop(); // Cierra el diálogo primero
-                          await _toggleEquipmentState(
-                              equipment); // Luego ejecuta la función asincrónica
+                          Navigator.of(context).pop();
+                          await _toggleEquipmentState(equipment);
                         },
                         child: const Text(
                           'Confirmar',
-                          style: TextStyle(
-                            color: Color(
-                                0xFF39A900), // Verde institucional para confirmar
-                          ),
+                          style: TextStyle(color: Color(0xFF39A900)),
                         ),
                       ),
                     ],

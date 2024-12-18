@@ -1,6 +1,7 @@
 class Equipment {
   final int? id;
   String? document;
+  String name;
   String brand;
   String model;
   String color;
@@ -17,12 +18,14 @@ class Equipment {
     required this.serial,
     required this.location,
     required this.state,
+    required this.name,
   });
 
   // Convertir JSON a objeto Equipment
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
       id: json['id'],
+      name: json['name'] ?? 'N/A',
       brand: json['brand'] ?? 'N/A',
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
@@ -38,6 +41,7 @@ class Equipment {
   Map<String, dynamic> toJson() {
     return {
       'document': document,
+      'name': name,
       'brand': brand,
       'serial': serial,
       'model': model,

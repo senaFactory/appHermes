@@ -69,32 +69,52 @@ class EquipmentService {
     }
   }
 
-  Future<void> editEquipment(
-    Equipment equipment,
-  ) async {
+  Future<void> editEquipment(Equipment equipment) async {
     var token = await tokenStorage.getToken();
     final String baseUrl = '$virtualPort$urlEquipment';
     final url = Uri.parse('$baseUrl/update/${equipment.id}');
 
+    // Decodificar el token y obtener el documento asociado
     var decodeToken = await tokenStorage.decodeJwtToken();
     var document = decodeToken['sub'];
     equipment.setDocumentId = document;
 
+    // Crear el payload con los datos del equipo
     final Map<String, dynamic> payload = {
       'data': equipment.toJson(),
     };
 
-    final response = await http.put(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      },
-      body: jsonEncode(payload),
-    );
+    // DEBUGGING: Imprimir información antes de enviar la solicitud
+    print('--- DEBUGGING editEquipment ---');
+    print('URL: $url');
+    print('Token: $token');
+    print('Decoded Document ID: $document');
+    print('Payload: ${jsonEncode(payload)}');
 
-    if (response.statusCode != 200) {
-      throw Exception('Error al editar el equipo');
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(payload),
+      );
+
+      // DEBUGGING: Imprimir información de la respuesta HTTP
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
+      if (response.statusCode != 200) {
+        throw Exception(
+            'Error al editar el equipo - Código: ${response.statusCode}');
+      }
+
+      print('Equipo editado correctamente');
+    } catch (e) {
+      // DEBUGGING: Capturar y mostrar el error
+      print('Error durante editEquipment: $e');
+      rethrow; // Re-lanza la excepción después de imprimirla
     }
   }
 

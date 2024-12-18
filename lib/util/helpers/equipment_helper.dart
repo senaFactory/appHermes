@@ -6,6 +6,7 @@ import 'package:maqueta/providers/token_storage.dart';
 class EquipmentHelper {
   static Equipment buildEquipment({
     String? document,
+    required String name,
     required String brand,
     required String model,
     required String color,
@@ -15,10 +16,11 @@ class EquipmentHelper {
   }) {
     return Equipment(
       document: null,
+      name: name,
       brand: brand,
       model: model,
       color: color,
-      location: location,      
+      location: location,
       serial: serial,
       state: state,
     );
