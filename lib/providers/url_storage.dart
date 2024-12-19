@@ -17,6 +17,7 @@ class UrlStorage {
   final String urlEquipment = 'api/v1/hermesapp/equipment';
   final String urlStudent = 'api/v1/hermesapp/student';
   final String urlPerson = 'api/v1/hermesapp/person';
+  final String urlUser = 'api/v1/hermesapp/user';
 
   final Map<String, String> roleEndpoints = {
     "APRENDIZ": "api/v1/hermesapp/card/student",

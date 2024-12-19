@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maqueta/services/profile_service.dart';
 import 'package:maqueta/services/student_service.dart';
-import 'package:maqueta/util/constans/blood_type.dart';
+import 'package:maqueta/util/app_theme.dart';
+import 'package:maqueta/util/constans.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/services/card_service.dart';
@@ -27,7 +28,6 @@ class _ProfilePageState extends State<ProfilePage> {
   final ProfileUpdateService _profileUpdateService;
   final CardService _peopleService = CardService();
   final TokenStorage tokenStorage = TokenStorage();
-
   final TextEditingController _dateBirthController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
@@ -115,8 +115,16 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Wrap(
             children: [
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: Colors.green),
-                title: const Text('Tomar una foto'),
+                leading: Icon(
+                  Icons.camera_alt,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  'Tomar una foto',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
                 onTap: () async {
                   try {
                     final pickedFile =
@@ -131,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     if (!pickedFile.path.endsWith('.jpg') &&
                         !pickedFile.path.endsWith('.jpeg')) {
                       _showMessage(
-                          'Por favor selecciona una imagen en formato JPG.');
+                          'Por favor selecciona una imagen en formato JPG o JPEG.');
                       return;
                     }
 
@@ -149,13 +157,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     });
                   } catch (e) {
                     // Manejo de errores genéricos
-                    _showMessage('Ocurrió un error al seleccionar la imagen');
+                    _showMessage(
+                        'Ocurrió un error al seleccionar la imagen: $e');
                   }
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library, color: Colors.blue),
-                title: const Text('Seleccionar de galería'),
+                leading: Icon(
+                  Icons.photo_library,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(
+                  'Seleccionar de galería',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
+                  ),
+                ),
                 onTap: () async {
                   final pickedFile =
                       await picker.pickImage(source: ImageSource.gallery);
@@ -164,7 +181,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     if (!pickedFile.path.endsWith('.jpg') &&
                         !pickedFile.path.endsWith('.jpeg')) {
                       _showMessage(
-                          'Por favor selecciona una imagen en formato JPG.');
+                          'Por favor selecciona una imagen en formato JPG o JPEG.');
                       return;
                     }
                     setState(() {
@@ -238,17 +255,28 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context)
+              .dialogBackgroundColor, // Fondo del diálogo según el tema
           content: Text(
             message,
-            style: const TextStyle(fontSize: 17),
+            style: TextStyle(
+              fontSize: 17,
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color, // Color del texto según el tema
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
+              child: Text(
                 'OK',
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondary, // Color del texto del botón "OK" según el tema
+                ),
               ),
             ),
           ],
@@ -265,14 +293,26 @@ class _ProfilePageState extends State<ProfilePage> {
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF39A900), // Color principal (verde)
-              onPrimary: Colors.white, // Color del texto en el botón "OK"
-              onSurface: Color(0xFF2B2B30), // Color del texto en el calendario
-            ),
-            dialogBackgroundColor: Colors.white, // Color de fondo del diálogo
-          ),
+          data: Theme.of(context).brightness == Brightness.dark
+              ? AppTheme.darkTheme.copyWith(
+                  colorScheme: ColorScheme.dark(
+                    primary: AppTheme.darkTheme.colorScheme.surface,
+                    onPrimary: AppTheme.darkTheme.colorScheme
+                        .primary, // Aseguramos que el texto en el botón sea blanco
+                    surface: AppTheme.darkTheme.colorScheme.primary,
+                    onSurface: Colors.white, // Texto en el calendario
+                    secondary: AppTheme.darkTheme.colorScheme.secondary,
+                  ),
+                )
+              : AppTheme.lightTheme.copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: AppTheme.lightTheme.colorScheme.primary,
+                    onPrimary: Colors.white,
+                    surface: AppTheme.lightTheme.colorScheme.surface,
+                    onSurface: Colors.black, // Texto en el calendario
+                    secondary: AppTheme.lightTheme.colorScheme.secondary,
+                  ),
+                ),
           child: child!,
         );
       },
@@ -294,14 +334,20 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               const HomeAppBar(),
               const SizedBox(height: 20),
+              // Indicador de carga o mensaje cuando no hay datos del usuario
               if (_isLoading)
                 const Center(
                     child: CircularProgressIndicator()) // Indicador de carga
               else if (_userData == null)
-                const Center(
+                Center(
                   child: Text(
                     'No se encontraron datos del usuario.',
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.color, // Usar el color del tema
+                    ),
                   ),
                 )
               else
@@ -309,12 +355,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     children: [
                       const SizedBox(height: 15),
-                      const Text(
+                      Text(
                         "Mi Perfil",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF39A900),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .primary, // Usamos el color primario del tema
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -332,7 +380,8 @@ class _ProfilePageState extends State<ProfilePage> {
             top: 55,
             left: 5,
             child: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              icon: Icon(Icons.arrow_back_ios,
+                  color: Theme.of(context).iconTheme.color),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -490,10 +539,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     (user.photo == null ||
                         user.photo!.isEmpty ||
                         imageProvider == const AssetImage('images/icono.jpg')))
-                ? const Icon(
+                ? Icon(
                     Icons.camera_alt,
                     size: 30,
-                    color: Colors.white70,
+                    color: Theme.of(context).iconTheme.color ??
+                        Colors.white70, // Color según el tema
                   )
                 : null,
           ),
@@ -508,7 +558,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.04,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFF2B2B30),
+                  color: Theme.of(context).textTheme.titleLarge?.color ??
+                      const Color(0xFF2B2B30), // Usar color del tema
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -517,7 +568,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 user.email,
                 style: TextStyle(
                   fontSize: MediaQuery.of(context).size.width * 0.03,
-                  color: const Color(0xFF888787),
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
+                      const Color(0xFF888787), // Usar color del tema
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -623,11 +675,13 @@ class _ProfilePageState extends State<ProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'RH',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF39A900), // Color del título
+            color: Theme.of(context)
+                .colorScheme
+                .primary, // Usamos el color primario del tema
           ),
         ),
         const SizedBox(height: 5),
@@ -638,8 +692,10 @@ class _ProfilePageState extends State<ProfilePage> {
               value: type,
               child: Text(
                 type,
-                style: const TextStyle(
-                  color: Color(0xFF2B2B30), // Color del texto del item
+                style: TextStyle(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .tertiary, // Usamos el color secundario
                 ),
               ),
             );
@@ -655,28 +711,37 @@ class _ProfilePageState extends State<ProfilePage> {
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Color del borde
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde usando el color primario
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Borde cuando está habilitado
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde cuando está habilitado
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Borde cuando está enfocado
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde cuando está enfocado
                 width: 2.0,
               ),
             ),
           ),
-          style: const TextStyle(
-            color: Color(0xFF2B2B30), // Color del texto seleccionado
+          style: TextStyle(
+            color: Theme.of(context)
+                .colorScheme
+                .primary, // Usamos el color secundario para el texto
           ),
-          dropdownColor: Colors.white, // Color de fondo del menú desplegable
+          dropdownColor:
+              Theme.of(context).colorScheme.primary, // Fondo del dropdown
         ),
       ],
     );
@@ -689,9 +754,11 @@ class _ProfilePageState extends State<ProfilePage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xFF39A900), // Color del texto del label
+            color: Theme.of(context)
+                .colorScheme
+                .primary, // Usamos el color primario del tema
           ),
         ),
         const SizedBox(height: 5),
@@ -704,31 +771,43 @@ class _ProfilePageState extends State<ProfilePage> {
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Color del borde
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde usando el color primario
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Borde cuando está habilitado
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde cuando está habilitado
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color(0xFF39A900), // Borde cuando está enfocado
+              borderSide: BorderSide(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary, // Borde cuando está enfocado
                 width: 2.0,
               ),
             ),
             hintText: label == "Fecha Nacimiento"
                 ? "Selecciona tu fecha"
                 : "Ingresa tu dirección",
-            hintStyle:
-                const TextStyle(color: Colors.grey), // Color del hint text
+            hintStyle: TextStyle(
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color, // Usamos el color del texto del tema
+            ),
           ),
-          style: const TextStyle(
-            color: Color(0xFF2B2B30), // Color del texto cuando se escribe
+          style: TextStyle(
+            color: Theme.of(context)
+                .colorScheme
+                .tertiary, // Usamos el color secundario para el texto
           ),
           readOnly: label ==
               "Fecha Nacimiento", // Solo lectura para Fecha de Nacimiento
@@ -746,7 +825,9 @@ class _ProfilePageState extends State<ProfilePage> {
           ElevatedButton(
             onPressed: _isLoading ? null : _saveProfile,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF39A900),
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .primary, // Usamos el color primario del tema
               padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -754,7 +835,10 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             child: _isLoading
                 ? const CircularProgressIndicator(color: Colors.white)
-                : const Text("Guardar", style: TextStyle(color: Colors.white)),
+                : const Text(
+                    "Guardar",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
@@ -6,6 +7,7 @@ import 'package:maqueta/providers/url_storage.dart';
 class AuthService {
   final String virtualPort = UrlStorage().virtualPort;
   final String urlLogin = UrlStorage().urlLogin;
+  final String urlUser = UrlStorage().urlUser;
   final TokenStorage tokenStorage = TokenStorage();
 
   /// Iniciar sesión y retornar el rol del usuario
@@ -51,6 +53,40 @@ class AuthService {
     } catch (e) {
       // Manejar excepciones
       throw Exception('Error al iniciar sesión. Intente nuevamente.');
+    }
+  }
+
+  Future<void> recoveryPassword(int document) async {
+    final String url = '$virtualPort$urlUser/recoverPassword/$document';
+
+    // Cuerpo de la solicitud con el número de documento
+    final body = jsonEncode({
+      "data": {
+        "link":
+            "www.hermes.sena.edu.co/recoverPassword?document=$document" //Cambiar por la URL del front desplegado
+      }
+    });
+
+    try {
+      // Debug: Imprimir URL, encabezados y cuerpo de la petición
+      debugPrint('Making POST request to URL: $url');
+      debugPrint('Request Body: $body');
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+
+      if (response.statusCode != 200) {
+        // Acción en caso de no éxito
+        throw Exception('Failed to recover password');
+      }
+    } catch (e) {
+      // Relanzar el error
+      throw Exception('Error during password recovery: $e');
     }
   }
 }

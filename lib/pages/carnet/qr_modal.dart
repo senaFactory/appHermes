@@ -26,11 +26,14 @@ class QrModal extends StatelessWidget {
           user.journey,
           user.trainingCenter
         ]}',
-        decoration: const PrettyQrDecoration(
-          background: Colors.white,
-          shape: PrettyQrSmoothSymbol(color: Colors.black),
+        decoration: PrettyQrDecoration(
+          background: Theme.of(context).colorScheme.surface,
+          shape: PrettyQrSmoothSymbol(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          // ignore: non_const_call_to_literal_constructor
           image: PrettyQrDecorationImage(
-            image: AssetImage('images/logo_sena_negro.png'),
+            image: const AssetImage('images/logo_sena_negro.png'),
           ),
         ),
         errorCorrectLevel: QrErrorCorrectLevel.M,

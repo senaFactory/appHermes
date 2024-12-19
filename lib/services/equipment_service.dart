@@ -84,13 +84,6 @@ class EquipmentService {
       'data': equipment.toJson(),
     };
 
-    // DEBUGGING: Imprimir información antes de enviar la solicitud
-    print('--- DEBUGGING editEquipment ---');
-    print('URL: $url');
-    print('Token: $token');
-    print('Decoded Document ID: $document');
-    print('Payload: ${jsonEncode(payload)}');
-
     try {
       final response = await http.put(
         url,
@@ -101,20 +94,12 @@ class EquipmentService {
         body: jsonEncode(payload),
       );
 
-      // DEBUGGING: Imprimir información de la respuesta HTTP
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-
       if (response.statusCode != 200) {
         throw Exception(
             'Error al editar el equipo - Código: ${response.statusCode}');
       }
-
-      print('Equipo editado correctamente');
     } catch (e) {
-      // DEBUGGING: Capturar y mostrar el error
-      print('Error durante editEquipment: $e');
-      rethrow; // Re-lanza la excepción después de imprimirla
+      throw Exception('Error al editar el equipo');
     }
   }
 

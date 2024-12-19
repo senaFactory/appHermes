@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//* Personalizacion de texto información de carnet
+//* Personalización de texto para la información del carnet
 
 class InfoColumnWidget extends StatelessWidget {
   final String label;
@@ -14,17 +14,26 @@ class InfoColumnWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener el tema actual
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF39A900),
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold, // Mantener negrita
+            color: theme.primaryColor, // Usar el color principal del tema
           ),
         ),
-        Text(value),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.textTheme.bodyMedium
+                ?.color, // Mantener el color de texto del tema
+          ),
+        ),
       ],
     );
   }

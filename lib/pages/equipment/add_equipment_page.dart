@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:maqueta/util/helpers/equipment_helper.dart';
 import 'package:maqueta/widgets/home_app_bar.dart';
 import 'package:maqueta/services/equipment_service.dart';
@@ -41,8 +40,8 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
                     top: 30,
                     left: 5,
                     child: IconButton(
-                      icon:
-                          const Icon(Icons.arrow_back_ios, color: Colors.white),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: Theme.of(context).colorScheme.onPrimary),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -57,9 +56,10 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Por favor completa la siguiente información.',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface),
                       ),
                       const SizedBox(height: 20),
                       // Tipo de Equipo
@@ -113,20 +113,27 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
                           ElevatedButton(
                             onPressed: _isLoading ? null : _saveEquipment,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF39A900),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 50, vertical: 15),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                             child: _isLoading
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white)
-                                : const Text(
+                                ? CircularProgressIndicator(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary)
+                                : Text(
                                     'Registrar',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                   ),
                           ),
                         ],
@@ -154,17 +161,20 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF39A900)),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            hintStyle: Theme.of(context).textTheme.bodySmall,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           ),

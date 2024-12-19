@@ -31,7 +31,7 @@ class _CarnetPageState extends State<CarnetPage> {
       try {
         _cachedPhoto = MemoryImage(user.photo!);
       } catch (e) {
-        throw Exception('Error! showing the photo');
+        throw Exception('Error mostrando la foto');
       }
     }
     return user;
@@ -48,7 +48,7 @@ class _CarnetPageState extends State<CarnetPage> {
     var screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: ListView(
@@ -79,16 +79,20 @@ class _CarnetPageState extends State<CarnetPage> {
     return Center(
       child: Text(
         'Error al cargar los datos: $errorMessage',
-        style: const TextStyle(color: Colors.red),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.error,
+            ),
       ),
     );
   }
 
   Widget _buildNoData() {
-    return const Center(
+    return Center(
       child: Text(
         'No se encontraron datos del usuario.',
-        style: TextStyle(color: Colors.grey),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
       ),
     );
   }
@@ -99,11 +103,11 @@ class _CarnetPageState extends State<CarnetPage> {
       margin: const EdgeInsets.symmetric(vertical: 30),
       padding: const EdgeInsets.all(40),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).shadowColor.withOpacity(0.2),
             blurRadius: 12,
             spreadRadius: 2,
             offset: const Offset(0, 5),
@@ -122,21 +126,19 @@ class _CarnetPageState extends State<CarnetPage> {
           const SizedBox(height: 15),
           Text(
             '${user.name.toUpperCase()} ${user.lastName.toUpperCase()}',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF39A900),
-            ),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
           Text(
             widget.role ?? 'N/A',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF39A900),
-            ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 5),
@@ -197,10 +199,10 @@ class _CarnetPageState extends State<CarnetPage> {
         Center(
           child: Text(
             'ESTADO: ${(user.state ?? 'N/A').toUpperCase()}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
-              color: Color(0xFF39A900),
+              color: Theme.of(context).colorScheme.secondary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -221,7 +223,6 @@ class _CarnetPageState extends State<CarnetPage> {
     );
   }
 
-  // Método para construir el carnet del ADMIN
   Widget _buildAdminDetails(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +251,6 @@ class _CarnetPageState extends State<CarnetPage> {
     );
   }
 
-// Método para construir el carnet del COORDINATOR
   Widget _buildCoordinatorDetails(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -279,7 +279,6 @@ class _CarnetPageState extends State<CarnetPage> {
     );
   }
 
-// Método para construir el carnet del SEGURIDAD
   Widget _buildSecurityDetails(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +307,6 @@ class _CarnetPageState extends State<CarnetPage> {
     );
   }
 
-// Método para construir el carnet del INVITADO
   Widget _buildGuestDetails(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +335,6 @@ class _CarnetPageState extends State<CarnetPage> {
     );
   }
 
-// Método para construir el carnet del INSTRUCTOR
   Widget _buildInstructorDetails(User user) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,13 +387,16 @@ class _CarnetPageState extends State<CarnetPage> {
   Widget _buildQrButton(User user) {
     return ElevatedButton.icon(
       onPressed: () => _showQrModal(user),
-      icon: const Icon(Icons.qr_code, color: Colors.white),
-      label: const Text(
+      icon:
+          Icon(Icons.qr_code, color: Theme.of(context).colorScheme.onSecondary),
+      label: Text(
         "Mostrar QR",
-        style: TextStyle(color: Colors.white), // Texto en negro
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary,
+            ),
       ),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF007D78),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

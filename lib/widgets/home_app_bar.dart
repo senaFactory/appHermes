@@ -7,14 +7,16 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = const Color(0xFF39A900);
+    // Obtener el tema actual
+    final theme = Theme.of(context);
+
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: color,
+        color: theme.primaryColor, // Usar el color principal del tema
         borderRadius: BorderRadius.circular(5), // Ajusta el redondeo
       ),
       padding: EdgeInsets.symmetric(
@@ -27,36 +29,38 @@ class HomeAppBar extends StatelessWidget {
           // Logo adaptable al tamaño de la pantalla
           Image.asset(
             "images/logo.png",
-            color: const Color.fromARGB(255, 241, 241, 241),
+            color: theme.colorScheme.secondary, // Contraste del tema
             height: screenSize.height *
                 0.07, // Altura proporcional al alto de la pantalla
           ),
           SizedBox(
-              width: screenSize.width *
-                  0.02), // Espacio adaptable entre logo y texto
+            width:
+                screenSize.width * 0.02, // Espacio adaptable entre logo y texto
+          ),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Título con tamaño proporcional al ancho de la pantalla
+                // Título con estilos del tema
                 Text(
                   "Hermes",
-                  style: TextStyle(
+                  style: theme.textTheme.labelLarge?.copyWith(
                     fontSize:
                         screenSize.width * 0.08, // Tamaño relativo al ancho
-                    fontWeight: FontWeight.w300,
-                    color: const Color(0xFFF5F4F4),
-                    letterSpacing: 2.0, // Espacio de las letras
+                    fontWeight:
+                        FontWeight.w300, // Mantener el peso especificado
+                    letterSpacing: 2.0, // Espaciado entre letras
                     height: 1.0, // Ajusta la altura de línea
+                    color: theme.colorScheme.secondary, // Contraste del tema
                   ),
                 ),
-
+                // Subtítulo con estilos del tema
                 Text(
                   "Transformando vidas, construyendo futuro.",
-                  style: TextStyle(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontSize:
-                        screenSize.width * 0.02, // Tamaño proporcional al ancho
-                    color: const Color(0xFFF5F4F4),
+                        screenSize.width * 0.02, // Tamaño relativo al ancho
+                    color: theme.colorScheme.secondary, // Contraste del tema
                   ),
                 ),
               ],

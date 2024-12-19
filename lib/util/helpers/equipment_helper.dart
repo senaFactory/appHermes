@@ -38,14 +38,37 @@ class EquipmentHelper {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(message),
+          backgroundColor:
+              Theme.of(context).colorScheme.surface, // Fondo ajustado al tema
+          title: Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary, // Color del título según el tema
+                ),
+          ),
+          content: Text(
+            message,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSecondary, // Color del texto según el tema
+                ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Aceptar'),
+              child: Text(
+                'Aceptar',
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary, // Color del botón según el tema
+                    ),
+              ),
             ),
           ],
         );

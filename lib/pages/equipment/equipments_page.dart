@@ -91,31 +91,28 @@ class _EquipmentspageState extends State<Equipmentspage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "Mis Equipos",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF39A900),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                  ElevatedButton(
+                    onPressed: _navigateToAddEquipmentPage,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text(
+                      "Agregar equipo",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                     ),
                   ),
-                  // Mostrar botón "Agregar equipo" solo si el rol es SUPER ADMIN o ADMIN
-                  if (userRole == 'SUPER ADMIN' || userRole == 'ADMIN')
-                    ElevatedButton(
-                      onPressed: _navigateToAddEquipmentPage,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF39A900),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text(
-                        "Agregar equipo",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -124,7 +121,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
               child: RefreshIndicator(
                 onRefresh: _fetchAllEquipment,
                 child: _equipments.isEmpty
-                    ? _buildEmptyEquipmentView()
+                    ? _buildEmptyEquipmentView(context)
                     : _buildEquipmentList(),
               ),
             ),
@@ -135,23 +132,23 @@ class _EquipmentspageState extends State<Equipmentspage> {
     );
   }
 
-  Widget _buildEmptyEquipmentView() {
-    return const Center(
+  Widget _buildEmptyEquipmentView(BuildContext context) {
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.devices_other,
             size: 80,
-            color: Colors.grey,
+            color: Theme.of(context).iconTheme.color,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             "No tienes equipos registrados.",
-            style: TextStyle(fontSize: 18, color: Colors.grey),
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -174,7 +171,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
             serialNumber: equipment.serial,
             isActive: equipment.state == true,
 
-            // Solo muestra el botón de editar si el rol es SUPER ADMIN o ADMIN
+            // Solo muestra el modal de editar si el rol es SUPER ADMIN o ADMIN
             onEdit: (userRole == 'SUPER ADMIN' || userRole == 'ADMIN')
                 ? () {
                     EditEquiptModal(
@@ -213,28 +210,34 @@ class _EquipmentspageState extends State<Equipmentspage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     title: Text(
                       equipment.state == true
                           ? 'Desactivar equipo'
                           : 'Activar equipo',
-                      style: TextStyle(
-                        color:
-                            equipment.state == true ? Colors.red : Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: equipment.state == true
+                                ? Theme.of(context).colorScheme.error
+                                : Theme.of(context).colorScheme.primary,
+                          ),
                     ),
                     content: Text(
                       equipment.state == true
                           ? '¿Estás seguro de que deseas desactivar este equipo?'
                           : '¿Estás seguro de que deseas activar este equipo?',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
+                        child: Text(
                           'Cancelar',
-                          style: TextStyle(color: Color(0xFF39A900)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                       TextButton(
@@ -242,9 +245,14 @@ class _EquipmentspageState extends State<Equipmentspage> {
                           Navigator.of(context).pop();
                           await _toggleEquipmentState(equipment);
                         },
-                        child: const Text(
+                        child: Text(
                           'Confirmar',
-                          style: TextStyle(color: Color(0xFF39A900)),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                         ),
                       ),
                     ],

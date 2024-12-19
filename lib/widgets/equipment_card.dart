@@ -29,9 +29,19 @@ class EquipmentCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: isActive
-            ? const Color(0xFFF5F5F5)
-            : Colors.grey.shade300, // Color según el estado
+            ? Theme.of(context).colorScheme.secondary
+            : Theme.of(context)
+                .colorScheme
+                .secondary
+                .withOpacity(0.8), // Fondo dinámico
         borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,23 +51,27 @@ class EquipmentCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.miscellaneous_services,
-                      size: 30, color: Colors.black54),
+                  Icon(
+                    Icons.miscellaneous_services,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
                       Text(
                         brand,
-                        style:
-                            const TextStyle(fontSize: 14, color: Colors.grey),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                       ),
                     ],
                   ),
@@ -66,27 +80,34 @@ class EquipmentCard extends StatelessWidget {
               // Menú desplegable con opciones de Editar y Activar/Desactivar
               DropdownButton<String>(
                 value: null,
-                icon: const Icon(Icons.keyboard_arrow_down),
+                icon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Theme.of(context).iconTheme.color,
+                ),
                 hint: Text(
                   isActive ? "Activo" : "Inactivo",
-                  style: TextStyle(
-                    color: isActive
-                        ? Colors.green
-                        : Colors.red, // Color según el estado
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: isActive
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 underline: const SizedBox(), // Elimina la línea de subrayado
                 items: [
                   // Opcional: Mostrar "Editar" solo si `onEdit` no es nulo
                   if (onEdit != null)
-                    const DropdownMenuItem<String>(
+                    DropdownMenuItem<String>(
                       value: "Editar",
                       child: Row(
                         children: [
-                          Icon(Icons.edit, color: Color(0xFF888787)),
-                          SizedBox(width: 10),
-                          Text("Editar"),
+                          Icon(Icons.edit,
+                              color: Theme.of(context).colorScheme.onSurface),
+                          const SizedBox(width: 10),
+                          Text(
+                            "Editar",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ],
                       ),
                     ),
@@ -96,10 +117,15 @@ class EquipmentCard extends StatelessWidget {
                       children: [
                         Icon(
                           isActive ? Icons.remove_circle : Icons.check_circle,
-                          color: isActive ? Colors.red : Colors.green,
+                          color: isActive
+                              ? Theme.of(context).colorScheme.error
+                              : Theme.of(context).colorScheme.primary,
                         ),
                         const SizedBox(width: 10),
-                        Text(isActive ? "Desactivar" : "Activar"),
+                        Text(
+                          isActive ? "Desactivar" : "Activar",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
                       ],
                     ),
                   ),
@@ -111,37 +137,43 @@ class EquipmentCard extends StatelessWidget {
                     onDeactivate();
                   }
                 },
-                dropdownColor: Colors.white,
+                dropdownColor: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(10),
               ),
             ],
           ),
-          const Divider(thickness: 1.5, color: Colors.grey),
+          const Divider(
+            thickness: 2.5,
+            color: Color.fromARGB(255, 1, 1, 1),
+          ),
           Row(
             children: [
-              const Icon(Icons.label, size: 20, color: Colors.black54),
+              Icon(Icons.label,
+                  size: 20, color: Theme.of(context).iconTheme.color),
               const SizedBox(width: 5),
               Text(
                 model,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(width: 15),
-              const Icon(Icons.color_lens, size: 20, color: Colors.black54),
+              Icon(Icons.color_lens,
+                  size: 20, color: Theme.of(context).iconTheme.color),
               const SizedBox(width: 5),
               Text(
                 color,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.qr_code, size: 20, color: Colors.black54),
+              Icon(Icons.qr_code,
+                  size: 20, color: Theme.of(context).iconTheme.color),
               const SizedBox(width: 5),
               Text(
                 serialNumber,
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),

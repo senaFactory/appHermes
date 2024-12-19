@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/pages/home_screen.dart';
 import 'package:maqueta/services/auth_service.dart';
+import 'package:maqueta/util/constans.dart';
+import 'package:maqueta/util/helpers/auth_modal.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,19 +26,19 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           title: Center(
             child: Column(
               children: [
                 Icon(
                   Icons.error,
-                  color: const Color.fromRGBO(251, 7, 7, 1),
+                  color: Theme.of(context).colorScheme.error,
                   size: MediaQuery.of(context).size.width * 0.2,
                 ),
                 Text(
                   'Oops!',
                   style: TextStyle(
-                    color: const Color.fromRGBO(251, 7, 7, 1),
+                    color: Theme.of(context).colorScheme.error,
                     fontSize: MediaQuery.of(context).size.width * 0.1,
                     fontWeight: FontWeight.bold,
                   ),
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     message,
                     style: TextStyle(
-                      color: const Color.fromRGBO(251, 7, 7, 1),
+                      color: Theme.of(context).colorScheme.error,
                       fontSize: MediaQuery.of(context).size.width * 0.04,
                     ),
                     textAlign: TextAlign.center,
@@ -62,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     'Para más información, visita www.hermes.com',
                     style: TextStyle(
-                      color: const Color.fromARGB(255, 113, 119, 121),
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontSize: MediaQuery.of(context).size.width * 0.028,
                     ),
                     textAlign: TextAlign.center,
@@ -78,8 +80,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(fontSize: 16, color: Colors.black);
-
     return Scaffold(
       body: Stack(
         children: [
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: const [
                           BoxShadow(
@@ -128,32 +128,40 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.article, color: Colors.grey),
+                          Icon(Icons.article,
+                              color: Theme.of(context).iconTheme.color),
                           const SizedBox(width: 10),
                           Expanded(
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
+                                dropdownColor:
+                                    Theme.of(context).colorScheme.surface,
                                 value: dropdownValue,
                                 icon: const Icon(Icons.arrow_downward),
                                 iconSize: 24,
                                 elevation: 16,
                                 isExpanded: true,
-                                style: textStyle,
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .color),
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     dropdownValue = newValue!;
                                   });
                                 },
-                                items: <String>[
-                                  'Cédula de Ciudadanía',
-                                  'Tarjeta de Identidad',
-                                  'Cédula de Extranjeria',
-                                  'Permiso especial de permanencía',
-                                  'Permiso de protección temporal',
-                                ].map<DropdownMenuItem<String>>((String value) {
+                                items: AppConstants.documentType
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
-                                    child: Text(value, style: textStyle),
+                                    child: Text(value,
+                                        style: TextStyle(
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .color)),
                                   );
                                 }).toList(),
                               ),
@@ -171,12 +179,14 @@ class _LoginPageState extends State<LoginPage> {
                         hintText: 'Número de documento',
                         prefixIcon: const Icon(Icons.person),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor:
+                            Theme.of(context).inputDecorationTheme.fillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      style: textStyle,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, ingrese su número de documento';
@@ -185,6 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     ),
                     const SizedBox(height: 20),
+
                     // Campo de contraseña
                     TextFormField(
                       controller: _passwordController,
@@ -197,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                             _obscureText
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Colors.grey,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                           onPressed: () {
                             setState(() {
@@ -206,12 +217,14 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor:
+                            Theme.of(context).inputDecorationTheme.fillColor,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      style: textStyle,
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium!.color),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Por favor, ingrese su contraseña';
@@ -261,21 +274,26 @@ class _LoginPageState extends State<LoginPage> {
                                 }
                               }
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF39A900),
-                              padding: const EdgeInsets.symmetric(vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "Iniciar Sesión",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
+                            child: const Text(
+                              "Iniciar Sesión",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
                             ),
                           ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            showPasswordRecoveryModal(context);
+                          },
+                          child: const Text(
+                            '¿Olvidaste tu contraseña?',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
