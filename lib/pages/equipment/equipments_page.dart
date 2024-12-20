@@ -32,7 +32,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
     setState(() {
       _equipments.clear();
       if (allEquipment != null) {
-        _equipments.addAll(allEquipment.equipments!);
+        _equipments.addAll(allEquipment.equipments);
       }
     });
   }

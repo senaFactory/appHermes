@@ -4,8 +4,9 @@ class Equipment {
   String brand;
   String model;
   String color;
+  bool location; // Cambiado a bool
   String serial;
-  dynamic state;
+  bool state; // Cambiado a bool
 
   Equipment({
     this.id,
@@ -14,6 +15,7 @@ class Equipment {
     required this.model,
     required this.color,
     required this.serial,
+    required this.location,
     required this.state,
   });
 
@@ -24,8 +26,11 @@ class Equipment {
       brand: json['brand'] ?? 'N/A',
       model: json['model'] ?? 'N/A',
       color: json['color'] ?? 'N/A',
+      location: json['location'] == true ||
+          json['location'] == "true", // Asegúrate de que el valor sea booleano
       serial: json['serial'] ?? 'N/A',
-      state: json['state'] == true || json['state'] == "true", // bool en frontend
+      state: json['state'] == true ||
+          json['state'] == "true", // Asegúrate de que el valor sea booleano
     );
   }
 
@@ -37,7 +42,8 @@ class Equipment {
       'serial': serial,
       'model': model,
       'color': color,
-      'state': state.toString(), // String en backend
+      'location': location, // Enviar como bool
+      'state': state.toString(), // Convertir a string en backend
     };
   }
 

@@ -131,7 +131,16 @@ class _CarnetPageState extends State<CarnetPage> {
           ),
           const SizedBox(height: 5),
           Text(
-            _getRoleDisplayName(widget.role),
+            widget.role ?? 'N/A',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF39A900),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            (user.state ?? 'N/A').toUpperCase(),
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
