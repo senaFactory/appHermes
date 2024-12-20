@@ -137,11 +137,19 @@ class _CarnetPageState extends State<CarnetPage> {
             widget.role ?? 'N/A',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                 ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 5),
+          Text(
+            (user.state ?? 'N/A').toUpperCase(),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
           _buildQrButton(user),
           const SizedBox(height: 25),
           _buildUserDetails(user, widget.role),
