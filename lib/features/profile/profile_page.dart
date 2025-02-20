@@ -2,15 +2,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
-import 'package:maqueta/services/profile_service.dart';
-import 'package:maqueta/services/student_service.dart';
-import 'package:maqueta/util/app_theme.dart';
-import 'package:maqueta/util/constans.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/models/user.dart';
-import 'package:maqueta/services/card_service.dart';
-import 'package:maqueta/providers/token_storage.dart';
+import 'package:maqueta/features/profile/profile_service.dart';
+import 'package:maqueta/features/profile/student_service.dart';
+
+import 'package:maqueta/core/wigdets/home_app_bar.dart';
+import 'package:maqueta/features/auth/user.dart';
+import 'package:maqueta/features/carnet/card_service.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
 import 'package:image/image.dart' as img;
+import 'package:maqueta/core/util/app_theme.dart';
+import 'package:maqueta/core/util/constans.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

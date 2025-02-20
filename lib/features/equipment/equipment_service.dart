@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/providers/url_storage.dart';
+import 'package:maqueta/features/equipment/equipment.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
+import 'package:maqueta/core/network/url_storage.dart';
 
 class EquipmentService {
   final String virtualPort = UrlStorage().virtualPort;

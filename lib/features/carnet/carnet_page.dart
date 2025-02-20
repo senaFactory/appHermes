@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/carnet/qr_modal.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/services/card_service.dart';
-import 'package:maqueta/models/user.dart';
-import 'package:maqueta/widgets/info_column.dart';
+import 'package:maqueta/core/wigdets/qr_modal.dart';
+import 'package:maqueta/core/wigdets/home_app_bar.dart';
+import 'package:maqueta/features/carnet/card_service.dart';
+import 'package:maqueta/features/auth/user.dart';
+import 'package:maqueta/core/wigdets/info_column.dart';
 
 class CarnetPage extends StatefulWidget {
   final String? role;

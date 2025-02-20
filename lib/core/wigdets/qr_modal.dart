@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
-import 'package:maqueta/models/user.dart';
+import 'package:maqueta/features/auth/user.dart';
 
 class QrModal extends StatelessWidget {
   final User user;

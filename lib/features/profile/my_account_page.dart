@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:maqueta/main.dart';
-import 'package:maqueta/pages/auth/login_page.dart';
-import 'package:maqueta/pages/profile/profile_page.dart';
-import 'package:maqueta/services/card_service.dart';
-import 'package:maqueta/models/user.dart';
-import 'package:maqueta/providers/token_storage.dart'; // Importa TokenStorage
-import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/features/auth/login_page.dart';
+import 'package:maqueta/features/profile/profile_page.dart';
+import 'package:maqueta/features/carnet/card_service.dart';
+import 'package:maqueta/features/auth/user.dart';
+import 'package:maqueta/core/provider/token_storage.dart'; // Importa TokenStorage
+import 'package:maqueta/core/wigdets/home_app_bar.dart';
 
 class Myaccountpage extends StatefulWidget {
   final String? role;

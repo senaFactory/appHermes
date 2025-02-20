@@ -9,7 +9,7 @@ class UrlStorage {
   UNA VEZ HAYA CAMBIADO EL PUERTO VAYA A LA TERMINAL Y SIGA LOS PASOS DEL MANUAL
 
 */
-  final String virtualPort = 'https://hhj97mdq-8081.use2.devtunnels.ms/';
+  final String virtualPort = 'https://kdx0kl19-8081.use2.devtunnels.ms/';
 
   // Routes Back-End
   final String urlCardPerson = 'api/v1/hermesapp/view';

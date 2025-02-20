@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/util/helpers/equipment_helper.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
-import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/core/wigdets/equipment_helper.dart';
+import 'package:maqueta/core/wigdets/home_app_bar.dart';
+import 'package:maqueta/features/equipment/equipment_service.dart';
 
 class AddEquipmentPage extends StatefulWidget {
   static const routename = 'addEquipment';

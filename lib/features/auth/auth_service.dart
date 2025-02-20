@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/providers/url_storage.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
+import 'package:maqueta/core/network/url_storage.dart';
 
 class AuthService {
   final String virtualPort = UrlStorage().virtualPort;

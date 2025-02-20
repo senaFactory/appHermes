@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:maqueta/models/student.dart';
-import 'package:maqueta/services/student_service.dart';
+import 'package:maqueta/features/profile/student.dart';
+import 'package:maqueta/features/profile/student_service.dart';
 
 class ProfileUpdateService {
   final StudentService _studentService;

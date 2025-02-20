@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/auth/login_page.dart';
-import 'package:maqueta/pages/home_screen.dart';
-import 'package:maqueta/util/app_theme.dart';
-import 'package:maqueta/util/preferences/pref_user.dart';
+import 'package:maqueta/features/auth/login_page.dart';
+import 'package:maqueta/features/home_screen.dart';
+import 'package:maqueta/core/util/app_theme.dart';
+import 'package:maqueta/core/util/pref_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

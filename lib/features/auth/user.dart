@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:maqueta/models/equipment.dart';
+import 'package:maqueta/features/equipment/equipment.dart';
 
 class User {
   final String name;

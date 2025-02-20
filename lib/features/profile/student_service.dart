@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:maqueta/models/student.dart';
-import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/providers/url_storage.dart';
+import 'package:maqueta/features/profile/student.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
+import 'package:maqueta/core/network/url_storage.dart';
 
 class StudentService {
   final String baseUrl = UrlStorage().virtualPort + UrlStorage().urlStudent;

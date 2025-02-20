@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/pages/equipment/add_equipment_page.dart';
-import 'package:maqueta/pages/equipment/edit_equipment_page.dart';
-import 'package:maqueta/providers/token_storage.dart';
-import 'package:maqueta/services/equipment_service.dart';
-import 'package:maqueta/services/card_service.dart';
-import 'package:maqueta/widgets/equipment_card.dart';
-import 'package:maqueta/widgets/home_app_bar.dart';
+import 'package:maqueta/features/equipment/equipment.dart';
+import 'package:maqueta/features/equipment/add_equipment_page.dart';
+import 'package:maqueta/features/equipment/edit_equipment_page.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
+import 'package:maqueta/features/equipment/equipment_service.dart';
+import 'package:maqueta/features/carnet/card_service.dart';
+import 'package:maqueta/core/wigdets/equipment_card.dart';
+import 'package:maqueta/core/wigdets/home_app_bar.dart';
 
 class Equipmentspage extends StatefulWidget {
   final Equipment? newEquipment;

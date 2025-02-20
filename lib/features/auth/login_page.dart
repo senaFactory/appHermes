@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/pages/home_screen.dart';
-import 'package:maqueta/services/auth_service.dart';
-import 'package:maqueta/util/constans.dart';
-import 'package:maqueta/util/helpers/auth_modal.dart';
+import 'package:maqueta/core/wigdets/auth_modal.dart';
+import 'package:maqueta/features/home_screen.dart';
+import 'package:maqueta/features/auth/auth_service.dart';
+import 'package:maqueta/core/util/constans.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

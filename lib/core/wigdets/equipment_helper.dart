@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:maqueta/models/equipment.dart';
-import 'package:maqueta/services/equipment_service.dart';
-import 'package:maqueta/providers/token_storage.dart';
+import 'package:maqueta/features/equipment/equipment.dart';
+import 'package:maqueta/features/equipment/equipment_service.dart';
+import 'package:maqueta/core/provider/token_storage.dart';
 
 class EquipmentHelper {
   static Equipment buildEquipment({
