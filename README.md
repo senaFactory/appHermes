@@ -1,16 +1,31 @@
-# maqueta
+# **Hermes - Carnetización**
 
-A new Flutter project.
+Hermes es una aplicación diseñada para **gestionar la carnetización** y la **generación de códigos QR únicos**, con el objetivo de controlar y optimizar el acceso de los usuarios 
+a las instalaciones de la institución.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## **Características Principales**
+- Generación de **códigos QR únicos** para cada usuario.
+- Generacion de carnets.
+- Registro de Equipos.
+- Diseño intuitivo y fácil de usar.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## **Requisitos previos**
+Antes de instalar el proyecto, asegúrate de tener lo siguiente configurado en tu sistema:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. **Flutter**  
+   - Versión recomendada: **3.24.4**  
+   - Sigue la guía oficial de instalación: [Instalar Flutter](https://docs.flutter.dev/).
+
+2. **Configuración del PATH**  
+   - Asegúrate de que Flutter esté correctamente añadido al **PATH** del sistema.
+
+3. **Verificar la instalación**  
+   Ejecuta el siguiente comando para comprobar que todo esté configurado correctamente:
+   ```bash
+   flutter doctor
+
+   
