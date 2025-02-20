@@ -1,7 +1,13 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-class TokenStorage {
+/*
+
+  Esta clase se encarga de guardar adecuadamente el token recibido 
+  del back, además, existen funciones relacionadas para manipularlo.
+
+*/
+class TokenStorage {  
   final _storage = const FlutterSecureStorage();
   static const String _authTokenKey = 'authToken';
 
@@ -51,11 +57,6 @@ class TokenStorage {
     return _determineHighestPriorityRole(roles);
   }
 
-  /// Determina el rol con mayor jerarquía en función de la lista de roles del usuario
-  Future<String?> getHighestPriorityRole() async {
-    List<String> roles = await getRolesFromToken();
-    return _determineHighestPriorityRole(roles);
-  }
 
   /// Determina la jerarquía de los roles según la importancia definida
   String? _determineHighestPriorityRole(List<String> roles) {
