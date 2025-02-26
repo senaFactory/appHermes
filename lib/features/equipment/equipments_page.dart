@@ -34,7 +34,7 @@ class _EquipmentspageState extends State<Equipmentspage> {
 
   /// Obtiene el rol del usuario y lo almacena en userRole
   Future<void> _getUserRole() async {
-    final role = await tokenStorage.getHighestPriorityRole();
+    final role = await tokenStorage.getPrimaryRole();
     setState(() {
       userRole = role;
     });
