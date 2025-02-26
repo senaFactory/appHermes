@@ -45,12 +45,16 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   jwt_decoder: ^2.0.1
   shared_preferences: ^2.3.2
+  equatable: ^2.0.7
+  dio: ^5.8.0+1
+  retrofit: ^4.4.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   image_picker: ^1.1.2
   flutter_launcher_icons: ^0.13.1
+  retrofit_generator: ^9.1.5
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
