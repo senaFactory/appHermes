@@ -193,7 +193,7 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
                 break;
               case FieldType.modelo:
                 if (value.length < 2 ||
-                    !RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                    !RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
                   return "El modelo debe tener al menos 2 caracteres y solo letras o números.";
                 }
                 break;
