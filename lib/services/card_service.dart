@@ -80,11 +80,14 @@ class CardService {
         } else {
           throw Exception('User data not available');
         }
+      } else if (response.statusCode == 404) {
+        throw Exception('Endpoint not found for role: $role. Status: ${response.statusCode}');
       } else {
-        throw Exception('Server error: ${response.statusCode}');
+        throw Exception('Server error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      throw Exception('Error getting user data');
+      print('Error details: $e');
+      throw Exception('Error getting user data: $e');
     }
   }
 }

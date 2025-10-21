@@ -2,6 +2,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserPreferences {
   static late SharedPreferences _prefs;
+  static final UserPreferences _instance = UserPreferences._internal();
+
+  factory UserPreferences() {
+    return _instance;
+  }
+
+  UserPreferences._internal();
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();

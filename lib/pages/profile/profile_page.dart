@@ -502,6 +502,28 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         );
+      case "ADMINISTRATIVO":
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: _buildInfoColumn("Correo", user.email, false)),
+                const SizedBox(width: 15),
+                Expanded(
+                    child:
+                        _buildInfoColumn("Teléfono", user.phoneNumber, false)),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Expanded(
+                    child:
+                        _buildInfoColumn("Centro", user.trainingCenter, false)),
+              ],
+            ),
+          ],
+        );
       default:
         throw Exception('ROL NO EXISTE');
     }

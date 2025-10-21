@@ -9,7 +9,7 @@ class UrlStorage {
   UNA VEZ HAYA CAMBIADO EL PUERTO VAYA A LA TERMINAL Y SIGA LOS PASOS DEL MANUAL
 
 */
-  final String virtualPort = 'https://cc4mfbk1-8081.use2.devtunnels.ms/';
+  final String virtualPort = 'https://athletic-lakes-losses-surplus.trycloudflare.com/';
 
   // Routes Back-End
   final String urlCardPerson = 'api/v1/hermesapp/view';
@@ -27,6 +27,7 @@ class UrlStorage {
     "SEGURIDAD": "api/v1/hermesapp/card/vigilant",
     "INVITADO": "api/v1/hermesapp/card/guest",
     "INSTRUCTOR": "api/v1/hermesapp/card/teacher",
+    "ADMINISTRATIVO": "api/v1/hermesapp/card/administrativo",
   };
 
   String getRoleUrl(String role, String document) {

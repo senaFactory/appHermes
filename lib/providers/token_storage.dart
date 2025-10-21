@@ -64,6 +64,7 @@ class TokenStorage {
       'ROLE_SUPER ADMIN',
       'ROLE_ADMIN',
       'ROLE_COORDINADOR',
+      'ROLE_ADMINISTRATIVO',
       'ROLE_SEGURIDAD',
       'ROLE_INSTRUCTOR',
       'ROLE_APRENDIZ',

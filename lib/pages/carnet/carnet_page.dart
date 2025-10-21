@@ -174,6 +174,8 @@ class _CarnetPageState extends State<CarnetPage> {
         return _buildInstructorDetails(user);
       case "SUPER ADMIN":
         return _buildSuperAdminDetails(user);
+      case "ADMINISTRATIVO":
+        return _buildAdministrativeDetails(user);
       default:
         throw Exception('ROL NO EXISTE');
     }
@@ -195,6 +197,34 @@ class _CarnetPageState extends State<CarnetPage> {
           user.email,
           "Teléfono",
           user.phoneNumber,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAdministrativeDetails(User user) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildInfoRow(
+          "Tipo Documento (${user.acronym})",
+          user.documentNumber,
+          "RH",
+          user.bloodType,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Correo",
+          user.email,
+          "Teléfono",
+          user.phoneNumber,
+        ),
+        const SizedBox(height: 10),
+        _buildInfoRow(
+          "Centro",
+          user.trainingCenter,
+          "",
+          "",
         ),
       ],
     );
