@@ -1,25 +1,21 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
+import 'package:maqueta/services/network_service.dart';
 
 class EquipmentService {
-  final String virtualPort = UrlStorage().virtualPort;
-  final String urlEquipment = UrlStorage().urlEquipment;
+  final UrlStorage urlStorage = UrlStorage();
   final TokenStorage tokenStorage = TokenStorage();
+  final NetworkService _networkService = NetworkService();
 
-  Future<void> addEquipment(
-      Equipment equipment, Map<dynamic, dynamic> token) async {
-    var token = await tokenStorage.getToken();
-    var decodeToken = await tokenStorage.decodeJwtToken();
-    var document = decodeToken['sub'];
-
-    final String baseUrl = '$virtualPort$urlEquipment';
-    final url = Uri.parse('$baseUrl/add');
-
+  Future<void> addEquipment(Equipment equipment, Map<dynamic, dynamic> token) async {
     try {
+      var authToken = await tokenStorage.getToken();
+      var decodeToken = await tokenStorage.decodeJwtToken();
+      var document = decodeToken['sub'];
+
       equipment.setDocumentId = document;
 
       // Crea el objeto con 'data'
@@ -27,19 +23,15 @@ class EquipmentService {
         'data': equipment.toJson(),
       };
 
-      final response = await http.post(
-        url,
+      await _networkService.makeRequest(
+        '${urlStorage.urlEquipment}/add',
+        method: 'POST',
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer $authToken',
           'Content-Type': 'application/json'
         },
-        body: json.encode(payload),
+        body: payload,
       );
-
-      if (response.statusCode != 200) {
-      } else {
-        throw Exception('Error al registrar el equipo: ${response.statusCode}');
-      }
     } catch (e) {
       rethrow;
     }
@@ -47,59 +39,59 @@ class EquipmentService {
 
   Future<List<Equipment>> fetchEquipments(List<int> equipmentIds) async {
     var token = await tokenStorage.getToken();
-    final String baseUrl = '$virtualPort$urlEquipment/by-id/';
-    var headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
 
     try {
-      var responses = await Future.wait(equipmentIds.map((id) {
-        return http.get(Uri.parse('$baseUrl$id'), headers: headers);
-      }));
+      var futures = equipmentIds.map((id) async {
+        try {
+          final response = await _networkService.makeRequest(
+            '${urlStorage.urlEquipment}/by-id/$id',
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+          );
 
-      return responses
-          .where((response) => response.statusCode == 200)
-          .map((response) {
-        var jsonResponse = json.decode(response.body);
-        return Equipment.fromJson(jsonResponse['data']);
-      }).toList();
+          if (response != null && response['data'] != null) {
+            return Equipment.fromJson(response['data']);
+          }
+          return null;
+        } catch (e) {
+          print('Error fetching equipment $id: $e');
+          return null;
+        }
+      });
+
+      var results = await Future.wait(futures);
+      return results.where((equipment) => equipment != null).cast<Equipment>().toList();
     } catch (e) {
+      print('Error fetching equipments: $e');
       return [];
     }
   }
 
   Future<void> editEquipment(Equipment equipment) async {
-    var token = await tokenStorage.getToken();
-    final String baseUrl = '$virtualPort$urlEquipment';
-    final url = Uri.parse('$baseUrl/update/${equipment.id}');
-
-    // Decodificar el token y obtener el documento asociado
-    var decodeToken = await tokenStorage.decodeJwtToken();
-    var document = decodeToken['sub'];
-    equipment.setDocumentId = document;
-
-    // Crear el payload con los datos del equipo
-    final Map<String, dynamic> payload = {
-      'data': equipment.toJson(),
-    };
-
     try {
-      final response = await http.put(
-        url,
+      var token = await tokenStorage.getToken();
+      var decodeToken = await tokenStorage.decodeJwtToken();
+      var document = decodeToken['sub'];
+      equipment.setDocumentId = document;
+
+      final Map<String, dynamic> payload = {
+        'data': equipment.toJson(),
+      };
+
+      await _networkService.makeRequest(
+        '${urlStorage.urlEquipment}/update/${equipment.id}',
+        method: 'PUT',
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode(payload),
+        body: payload,
       );
-
-      if (response.statusCode != 200) {
-        throw Exception(
-            'Error al editar el equipo - Código: ${response.statusCode}');
-      }
     } catch (e) {
-      throw Exception('Error al editar el equipo');
+      throw Exception('Error al editar el equipo: $e');
     }
   }
 

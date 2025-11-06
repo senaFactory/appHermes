@@ -5,14 +5,11 @@ import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
 
 class StudentService {
-  final String baseUrl = UrlStorage().virtualPort + UrlStorage().urlStudent;
-  final String baseUrlPerson =
-      UrlStorage().virtualPort + UrlStorage().urlPerson;
-  final TokenStorage tokenStorage = TokenStorage();
   final UrlStorage urlStorage = UrlStorage();
+  final TokenStorage tokenStorage = TokenStorage();
 
   Future<void> sendImageBase64(String base64Image, int document) async {
-    final url = Uri.parse('$baseUrlPerson/updatePhoto/$document');
+    final url = Uri.parse(urlStorage.getUrl('${urlStorage.urlPerson}/updatePhoto/$document'));
     var token = await tokenStorage.getToken();
 
     final body = jsonEncode({
@@ -89,7 +86,7 @@ class StudentService {
 
   Future<void> updateStudentData(Student student, int document) async {
     final url = Uri.parse(
-        '$baseUrlPerson/updateCard/$document'); // Ruta para actualización parcial
+        '${urlStorage.getUrl(urlStorage.urlPerson)}/updateCard/$document'); // Ruta para actualización parcial
     var token = await tokenStorage.getToken();
 
     // Creamos el payload directamente como un objeto JSON en lugar de una cadena JSON anidada

@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:maqueta/models/user.dart';
 import 'package:maqueta/models/equipment.dart';
 import 'package:maqueta/providers/token_storage.dart';
 import 'package:maqueta/providers/url_storage.dart';
 import 'package:maqueta/services/equipment_service.dart';
+import 'package:maqueta/services/network_service.dart';
 
 class CardService {
-  final String virtualPort = UrlStorage().virtualPort;
+  final UrlStorage urlStorage = UrlStorage();
   final EquipmentService _equipmentService = EquipmentService();
   final TokenStorage tokenStorage = TokenStorage();
-  final UrlStorage urlStorage = UrlStorage();
+  final NetworkService _networkService = NetworkService();
 
   Future<User?> getUser() async {
     try {
@@ -28,7 +28,7 @@ class CardService {
         throw Exception('Role is not available in the token');
       }
 
-      // Obtén el documento directamente desde el token (en este caso, 'sub' es el documento)
+      // Obtén el documento directamente desde el token
       var decodeToken = await tokenStorage.decodeJwtToken();
       var document = decodeToken['sub'];
 
@@ -37,53 +37,43 @@ class CardService {
       }
 
       // Usa el rol para obtener la URL adecuada
-      final String url = urlStorage.getRoleUrl(role, document);
+      final String fullUrl = urlStorage.getRoleUrl(role, document);
+      final Uri uri = Uri.parse(fullUrl);
+      // Extraer el endpoint relativo (todo después del dominio)
+      final String endpoint = uri.path + (uri.query.isEmpty ? '' : '?${uri.query}');
 
-      // Realiza la petición al backend con el rol y documento
-      var response = await http.get(
-        Uri.parse(url),
+      // Realiza la petición al backend usando NetworkService
+      final response = await _networkService.makeRequest(
+        endpoint,
+        method: 'GET',
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
         },
       );
-      // Ver el cuerpo de la respuesta
 
-      if (response.statusCode == 200) {
-        // Intentar decodificar utilizando una limpieza adicional
-        String body = utf8.decode(response.bodyBytes);
-        final jsonResponse = json.decode(body) as Map<String, dynamic>;
-
-        if (jsonResponse.isNotEmpty) {
-          final userData = jsonResponse;
-
+      if (response != null) {
+        if (response is Map<String, dynamic> && response.isNotEmpty) {
           // Verifica si 'equipments' es una lista antes de intentar mapearla
-          if (userData['equipments'] != null &&
-              userData['equipments'] is List) {
-            List<int> equipmentIds =
-                List<int>.from(userData['equipments'].map((e) => e['id']));
+          if (response['equipments'] != null && response['equipments'] is List) {
+            List<int> equipmentIds = List<int>.from(response['equipments'].map((e) => e['id']));
 
             // Obtén la lista de equipos asociados al usuario
-            List<Equipment> equipmentList =
-                await _equipmentService.fetchEquipments(equipmentIds);
+            List<Equipment> equipmentList = await _equipmentService.fetchEquipments(equipmentIds);
 
             // Crea el objeto User a partir del json y usa copyWith
-            User user = User.fromJson(userData);
-
-            // Ahora puedes usar copyWith para agregar los equipos
+            User user = User.fromJson(response);
             return user.copyWith(equipments: equipmentList);
           } else {
             // Si no hay equipos, podemos crear el usuario sin equipos
-            User user = User.fromJson(userData);
+            User user = User.fromJson(response);
             return user.copyWith(equipments: []);
           }
         } else {
           throw Exception('User data not available');
         }
-      } else if (response.statusCode == 404) {
-        throw Exception('Endpoint not found for role: $role. Status: ${response.statusCode}');
       } else {
-        throw Exception('Server error: ${response.statusCode} - ${response.body}');
+        throw Exception('No response from server');
       }
     } catch (e) {
       print('Error details: $e');
