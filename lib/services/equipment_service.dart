@@ -10,7 +10,7 @@ class EquipmentService {
   final TokenStorage tokenStorage = TokenStorage();
   final NetworkService _networkService = NetworkService();
 
-  Future<void> addEquipment(Equipment equipment, Map<dynamic, dynamic> token) async {
+  Future<dynamic> addEquipment(Equipment equipment, Map<dynamic, dynamic> token) async {
     try {
       var authToken = await tokenStorage.getToken();
       var decodeToken = await tokenStorage.decodeJwtToken();
@@ -18,12 +18,22 @@ class EquipmentService {
 
       equipment.setDocumentId = document;
 
-      // Crea el objeto con 'data'
-      final Map<String, dynamic> payload = {
-        'data': equipment.toJson(),
+      // Construir el payload que el backend espera
+      final Map<String, dynamic> data = {
+        'brand': equipment.brand,
+        'serial': equipment.serial,
+        'model': equipment.model,
+        'color': equipment.color,
+        // backend en add usa getString("state") -> enviar como string
+        'state': equipment.state.toString(),
+        // location en add se fija en false por backend, pero lo enviamos acorde al modelo
+        'location': equipment.location,
+        'person': {'document': document}
       };
 
-      await _networkService.makeRequest(
+      final Map<String, dynamic> payload = {'data': data};
+
+      final response = await _networkService.makeRequest(
         '${urlStorage.urlEquipment}/add',
         method: 'POST',
         headers: {
@@ -32,6 +42,8 @@ class EquipmentService {
         },
         body: payload,
       );
+
+      return response;
     } catch (e) {
       rethrow;
     }
@@ -57,7 +69,6 @@ class EquipmentService {
           }
           return null;
         } catch (e) {
-          print('Error fetching equipment $id: $e');
           return null;
         }
       });
@@ -65,23 +76,32 @@ class EquipmentService {
       var results = await Future.wait(futures);
       return results.where((equipment) => equipment != null).cast<Equipment>().toList();
     } catch (e) {
-      print('Error fetching equipments: $e');
       return [];
     }
   }
 
-  Future<void> editEquipment(Equipment equipment) async {
+  Future<dynamic> editEquipment(Equipment equipment) async {
     try {
       var token = await tokenStorage.getToken();
       var decodeToken = await tokenStorage.decodeJwtToken();
       var document = decodeToken['sub'];
       equipment.setDocumentId = document;
 
-      final Map<String, dynamic> payload = {
-        'data': equipment.toJson(),
+      // Construir payload consistente con update del backend
+      final Map<String, dynamic> data = {
+        'brand': equipment.brand,
+        'serial': equipment.serial,
+        'model': equipment.model,
+        'color': equipment.color,
+        // backend en update usa getString("state") -> enviar como string
+        'state': equipment.state.toString(),
+        'location': equipment.location,
+        'person': {'document': document}
       };
 
-      await _networkService.makeRequest(
+      final Map<String, dynamic> payload = {'data': data};
+
+      final response = await _networkService.makeRequest(
         '${urlStorage.urlEquipment}/update/${equipment.id}',
         method: 'PUT',
         headers: {
@@ -90,6 +110,8 @@ class EquipmentService {
         },
         body: payload,
       );
+
+      return response;
     } catch (e) {
       throw Exception('Error al editar el equipo: $e');
     }

@@ -8,8 +8,9 @@ class NetworkService {
 
   // Cliente HTTP personalizado que acepta certificados autofirmados
   HttpClient _createHttpClient() {
-    return HttpClient()
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    final httpClient = HttpClient();
+    httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return httpClient;
   }
 
   Future<dynamic> makeRequest(String endpoint, {
@@ -32,8 +33,15 @@ class NetworkService {
 
       return _handleResponse(response);
     } catch (e) {
+      // Rethrow para que el llamador maneje el error
       rethrow;
     }
+  }
+
+  // Normaliza la URL devuelta por UrlStorage.getUrl para evitar prefijos repetidos
+  String _normalizeUrl(String rawUrl) {
+    // Asegurar que sólo exista un 'api/api' si el backend espera ese prefijo
+    return rawUrl.replaceAll(RegExp(r'(?:/api){2,}'), '/api/api');
   }
 
   Future<http.Response> _attemptRequest(String endpoint, {
@@ -41,7 +49,11 @@ class NetworkService {
     required Map<String, String> headers,
     dynamic body,
   }) async {
-    final url = Uri.parse(urlStorage.getUrl(endpoint));
+    // Construir URL y normalizar
+    final raw = urlStorage.getUrl(endpoint);
+    final normalized = _normalizeUrl(raw);
+    final url = Uri.parse(normalized);
+
     final httpClient = _createHttpClient();
 
     try {
@@ -61,11 +73,12 @@ class NetworkService {
 
       final httpResponse = await request.close();
 
-      // Si hay redirección, seguirla manualmente
+      // Si hay redirección, seguirla manualmente (resuelve doble prefijo)
       if (httpResponse.isRedirect) {
         final redirectUrl = httpResponse.headers.value(HttpHeaders.locationHeader);
-        if (redirectUrl != null) {
-          final redirectUri = Uri.parse(redirectUrl);
+        if (redirectUrl != null && redirectUrl.isNotEmpty) {
+          final fixedRedirect = _normalizeUrl(redirectUrl);
+          final redirectUri = Uri.parse(fixedRedirect);
           final redirectRequest = await httpClient.openUrl(method, redirectUri);
 
           // Copiar headers
@@ -83,6 +96,7 @@ class NetworkService {
           final redirectResponse = await redirectRequest.close();
           final redirectBody = await redirectResponse.transform(utf8.decoder).join();
 
+          // Construir Response con headers básicos
           return http.Response(
             redirectBody,
             redirectResponse.statusCode,
@@ -105,7 +119,7 @@ class NetworkService {
         },
       );
     } finally {
-      httpClient.close();
+      httpClient.close(force: true);
     }
   }
 

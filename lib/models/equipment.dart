@@ -46,8 +46,9 @@ class Equipment {
       'serial': serial,
       'model': model,
       'color': color,
-      'location': location, // Enviar como bool
-      'state': state.toString(), // Convertir a string en backend
+      // Enviar booleanos tal cual (mejor práctica) — el backend debería aceptar booleans.
+      'location': location,
+      'state': state,
     };
   }
 

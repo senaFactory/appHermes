@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:maqueta/models/student.dart';
 import 'package:maqueta/services/student_service.dart';
+import 'package:maqueta/util/image_helper.dart';
 
 class ProfileUpdateService {
   final StudentService _studentService;
@@ -34,17 +35,33 @@ class ProfileUpdateService {
     required String address,
     required int document,
   }) async {
-    // Si la imagen cambió, subir la imagen
-    if (image != null && image != initialImage) {
-      final bytes = await image.readAsBytes();
-      final base64Image = base64Encode(bytes);
-      await _studentService.sendImageBase64(base64Image, document);
+    try {
+      // Si la imagen cambió, procesarla y subirla
+      if (image != null && image != initialImage) {
+        // Procesar y comprimir la imagen
+        final compressedImageBytes = await ImageHelper.processImageForUpload(image);
+        final base64Image = base64Encode(compressedImageBytes);
+
+        // Verificar el tamaño después de la codificación base64
+        final sizeInMB = base64Image.length / (1024 * 1024);
+        if (sizeInMB > 1) {
+          throw Exception('La imagen es demasiado grande. Por favor, selecciona una imagen más pequeña (máximo 1MB).');
+        }
+
+        await _studentService.sendImageBase64(base64Image, document);
+      }
+
+      // Subir los otros datos (tipo de sangre, fecha de nacimiento, dirección)
+      final updatedData = Student(
+        dateBirth: dateBirth,
+        bloodType: bloodType,
+        address: address
+      );
+
+      await _studentService.updateStudentData(updatedData, document);
+    } catch (e) {
+      print('Error en updateProfile: $e');
+      throw Exception('Error al actualizar el perfil: $e');
     }
-
-    // Subir los otros datos (tipo de sangre, fecha de nacimiento, dirección)
-    final updatedData =
-        Student(dateBirth: dateBirth, bloodType: bloodType, address: address);
-
-    await _studentService.updateStudentData(updatedData, document);
   }
 }

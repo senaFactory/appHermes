@@ -230,13 +230,12 @@ class _RegisterEquipmentPageState extends State<AddEquipmentPage> {
         name: _typeController.text,
       );
 
-      Navigator.pop(context, newEquipment);
-
+      // No realizar Navigator.pop antes de confirmar que la creación fue exitosa
       try {
-        await EquipmentHelper.submitEquipment(newEquipment, _equipmentService);
+        await EquipmentHelper.submitEquipment(newEquipment, _equipmentService, context);
         if (mounted) {
-          EquipmentHelper.showAlertDialog(
-              context, 'Éxito', 'El equipo ha sido registrado correctamente.');
+          // Si la petición fue exitosa, cerramos y devolvemos el objeto creado
+          Navigator.pop(context, newEquipment);
         }
       } catch (e) {
         if (mounted) {

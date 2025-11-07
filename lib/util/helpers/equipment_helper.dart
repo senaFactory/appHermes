@@ -27,9 +27,17 @@ class EquipmentHelper {
   }
 
   static Future<void> submitEquipment(
-      Equipment equipment, EquipmentService equipmentService) async {
+      Equipment equipment, EquipmentService equipmentService, BuildContext context) async {
     final jwt = await TokenStorage().decodeJwtToken();
-    await equipmentService.addEquipment(equipment, jwt);
+    try {
+      await equipmentService.addEquipment(equipment, jwt);
+
+      // Mostrar mensaje de éxito si el backend devuelve algo indicativo
+      showAlertDialog(context, 'Éxito', 'Equipo registrado correctamente.');
+    } catch (e) {
+      showAlertDialog(context, 'Error', 'No se pudo registrar el equipo: $e');
+      rethrow;
+    }
   }
 
   static void showAlertDialog(
